@@ -4,7 +4,7 @@ const path = require('path')
 const {
   GantreeError,
   ErrorTypes: { DIR_NOT_FOUND, SCRIPT_ERROR }
-} = require('../gantree-error')
+} = require('../lib/gantree-error')
 
 async function keyCombine(sessionDirPath) {
   if (!fs.existsSync(sessionDirPath)) {

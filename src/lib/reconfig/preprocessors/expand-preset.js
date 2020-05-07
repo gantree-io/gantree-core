@@ -1,7 +1,7 @@
 const cloneDeepWith = require('lodash.clonedeepwith')
 const hasProp = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
 
-const binPresets = require('../../../static_data/binary_presets')
+const binPresets = require('../../static_data/binary_presets')
 const {
   GantreeError,
   ErrorTypes: { BAD_CONFIG }

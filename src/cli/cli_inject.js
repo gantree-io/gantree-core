@@ -5,7 +5,7 @@ const {
   GantreeError,
   ErrorTypes: { MISSING_ARGUMENTS }
 } = require('../lib/gantree-error')
-const { inject } = require('../lib/tools/inject')
+const { inject } = require('../tools/inject')
 
 program
   .description('Injects keys into chainspec (non-raw).')

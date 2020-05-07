@@ -1,4 +1,4 @@
-const _error_meta = require('../static_data/error_meta')
+const _error_meta = require('./static_data/error_meta')
 
 const { BaseError } = require('make-error-cause')
 

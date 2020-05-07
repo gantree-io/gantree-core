@@ -5,7 +5,7 @@ const {
   GantreeError,
   ErrorTypes: { MISSING_ARGUMENTS }
 } = require('../lib/gantree-error')
-const { keyCombine } = require('../lib/tools/key-combine')
+const { keyCombine } = require('../tools/key-combine')
 
 program
   .description(

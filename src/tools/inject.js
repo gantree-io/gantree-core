@@ -1,9 +1,9 @@
 const fs = require('fs')
 const JSONbig = require('json-bigint')
 const BigNumber = require('bignumber.js')
-const { GantreeError } = require('../gantree-error')
-const opt = require('../utils/options')
-const { returnLogger } = require('../logging')
+const { GantreeError } = require('../lib/gantree-error')
+const opt = require('../lib/utils/options')
+const { returnLogger } = require('../lib/logging')
 
 const logger = returnLogger('inject')
 

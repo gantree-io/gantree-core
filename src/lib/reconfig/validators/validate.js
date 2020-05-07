@@ -4,8 +4,8 @@ const {
   GantreeError,
   ErrorTypes: { BAD_CONFIG }
 } = require('../../gantree-error')
-const gantree_config_schema = require('../../../schemas/gantree_config_schema')
-const provider_specific_keys = require('../../../static_data/provider_specific_keys')
+const gantree_config_schema = require('../../schemas/gantree_config_schema')
+const provider_specific_keys = require('../../static_data/provider_specific_keys')
 const { returnLogger } = require('../../logging')
 const { hasOwnProp } = require('../../utils/has-own-prop')
 
