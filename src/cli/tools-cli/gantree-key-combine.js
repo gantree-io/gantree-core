@@ -4,8 +4,8 @@ const program = require('commander')
 const {
   GantreeError,
   ErrorTypes: { MISSING_ARGUMENTS }
-} = require('../lib/gantree-error')
-const { keyCombine } = require('../tools/key-combine')
+} = require('../../lib/gantree-error')
+const { keyCombine } = require('../../tools/key-combine')
 
 program
   .description(

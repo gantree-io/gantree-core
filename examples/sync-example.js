@@ -1,4 +1,4 @@
-const { Gantree, Config } = require('../src')
+const { Gantree, Config } = require('../src/lib')
 
 let PATH_TO_CONFIG =
   process.argv[2] || 'samples/config/preset/polkadot_do.sample.json'

@@ -1,4 +1,4 @@
-const { Gantree: gantree, Config } = require('../lib')
+const { Gantree: gantree, Config } = require('../../lib')
 const { gantreeTitle } = require('./art')
 
 // const gantree = new Gantree()

@@ -1,7 +1,7 @@
 {
   "name": "gantree-core",
-  "version": "0.6.7",
-  "main": "src/cli/index.js",
+  "version": "0.9.0",
+  "main": "src/lib",
   "repository": "https://github.com/flex-dapps/gantree-core",
   "author": "Flex Dapps",
   "license": "Apache-2.0",
@@ -25,9 +25,14 @@
   "pre-commit": [
     "lintstaged"
   ],
+  "bin": {
+    "gantree-cli": "src/cli/gantree-cli/gantree-cli.js",
+    "gantree-key-combine": "src/cli/tools-cli/gantree-key-combine.js",
+    "gantree-inject": "src/cli/tools-cli/gantree-inject.js",
+    "gantree-inventory": "src/cli/tools-cli/gantree-inventory.js"
+  },
   "files": [
     "/ansible",
-    "/inventorySegments",
     "/src",
     "Pipfile",
     "Pipfile.lock",
@@ -40,7 +45,7 @@
       "web": "http://www.flexdapps.com"
     },
     {
-      "name": "Ryan Flexdapps",
+      "name": "Ryan Miller",
       "email": "ryan@flexdapps.com",
       "web": "http://www.flexdapps.com"
     },

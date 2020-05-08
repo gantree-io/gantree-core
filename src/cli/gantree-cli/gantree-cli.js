@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 const program = require('commander')
-const packageMeta = require('../lib/packageMeta')
+const packageMeta = require('../../lib/packageMeta')
 const { syncWrapper } = require('./syncWrapper')
 const { cleanWrapper } = require('./cleanWrapper')
-const gantreeLib = require('../lib')
+const gantreeLib = require('../../lib')
 
 function returnVersionString() {
   const name = packageMeta.getName()

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const projectPath = process.argv[2]
 
 // console.log(`${projectPath}/gantreeInventory.json`)

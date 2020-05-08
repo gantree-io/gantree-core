@@ -1,32 +1,19 @@
 const path = require('path')
 const fs = require('fs')
 
-const opt = require('./options')
-
 // NOTE: If you move this file, ensure this path in gantreeLibRoot remains correct
 const gantreeLibRoot = () => path.join(__dirname, '../', '../', '../')
 
 const getGantreePath = (...extra) => path.join(gantreeLibRoot(), ...extra)
 
 // NOTE: does not consider overrides, handled in getProjectPath
-const getInventoryPath = (...extra) => getGantreePath('inventory', ...extra)
+// const getInventoryPath = (...extra) => getGantreePath('inventory', ...extra)
 
-const getInventorySegmentsPath = (...extra) =>
-  getGantreePath('inventorySegments', ...extra)
-
-const getProjectPath = (projectName, _options = {}) => {
-  const inventoryPathOverride = opt.default(
-    _options.inventoryPathOverride,
-    undefined
-  )
-
-  if (inventoryPathOverride === undefined) {
-    // use gantree inventory path as base
-    return getInventoryPath(projectName)
-  } else {
-    // use override inventory path as base
-    return path.join(inventoryPathOverride, projectName)
-  }
+const getProjectPath = (projectName, options = {}) => {
+  const inventory_path = options.inventoryPathOverride || getInventoryPath()
+  const project_path = path.join(inventory_path, projectName)
+  fs.mkdirSync(project_path, { recursive: true })
+  return project_path
 }
 
 const getControlPath = () => {
@@ -56,8 +43,7 @@ const getPlaybookFilePath = playbookFilename => {
 
 module.exports = {
   getGantreePath,
-  getInventoryPath,
-  getInventorySegmentsPath,
+  //getInventoryPath,
   getProjectPath,
   getControlPath,
   getWorkspacePath,

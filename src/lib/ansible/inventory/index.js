@@ -41,7 +41,7 @@ const writeGantreeInventory = (project_path, inv) => {
   const inventory_path = path.join(project_path, 'gantree')
   fs.writeFileSync(inventory_file_path, StdJson.stringify(inv), 'utf8')
 
-  const sh_file_content = `#!/bin/bash\n\nnode ${gantree_path}/src/cli/cli_repeat_inventory.js ${project_path}`
+  const sh_file_content = `#!/bin/bash\n\nnode ${gantree_path}/src/cli/tools-cli/gantree-inventory.js ${project_path}`
   const sh_file_path = path.join(inventory_path, 'gantree.sh')
 
   fs.writeFileSync(sh_file_path, sh_file_content, 'utf8')
