@@ -11,7 +11,7 @@ async function syncWrapper(args) {
   const frame = create_frame(args)
   const config_path = await resolve_config_path(args)
   const gco = StdJson.read(config_path)
-  //const project_name = extract_project_name(gco)
+  const project_name = extract_project_name(gco)
   const config_version = extract_config_version(gco)
 
 
@@ -20,7 +20,7 @@ async function syncWrapper(args) {
       await gantree.sync_v2(frame, gco)
       break
     default:
-      throw new Error(`Unsupported config version (${typoeof(config_version)})${config_version})`)
+      throw new Error(`Unsupported config version (${typeof config_version})${config_version})`)
   }
 }
 
