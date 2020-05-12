@@ -2,8 +2,8 @@
 
 const program = require('commander')
 const packageMeta = require('../../package/package-meta')
-const { syncWrapper } = require('./syncWrapper')
-const { cleanWrapper } = require('./cleanWrapper')
+const { syncWrapper } = require('./commands/sync')
+const { cleanWrapper } = require('./commands/clean')
 const gantreeLib = require('../../lib')
 
 function returnVersionString() {

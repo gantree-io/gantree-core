@@ -1,6 +1,6 @@
-const { Gantree } = require('../../lib')
-const { gantreeTitle } = require('./art')
-const { processCommandArgs } = require('./processCommandArgs')
+const { Gantree } = require('../../../lib')
+const { gantreeTitle } = require('../support/art')
+const { processCommandArgs } = require('./command-args')
 
 async function cleanWrapper(args) {
   console.log(gantreeTitle)

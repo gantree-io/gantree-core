@@ -2,8 +2,8 @@ const path = require('path')
 const fs = require('fs')
 
 async function create(frame) {
-  const logger = frame.log.at('lib/ansible/inventory/namespace')
-  const projectPath = frame.paths.project
+  const logger = frame.logAt('lib/ansible/inventory/namespace')
+  const projectPath = frame.project_path
 
   logger.info('creating namespace')
 

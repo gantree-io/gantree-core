@@ -1,15 +1,13 @@
 const path = require('path')
 const fs = require('fs')
 const namespace = require('./namespace')
-//const { makeInventory } = require('../../dataManip/makeInventory')
 const { inventory: full_inventory } = require('../../reconfig/inventories/full')
 const {
   activateProviders
 } = require('../../ansible/inventory/activate-providers')
-const { Paths } = require('../../../utils/paths')
 const { hash } = require('../../../utils/hash')
 const envPython = require('../../../utils/env-python')
-const { ensurePath } = require('../../../utils/path-helpers')
+const { ensurePath, getGantreePath } = require('../../../utils/path-helpers')
 const {
   GantreeError,
   ErrorTypes: { BAD_CHECKSUM }
@@ -17,10 +15,8 @@ const {
 
 const StdJson = require('../../../utils/std-json')
 
-const paths = new Paths()
-
 async function createInventory(frame, gco) {
-  const logger = frame.log.at('lib/ansible/inventory')
+  const logger = frame.logAt('lib/ansible/inventory')
   logger.info('creating Gantree inventory')
 
   const python_interpreter = await envPython.getInterpreterPath()
@@ -30,7 +26,7 @@ async function createInventory(frame, gco) {
   const inv = full_inventory({
     frame,
     gco,
-    project_path: frame.paths.project,
+    project_path: frame.project_path,
     python_interpreter
   })
 
@@ -42,11 +38,11 @@ async function createInventory(frame, gco) {
 }
 
 const writeGantreeInventory = (frame, inv) => {
-  const project_path = frame.paths.project
+  const project_path = frame.project_path
 
   const active_path = ensurePath(project_path, 'active')
 
-  const gantree_path = paths.getGantreePath()
+  const gantree_path = getGantreePath()
 
   const inventory_file_path = path.join(project_path, 'gantreeInventory.json')
 
@@ -60,9 +56,8 @@ const writeGantreeInventory = (frame, inv) => {
 }
 
 const checkHash = (frame, gco) => {
-  const logger = frame.log.at('lib/ansible/inventory/checkHash')
-  const project_path = frame.paths.project
-  const { strict } = frame.options
+  const logger = frame.logAt('lib/ansible/inventory/checkHash')
+  const { strict, project_path } = frame
 
   const inventory_path = path.join(project_path, 'gantree')
   const hash_path = path.join(inventory_path, 'gantree_config_hash.txt')
@@ -100,9 +95,9 @@ const checkHash = (frame, gco) => {
 }
 
 async function deleteGantreeInventory(frame) {
-  const logger = frame.log.at('lib/ansible/inventory/deleteGantreeInventory')
+  const logger = frame.logAt('lib/ansible/inventory/deleteGantreeInventory')
   // TODO: add extra functionality other than hash delete
-  const projectPath = frame.paths.project
+  const projectPath = frame.project_path
   const gantreeInventoryPath = await path.join(projectPath, 'gantree')
   const gantreeConfigHashTxtFilePath = await path.join(
     gantreeInventoryPath,

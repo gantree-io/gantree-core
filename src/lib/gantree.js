@@ -1,29 +1,29 @@
 const StdJson = require('./utils/std-json')
 const {
   GantreeError,
-  ErrorTypes: { BAD_CONFIG }
+  ErrorTypes: { MISSING_ARGUMENTS, BAD_CONFIG }
 } = require('./gantree-error')
 
 const libV2 = require('./v2/core/core')
 
 const get_gco = args => {
-  const { config, config_path } = args
-  if (config && config_path) {
+  const { config_object, config_path } = args
+  if (config_object && config_path) {
     throw new GantreeError(
-      BAD_CONFIG,
-      "Cannot supply both 'config' and 'config_path'"
+      MISSING_ARGUMENTS,
+      "Cannot supply both 'config_object' and 'config_path'"
     )
   }
 
-  if (!config && !config_path) {
+  if (!config_object && !config_path) {
     throw new GantreeError(
-      BAD_CONFIG,
-      "Must supply either 'config' or 'config_path'"
+      MISSING_ARGUMENTS,
+      "Must supply either 'config_object' or 'config_path'"
     )
   }
 
-  if (config) {
-    return config
+  if (config_object) {
+    return config_object
   }
 
   return StdJson.read(config_path)
@@ -36,9 +36,21 @@ const get_config_version = gco => {
   )
 }
 
+const get_project_name = gco => {
+  const project_name = gco.metadata && gco.metadata.project
+  if (!project_name) {
+    throw new GantreeError(
+      BAD_CONFIG,
+      'Config requires |.metadata.project field'
+    )
+  }
+  return project_name
+}
+
 const run = async (args = {}) => {
   const gco = get_gco(args)
   const config_version = get_config_version(gco)
+  const project_name = get_project_name(gco)
 
   let gLib = null
   switch (config_version) {
@@ -52,7 +64,7 @@ const run = async (args = {}) => {
     break
   }
 
-  gLib.run({ ...args, gco })
+  gLib.run({ ...args, gco, project_name })
 }
 
 module.exports = {

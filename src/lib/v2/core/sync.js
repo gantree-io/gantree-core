@@ -1,21 +1,20 @@
 const { Ansible } = require('../ansible')
 const stdout = require('../../utils/stdout')
 const path = require('path') // TODO: remove import once active path fixed
-const { returnLogger } = require('../services/logging')
 const pathHelpers = require('../../utils/path-helpers')
 
 const sync = async (frame, gco) => {
-  const logger = returnLogger('lib/gantree/sync')
+  const logger = frame.logAt('lib/gantree/sync')
   const ansible = new Ansible()
 
-  const projectPath = frame.paths.project
+  const projectPath = frame.project_path
 
   await ansible.inventory.namespace.create(frame, projectPath) // create project path recursively
 
   // TODO: must be refactored, also creates active inventory
   // create inventory for inventory/{NAMESPACE}/gantree
   await ansible.inventory.createInventory(frame, gco)
-  const gantreeInventoryPath = frame.paths.inventory
+  const gantreeInventoryPath = frame.inventory_path
 
   // TODO: TEMPorary, should be output of this.ansible.inventory.createActiveInventory
   const activeInventoryPath = await path.join(projectPath, 'active')

@@ -13,7 +13,7 @@ const clean = async (frame, gco) => {
   // TODO: FIX: must be refactored to not reuse so much code from sync, this is a temp fix
   // TODO: implement strict flag in CLI and also document for lib and CLI
 
-  const projectPath = frame.paths.project
+  const projectPath = frame.project_path
 
   await ansible.inventory.namespace.create(frame) // create project path recursively
 
@@ -23,7 +23,7 @@ const clean = async (frame, gco) => {
 
   if (gantreeInventoryExists === false) {
     // NOTE(ryan): why can't we create the inventory and then clean it?
-    if (frame.options.strict === true) {
+    if (frame.strict === true) {
       throw new GantreeError(
         MISSING_NAMESPACE_ITEM,
         "Can not clean Gantree inventory that doesn't exist"
@@ -36,7 +36,7 @@ const clean = async (frame, gco) => {
 
   // create inventory for inventory/{NAMESPACE}/gantree
   await ansible.inventory.createInventory(frame, gco)
-  const gantreeInventoryPath = frame.paths.inventory
+  const gantreeInventoryPath = frame.inventory_path
 
   // TODO: TEMPorary, should be output of this.ansible.inventory.createActiveInventory
   const activeInventoryPath = path.join(projectPath, 'active')

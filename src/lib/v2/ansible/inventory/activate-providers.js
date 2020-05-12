@@ -6,7 +6,7 @@ const dynamicAws = require('../../providers/aws/dynamic')
 const dynamicDo = require('../../providers/do/dynamic')
 
 const activateProviders = (frame, gco) => {
-  const activePath = path.join(frame.paths.project, 'active')
+  const activePath = path.join(frame.project_path, 'active')
 
   dynamicGcp.managePlugin(gco, activePath)
   dynamicAws.managePlugin(gco, activePath)

@@ -8,6 +8,11 @@ const processCommandArgs = args => {
 
   const verbosity = args.verbosity || process.env.GANTREE_VERBOSITY || 'info'
 
+  const config_path = args.config || null
+  if (!config_path) {
+    throw new Error('Must provide config')
+  }
+
   const project_path =
     args.project ||
     process.env.GANTREE_OVERRIDE_PROJECT_PATH ||
@@ -34,6 +39,7 @@ const processCommandArgs = args => {
   })
 
   return {
+    config_path,
     strict,
     verbose,
     verbosity,
