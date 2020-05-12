@@ -1,17 +1,10 @@
 const yaml = require('js-yaml')
 const fs = require('fs')
 const path = require('path')
-const {
-  GantreeError,
-  ErrorTypes: { DIR_NOT_FOUND, SCRIPT_ERROR }
-} = require('../lib/gantree-error')
 
 async function keyCombine(sessionDirPath) {
   if (!fs.existsSync(sessionDirPath)) {
-    throw new GantreeError(
-      DIR_NOT_FOUND,
-      `Invalid path to session directory (${sessionDirPath})`
-    )
+    throw new Error(`Invalid path to session directory (${sessionDirPath})`)
   }
   const validators = []
 
@@ -24,7 +17,7 @@ async function keyCombine(sessionDirPath) {
       validators.push(data)
     } catch (e) {
       // todo: discuss if this should be a warning instead of a fatal error (used to be a warning)
-      throw new GantreeError(SCRIPT_ERROR, `key-combine failed for ${filename}`)
+      throw new Error(`key-combine failed for ${filename}: error ${e}`)
     }
   })
 

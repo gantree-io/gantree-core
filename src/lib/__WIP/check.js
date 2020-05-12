@@ -1,4 +1,4 @@
-const { envVars } = require('./checks/envVars')
+const { envVars } = require('../checks/envVars')
 
 module.exports = {
   envVars

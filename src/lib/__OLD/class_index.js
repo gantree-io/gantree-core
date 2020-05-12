@@ -1,7 +1,7 @@
 const { rawRead } = require('../utils/raw-read')
-const validate = require('./validators/validate')
-const { extract: extractMetadata } = require('./extractors/metadata')
-const { processor: full_preprocess } = require('./preprocessors/full')
+const validate = require('../reconfig/validators/validate')
+const { extract: extractMetadata } = require('../reconfig/extractors/metadata')
+const { processor: full_preprocess } = require('../reconfig/preprocessors/full')
 
 // const { returnLogger } = require('../logging')
 

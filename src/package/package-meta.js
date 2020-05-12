@@ -1,5 +1,5 @@
 const path = require('path')
-const StdJson = require('./utils/std-json')
+const StdJson = require('../lib/utils/std-json')
 
 function getVersion() {
   const targetPath = path.join(

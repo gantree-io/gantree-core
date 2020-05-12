@@ -1,10 +1,6 @@
 #!/usr/bin/env node
 
 const program = require('commander')
-const {
-  GantreeError,
-  ErrorTypes: { MISSING_ARGUMENTS }
-} = require('../../lib/gantree-error')
 const { inject } = require('../../tools/inject')
 
 program
@@ -26,10 +22,10 @@ program.parse(process.argv)
 function inject_CLI(cmd) {
   let allowRaw = false
   if (cmd.chainSpecPath === undefined) {
-    throw new GantreeError(MISSING_ARGUMENTS, 'chainSpecPath missing')
+    throw new Error('chainSpecPath missing')
   }
   if (cmd.validatorSpecPath === undefined) {
-    throw new GantreeError(MISSING_ARGUMENTS, 'validatorSpecPath missing')
+    throw new Error('validatorSpecPath missing')
   }
   if (!(cmd.allowRaw === undefined)) {
     allowRaw = cmd.allowRaw

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const program = require('commander')
-const packageMeta = require('../../lib/packageMeta')
+const packageMeta = require('../../package/package-meta')
 const { syncWrapper } = require('./syncWrapper')
 const { cleanWrapper } = require('./cleanWrapper')
 const gantreeLib = require('../../lib')

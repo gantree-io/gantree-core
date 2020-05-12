@@ -8,7 +8,7 @@ const {
 function publicKeyFromPrivateKeyPath(privateKeyPath) {
   // throw error if path undefined
   if (privateKeyPath === undefined) {
-    throw GantreeError(
+    throw new GantreeError(
       BAD_CONFIG,
       'private key path is undefined on one or more nodes'
     )
@@ -20,7 +20,7 @@ function publicKeyFromPrivateKeyPath(privateKeyPath) {
   try {
     privateKey = fs.readFileSync(privateKeyPath)
   } catch (e) {
-    throw GantreeError(BAD_CONFIG, 'failed to read private key', e)
+    throw new GantreeError(BAD_CONFIG, 'failed to read private key', e)
   }
 
   const forgePrivateKey = forge.pki.privateKeyFromPem(privateKey)
