@@ -1,4 +1,4 @@
-const { getPathEnsure } = require('../../../utils/path-helpers')
+const { ensurePath } = require('../../../utils/path-helpers')
 
 const { extract: metadata } = require('./metadata')
 const { extract: system } = require('./system-account')
@@ -15,7 +15,7 @@ const extract = extProps => {
   return {
     gantree_root: '../',
     gantree_working: `/home/${substrate_user}/tmp/gantree-validator`,
-    gantree_control_working: getPathEnsure(control, project_name, 'operation')
+    gantree_control_working: ensurePath(control, project_name, 'operation')
   }
 }
 
