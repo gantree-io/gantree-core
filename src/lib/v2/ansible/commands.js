@@ -1,11 +1,9 @@
 const cmd = require('../services/cmd')
-const { returnLogger } = require('../services/logging')
-
-const logger = returnLogger('lib/ansible/commands')
 
 const _genInventoryString = invPaths => invPaths.map(p => `-i ${p}`).join(' ')
 
-async function runPlaybook(inventoryPathArray, playbookFilePath) {
+async function runPlaybook(frame, inventoryPathArray, playbookFilePath) {
+  const logger = frame.logAt('ansible/commands/runPlaybook')
   logger.info(`running playbook: ${playbookFilePath}`)
 
   const inventoryString = _genInventoryString(inventoryPathArray)
@@ -20,7 +18,8 @@ async function runPlaybook(inventoryPathArray, playbookFilePath) {
   return execOutput
 }
 
-async function returnCombinedInventory(inventoryPathArray) {
+async function returnCombinedInventory(frame, inventoryPathArray) {
+  const logger = frame.logAt('ansible/commands/returnCombinedInventory')
   logger.info(`...getting generated ansible inventory`)
 
   const inventoryString = await _genInventoryString(inventoryPathArray)

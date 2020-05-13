@@ -2,7 +2,7 @@ const provider_env_vars = require('../../static_data/provider_env_vars')
 const {
   GantreeError,
   ErrorTypes: { MISSING_ARGUMENTS, ENVIRONMENT_VARIABLE_MISSING, BAD_CONFIG }
-} = require('../../gantree-error')
+} = require('../../../gantree-error')
 const { returnLogger } = require('../logging')
 
 const logger = returnLogger('envVars')

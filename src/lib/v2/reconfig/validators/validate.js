@@ -1,5 +1,5 @@
 const Ajv = require('ajv')
-const checks = require('../../checks')
+const checks = require('../checks')
 const {
   GantreeError,
   ErrorTypes: { BAD_CONFIG }

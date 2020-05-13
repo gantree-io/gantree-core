@@ -2,25 +2,29 @@ const util = require('util')
 
 const exec = util.promisify(require('child_process').exec)
 
-const getInterpreterPath = async () => {
-  // get the python for current environment so we can pass it around ansible if needed
-  let pythonLocalPython
-
-  // TODO(ryan): try python3 first?
-
+const findPython = async binary_name => {
   try {
-    pythonLocalPython = await exec(
-      'python -c "import sys; print(sys.executable)"'
+    const raw = await exec(
+      `${binary_name} -c "import sys; print(sys.executable)"`
     )
+    return raw.stdout.trim()
   } catch (e) {
-    // console.warn('python 2 is a no-go')
+    return null
+  }
+}
+
+const getInterpreterPath = async () => {
+  let localPython = await findPython('python3')
+
+  if (!localPython) {
+    await findPython('python')
   }
 
-  pythonLocalPython = await exec(
-    'python3 -c "import sys; print(sys.executable)"'
-  )
+  if (!localPython) {
+    throw new Error('Could not find local python')
+  }
 
-  return pythonLocalPython.stdout.trim()
+  return localPython
 }
 
 module.exports = {

@@ -3,7 +3,7 @@ const gantreeLibRoot = () => path.join(__dirname, '../', '../', '../')
 
 const fs = require('fs')
 const path = require('path')
-const opt = require('./options')
+const opt = require('../utils/options')
 
 class Paths {
   constructor() {

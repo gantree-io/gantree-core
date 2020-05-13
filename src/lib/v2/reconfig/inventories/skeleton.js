@@ -7,7 +7,7 @@ const inventory = invProps => ({
   local: {
     hosts: ['localhost'],
     vars: {
-      ansible_python_interpreter: invProps.python_interpreter,
+      ansible_python_interpreter: invProps.frame.python_interpreter,
       ansible_connection: 'local',
       ...extractAnsible(invProps)
     }

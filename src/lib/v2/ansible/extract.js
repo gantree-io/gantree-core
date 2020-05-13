@@ -1,11 +1,10 @@
-async function IPs(combinedInventoryObj) {
-  // TODO(ryan): remove dummy logger
-  const logger = { info: () => null }
+async function IPs(frame, combined_inventory) {
+  const logger = frame.logAt('ansible/extract/IPs')
 
   logger.info('...extracting IPs')
 
   // TODO: ansible code must be changed from "validator" to "node" group
-  const nodeHostNames = combinedInventoryObj.validator.children
+  const nodeHostNames = combined_inventory.validator.children
 
   logger.info(nodeHostNames)
 
@@ -13,7 +12,7 @@ async function IPs(combinedInventoryObj) {
 
   for (const hostName of nodeHostNames) {
     // use names to pull out hostname objects
-    const hostNamesProperties = combinedInventoryObj[hostName]
+    const hostNamesProperties = combined_inventory[hostName]
     const hostNameIps = hostNamesProperties.hosts
 
     logger.info(`----properties of hostname '${hostName}':----`)

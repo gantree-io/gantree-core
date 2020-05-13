@@ -5,7 +5,7 @@ const { processCommandArgs } = require('./command-args')
 async function cleanWrapper(args) {
   console.log(gantreeTitle)
 
-  const processedArgs = processCommandArgs(args)
+  const processedArgs = await processCommandArgs(args)
 
   // TODO(ryan): try/catch
   await Gantree.run({

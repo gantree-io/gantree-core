@@ -1,7 +1,7 @@
 const StdJson = require('./utils/std-json')
 const {
   GantreeError,
-  ErrorTypes: { MISSING_ARGUMENTS, BAD_CONFIG }
+  ErrorTypes: { MISSING_ARGUMENTS }
 } = require('./gantree-error')
 
 const libV2 = require('./v2/core/core')
@@ -36,21 +36,9 @@ const get_config_version = gco => {
   )
 }
 
-const get_project_name = gco => {
-  const project_name = gco.metadata && gco.metadata.project
-  if (!project_name) {
-    throw new GantreeError(
-      BAD_CONFIG,
-      'Config requires |.metadata.project field'
-    )
-  }
-  return project_name
-}
-
 const run = async (args = {}) => {
   const gco = get_gco(args)
   const config_version = get_config_version(gco)
-  const project_name = get_project_name(gco)
 
   let gLib = null
   switch (config_version) {
@@ -59,12 +47,14 @@ const run = async (args = {}) => {
     break
   default:
     // TODO(ryan): log to job
-    console.log(`Unsupported config version '${config_version}', using '2'`)
+    args.logger.warn(
+      `Unsupported config version '${config_version}', using '2'`
+    )
     gLib = libV2
     break
   }
 
-  gLib.run({ ...args, gco, project_name })
+  gLib.run({ ...args, gco })
 }
 
 module.exports = {
