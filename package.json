@@ -1,6 +1,6 @@
 {
   "name": "gantree-core",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "main": "src/lib",
   "repository": "https://github.com/flex-dapps/gantree-core",
   "author": "Flex Dapps",
