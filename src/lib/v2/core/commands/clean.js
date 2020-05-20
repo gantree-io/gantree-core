@@ -1,11 +1,10 @@
-const Ansible = require('../../ansible')
-const Inventory = require('../../inventory')
+const Ansible = require('../ansible')
+const Inventory = require('../inventory')
 const {
   GantreeError,
   ErrorTypes: { MISSING_NAMESPACE_ITEM }
 } = require('../../../gantree-error')
 const { returnLogger } = require('../../services/logging')
-const pathHelpers = require('../../../utils/path-helpers')
 
 const clean = async (frame, gco) => {
   const logger = returnLogger('lib/gantree/clean')
@@ -29,15 +28,7 @@ const clean = async (frame, gco) => {
 
   await Inventory.createInventory(frame, gco)
 
-  const infra_playbook_filepath = pathHelpers.getPlaybookFilePath(
-    'clean_infra.yml'
-  )
-
-  await Ansible.commands.runPlaybook(
-    frame,
-    [frame.active_path],
-    infra_playbook_filepath
-  )
+  await Ansible.commands.runPlaybook(frame, 'clean_infra.yml')
 
   // delete gantree inventory
   Inventory.deleteGantreeInventory(frame)

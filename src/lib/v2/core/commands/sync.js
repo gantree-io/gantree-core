@@ -1,7 +1,6 @@
-const Ansible = require('../../ansible')
-const Inventory = require('../../inventory')
+const Ansible = require('../ansible')
+const Inventory = require('../inventory')
 const stdout = require('../../../utils/stdout')
-const pathHelpers = require('../../../utils/path-helpers')
 
 const sync = async (frame, gco) => {
   const logger = frame.logAt('core/sync')
@@ -12,37 +11,23 @@ const sync = async (frame, gco) => {
 
   // TODO: TEMPorary, should be output of this.ansible.inventory.createActiveInventory
 
-  const inventory_path_array = [frame.active_path]
-
   // setup infra
-  const infra_playbook_filepath = pathHelpers.getPlaybookFilePath('infra.yml')
-  await Ansible.commands.runPlaybook(
-    frame,
-    inventory_path_array,
-    infra_playbook_filepath
-  )
+  await Ansible.commands.runPlaybook(frame, 'infra.yml')
 
   // // get instance IPs using inventories
   const combined_inventory = await Ansible.commands.returnCombinedInventory(
-    frame,
-    inventory_path_array
+    frame
   )
-  const nodeIpAddresses = await Ansible.extract.IPs(frame, combined_inventory)
+
+  const node_ip_addresses = await Ansible.extract.IPs(frame, combined_inventory)
 
   await stdout.writeForParsing(
     'NODE_IP_ADDRESSES',
-    JSON.stringify(nodeIpAddresses)
+    JSON.stringify(node_ip_addresses)
   )
 
   // convert instances into substrate nodes
-  const operation_playbook_filepath = pathHelpers.getPlaybookFilePath(
-    'operation.yml'
-  )
-  await Ansible.commands.runPlaybook(
-    frame,
-    inventory_path_array,
-    operation_playbook_filepath
-  )
+  await Ansible.commands.runPlaybook(frame, 'operation.yml')
 
   logger.info('sync finished')
 }
