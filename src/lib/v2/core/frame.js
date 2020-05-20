@@ -26,7 +26,7 @@ const getProjectPath = (args, project_name) => {
   if (!args.project_root) {
     throw new GantreeError(
       MISSING_ARGUMENTS,
-      `Must supply 'project_path' or 'project_root_path'`
+      `Must supply 'project_path' or 'project_root'`
     )
   }
 

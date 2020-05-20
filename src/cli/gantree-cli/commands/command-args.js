@@ -9,9 +9,11 @@ const processCommandArgs = async args => {
 
   const verbosity = args.verbosity || process.env.GANTREE_VERBOSITY || 'info'
 
-  const config_path = args.config || null
+  const config_path = args.config || process.env.GANTREE_CONFIG_PATH
   if (!config_path) {
-    throw new Error('Must provide config')
+    throw new Error(
+      'Must provide config argument or set env:GANTEREE_CONFIG_PATH'
+    )
   }
 
   const project_root =

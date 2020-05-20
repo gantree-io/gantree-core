@@ -20,13 +20,28 @@ const managePlugin = (c, invPath) => {
 
 const getAwsRegions = c => {
   const regions = []
-  c.nodes.forEach(n => {
-    if (n.instance.provider != 'aws') return
-    if (!n.instance.region) return
-    if (regions.includes(n.instance.region)) return
 
-    regions.push(n.instance.region)
+  c.nodes.forEach(n => {
+    if (
+      !(n && n.instance && n.instance.provider && n.instance.provider === 'aws')
+    ) {
+      return
+    }
+
+    // TODO(ryan): warn 'location' deprecated
+    const region = n.instance.region || n.instance.location || null
+
+    if (!region) {
+      return
+    }
+
+    if (regions.includes(n.instance.region)) {
+      return
+    }
+
+    regions.push(region)
   })
+
   return regions
 }
 
