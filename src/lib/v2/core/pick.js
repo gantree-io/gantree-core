@@ -1,7 +1,7 @@
 const {
   GantreeError,
   ErrorTypes: { MISSING_ARGUMENTS }
-} = require('../../gantree-error')
+} = require('../../error/gantree-error')
 
 const notUndef = (args, argument_name) => {
   if (args[argument_name] === undefined) {

@@ -1,7 +1,4 @@
 const cloneDeepWith = require('lodash.clonedeepwith')
-const { returnLogger } = require('../../services/logging')
-
-const logger = returnLogger('lib/config/preprocessors/boolToString')
 
 function boolToStringCustomizer(value) {
   if (value === true) {
@@ -13,6 +10,7 @@ function boolToStringCustomizer(value) {
 }
 
 function processor(procProps) {
+  const logger = procProps.frame.logAt('v2/preprocessors/bool-to-string')
   logger.info('converting booleans in config to strings')
 
   return cloneDeepWith(procProps.gco, boolToStringCustomizer)

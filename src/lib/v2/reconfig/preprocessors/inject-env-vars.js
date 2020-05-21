@@ -2,11 +2,8 @@ const cloneDeepWith = require('lodash.clonedeepwith')
 const {
   GantreeError,
   ErrorTypes: { ENVIRONMENT_VARIABLE_MISSING }
-} = require('../../../gantree-error')
-const { returnLogger } = require('../../services/logging')
+} = require('../../../error/gantree-error')
 const { hasOwnProp } = require('../../../utils/has-own-prop')
-
-const logger = returnLogger('lib/config/preprocessors/injectEnvVars')
 
 const envRegex = /(?<=^\$(env|ENV):)[A-Za-z_]+(?=$)/
 
@@ -32,6 +29,7 @@ function dynamicEnvVarCustomizer(value) {
 }
 
 function processor(procProps) {
+  const logger = procProps.frame.logAt('v2/processor/inject-env-vars')
   logger.info('injecting environment variables into config')
 
   return cloneDeepWith(procProps.gco, dynamicEnvVarCustomizer)

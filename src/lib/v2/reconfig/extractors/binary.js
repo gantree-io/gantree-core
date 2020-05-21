@@ -1,7 +1,7 @@
 const {
   GantreeError,
   ErrorTypes: { BAD_CONFIG }
-} = require('../../../gantree-error')
+} = require('../../../error/gantree-error')
 const { extract: system } = require('./system-account')
 
 const binaryGeneral = extProps => {

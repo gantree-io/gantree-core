@@ -9,8 +9,8 @@ const myFormat = printf(({ level, message, label, timestamp, service }) => {
 const create = options => {
   const service_name = options.service_name || 'Gantree'
   const level = options.level || 'info'
-  const error_log_file = options.error_log_file || 'error.log'
-  const combined_log_file = options.combined_log_file || 'combined.log'
+  const error_log_file = options.error_log_file || 'gantree-error.log'
+  const combined_log_file = options.combined_log_file || 'gantree-combined.log'
   const log_to_console = options.log_to_console || false
 
   const logger = winston.createLogger({

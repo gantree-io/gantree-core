@@ -1,6 +1,6 @@
 const path = require('path') // for resolving packageDir
 const Gantree = require('./gantree')
-const Errors = require('./gantree-error')
+const Errors = require('./error/gantree-error')
 const packageMeta = require('../package/package-meta')
 const envPython = require('./utils/env-python')
 

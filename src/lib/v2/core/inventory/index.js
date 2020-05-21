@@ -1,9 +1,10 @@
 const path = require('path')
 const fs = require('fs')
 const namespace = require('./namespace')
-const { inventory: full_inventory } = require('../../reconfig/inventories/full')
+const {
+  inventory: gantreeInventory
+} = require('../../reconfig/inventories/full')
 const { activateProviders } = require('./activate-providers')
-const pathHelpers = require('../../../utils/path-helpers')
 const { checkHash } = require('./check-hash')
 
 const StdJson = require('../../../utils/std-json')
@@ -14,7 +15,7 @@ async function createInventory(frame, gco) {
 
   activateProviders(frame, gco)
 
-  const inv = full_inventory({ frame, gco })
+  const inv = gantreeInventory({ frame, gco })
 
   writeGantreeInventory(frame, inv)
 
@@ -24,18 +25,14 @@ async function createInventory(frame, gco) {
 }
 
 const writeGantreeInventory = (frame, inv) => {
-  const inventory_tool_filepath = pathHelpers.getToolsPath(
-    'gantree-inventory.js'
-  )
-
   const inventory_filepath = path.join(
     frame.project_path,
-    'gantreeInventory.json'
+    'gantree_inventory.json'
   )
 
   fs.writeFileSync(inventory_filepath, StdJson.stringify(inv), 'utf8')
 
-  const sh_file_content = `#!/bin/bash\n\nnode ${inventory_tool_filepath} ${frame.project_path}`
+  const sh_file_content = `#!/bin/bash\n\ncat ${inventory_filepath}`
   const sh_file_path = path.join(frame.active_path, 'gantree.sh')
 
   fs.writeFileSync(sh_file_path, sh_file_content, 'utf8')

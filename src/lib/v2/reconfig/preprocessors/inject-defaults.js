@@ -4,9 +4,6 @@ const binPresets = require('../../static_data/binary_presets')
 const { throwGantreeError } = require('../error')
 const opt = require('../utils/options')
 const types = require('../utils/types')
-const { returnLogger } = require('../logging')
-
-const logger = returnLogger('lib/config/inject')
 
 function processor(realObject, defaultObject, key, name, _options = {}) {
   if (typeof realObject === 'object') {
@@ -62,7 +59,6 @@ return realObject
 }
 
 function injectDefaults(gantreeConfigObj, _options = {}) {
-  logger.info('injecting defaults')
   for (const key of Object.keys(defaults)) {
     gantreeConfigObj = defaultReducer(
       gantreeConfigObj,

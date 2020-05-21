@@ -3,11 +3,10 @@ const Inventory = require('../inventory')
 const {
   GantreeError,
   ErrorTypes: { MISSING_NAMESPACE_ITEM }
-} = require('../../../gantree-error')
-const { returnLogger } = require('../../services/logging')
+} = require('../../../error/gantree-error')
 
 const clean = async (frame, gco) => {
-  const logger = returnLogger('lib/gantree/clean')
+  const logger = frame.logAt('lib/gantree/clean')
 
   await Inventory.namespace.create(frame) // create project path recursively
 

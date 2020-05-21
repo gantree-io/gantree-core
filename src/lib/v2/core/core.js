@@ -1,7 +1,7 @@
 const {
   GantreeError,
   ErrorTypes: { COMMAND_ERROR }
-} = require('../../gantree-error')
+} = require('../../error/gantree-error')
 const Frame = require('./frame')
 const { sync } = require('./commands/sync')
 const { clean } = require('./commands/clean')
@@ -24,8 +24,8 @@ const run = async args => {
   }
 
   let gco = args.gco
-  gco = Config.validate(gco)
-  gco = Config.preprocess(gco)
+  gco = Config.validate(frame, gco)
+  gco = Config.preprocess(frame, gco)
 
   await command(frame, gco)
 }

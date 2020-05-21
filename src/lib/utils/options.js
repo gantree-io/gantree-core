@@ -1,7 +1,7 @@
 const {
   GantreeError,
   ErrorTypes: { INTERNAL_ERROR }
-} = require('../gantree-error')
+} = require('../error/gantree-error')
 
 /**
  * Return a default value if the real one is undefined

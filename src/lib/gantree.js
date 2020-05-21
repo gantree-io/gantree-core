@@ -2,7 +2,7 @@ const StdJson = require('./utils/std-json')
 const {
   GantreeError,
   ErrorTypes: { MISSING_ARGUMENTS }
-} = require('./gantree-error')
+} = require('./error/gantree-error')
 
 const libV2 = require('./v2/core/core')
 
@@ -46,7 +46,6 @@ const run = async (args = {}) => {
     gLib = libV2
     break
   default:
-    // TODO(ryan): log to job
     args.logger.warn(
       `Unsupported config version '${config_version}', using '2'`
     )

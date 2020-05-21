@@ -3,7 +3,7 @@
 const {
   GantreeError,
   ErrorTypes: { BAD_CONFIG }
-} = require('../../../gantree-error')
+} = require('../../../error/gantree-error')
 const { hasOwnProp } = require('../../../utils/has-own-prop')
 
 async function nodeNameCharLimit(gantreeConfigObj, _options = {}) {

@@ -28,8 +28,7 @@
   "bin": {
     "gantree-cli": "src/cli/gantree-cli/gantree-cli.js",
     "gantree-key-combine": "src/cli/tools-cli/gantree-key-combine.js",
-    "gantree-inject": "src/cli/tools-cli/gantree-inject.js",
-    "gantree-inventory": "src/cli/tools-cli/gantree-inventory.js"
+    "gantree-inject": "src/cli/tools-cli/gantree-inject.js"
   },
   "files": [
     "/ansible",

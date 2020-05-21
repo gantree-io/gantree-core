@@ -4,7 +4,7 @@ const { hash } = require('../../../utils/hash')
 const {
   GantreeError,
   ErrorTypes: { BAD_CHECKSUM }
-} = require('../../../gantree-error')
+} = require('../../../error/gantree-error')
 
 const StdJson = require('../../../utils/std-json')
 

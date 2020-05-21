@@ -5,12 +5,10 @@ const binPresets = require('../../static_data/binary_presets')
 const {
   GantreeError,
   ErrorTypes: { BAD_CONFIG }
-} = require('../../../gantree-error')
-const { returnLogger } = require('../../services/logging')
-
-const logger = returnLogger('/lib/config/inject')
+} = require('../../../error/gantree-error')
 
 function processor(procProps) {
+  const logger = procProps.frame.logAt('/lib/config/inject')
   logger.info('checking for preset')
 
   const gco = cloneDeepWith(procProps.gco)

@@ -4,7 +4,7 @@ const { ensurePath } = require('../../utils/path-helpers')
 const {
   GantreeError,
   ErrorTypes: { BAD_CONFIG, MISSING_ARGUMENTS }
-} = require('../../gantree-error')
+} = require('../../error/gantree-error')
 
 const getProjectName = args => {
   const { gco } = args

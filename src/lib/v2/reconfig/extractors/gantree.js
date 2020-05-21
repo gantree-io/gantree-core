@@ -9,6 +9,7 @@ const extract = extProps => {
   return {
     gantree_root: '../',
     gantree_working: `/home/${substrate_user}/tmp/gantree-validator`,
+    // TODO(ryan): no mutations
     gantree_control_working: ensurePath(control_path, 'operation'),
     gantree_tools_root: getToolsPath()
   }

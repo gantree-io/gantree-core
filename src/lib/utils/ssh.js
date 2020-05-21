@@ -3,7 +3,7 @@ const forge = require('node-forge')
 const {
   GantreeError,
   ErrorTypes: { BAD_CONFIG }
-} = require('../gantree-error')
+} = require('../error/gantree-error')
 
 function publicKeyFromPrivateKeyPath(privateKeyPath) {
   // throw error if path undefined
