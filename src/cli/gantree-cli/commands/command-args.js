@@ -9,6 +9,8 @@ const processCommandArgs = async args => {
 
   const verbosity = args.verbosity || process.env.GANTREE_VERBOSITY || 'info'
 
+  const enable_process_stdout = true
+
   const config_path = args.config || process.env.GANTREE_CONFIG_PATH
   if (!config_path) {
     throw new Error(
@@ -48,6 +50,7 @@ const processCommandArgs = async args => {
     (await Utils.getPythonInterpreterPath())
 
   return {
+    enable_process_stdout,
     config_path,
     strict,
     verbose,

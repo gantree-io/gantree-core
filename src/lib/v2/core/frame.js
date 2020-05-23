@@ -1,5 +1,5 @@
 const path = require('path')
-const { oPick, notNull } = require('./pick')
+const { oPick, notNull, fallback, assertType } = require('./pick')
 const { ensurePath } = require('../../utils/path-helpers')
 const {
   GantreeError,
@@ -50,6 +50,7 @@ const createFrame = args => {
     project_name,
     project_path,
     control_path,
+    ...oPick(args, 'enable_process_stdout', fallback(false), assertType('boolean')),
     ...oPick(args, 'strict', notNull),
     ...oPick(args, 'verbose', notNull),
     ...oPick(args, 'verbosity', notNull),
@@ -59,8 +60,19 @@ const createFrame = args => {
 
   frame.active_path = ensurePath(frame.project_path, 'active')
 
-  frame.logAt = loc => {
-    return frame.logger.child({ defaultMeta: { service_name: loc } })
+  frame.logAt = meta => {
+    if (typeof meta === 'string') {
+      meta = { service: meta }
+    }
+
+    const log = (level, message = '', more_meta = {}) => frame.logger.log({ ...meta, ...more_meta, level, message })
+    const build = level => ({ [level]: (message, more_meta) => log(level, message, more_meta) })
+    const buildAll = (...levels) => levels.reduce((res, level) => ({ ...res, ...build(level) }), {})
+
+    return {
+      log,
+      ...buildAll('error', 'warn', 'info', 'http', 'verbose', 'debug', 'silly')
+    }
   }
 
   return frame

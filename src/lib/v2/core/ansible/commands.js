@@ -21,11 +21,15 @@ async function runPlaybook(frame, playbook_filename) {
 
   const playbook_command = `ansible-playbook ${inventory_substring} ${playbook_filepath}`
 
-  const execOutput = await cmd.exec(playbook_command, { verbose: true })
+  const result = await cmd.exec(frame, playbook_command, {
+    log_to_console: true,
+    log_to_error_file: true,
+    log_to_combined_file: true
+  })
 
   logger.info(`playbook finished: ${playbook_filepath}`)
 
-  return execOutput
+  return result
 }
 
 async function returnCombinedInventory(frame) {
@@ -38,17 +42,13 @@ async function returnCombinedInventory(frame) {
 
   const inventory_command = `ansible-inventory ${inventory_path_substring} --list`
 
-  const cmd_output_buffer = await cmd.exec(inventory_command, {
-    verbose: false,
-    returnStdoutOnly: true,
-    returnCleanStdout: true
-  })
-  const cmd_output = await cmd_output_buffer.toString()
-  const inventory_obj = await JSON.parse(cmd_output)
+  const exec_result = await cmd.exec(frame, inventory_command)
+
+  const inventory = await JSON.parse(exec_result.out)
 
   logger.info(`...got generated ansible inventory!`)
 
-  return inventory_obj
+  return inventory
 }
 
 module.exports = {

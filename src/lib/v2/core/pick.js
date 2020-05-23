@@ -42,6 +42,18 @@ const fallfunc = (fallback_func, ...params) => {
   }
 }
 
+const assertType = type_name => {
+  return (args, arg_name) => {
+    if (typeof args[arg_name] !== type_name) {
+      throw new GantreeError(
+        MISSING_ARGUMENTS,
+        `Argument '${arg_name}' must be of type '${type_name}'`
+      )
+    }
+    return args
+  }
+}
+
 const oPick = (args, arg_name, ...mods) => {
   const modArgs = mods.reduce((p, m) => ({ ...m(p, arg_name) }), args)
   const result =
@@ -54,5 +66,6 @@ module.exports = {
   fallback,
   fallfunc,
   notUndef,
-  notNull
+  notNull,
+  assertType,
 }

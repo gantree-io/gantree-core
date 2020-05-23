@@ -1,146 +1,75 @@
 const { Buffer } = require('buffer')
 const child_process = require('child_process')
 const { Counter } = require('./counter')
-const opt = require('../../utils/options')
-const { returnLogger } = require('./logging')
 
-const logger = returnLogger('cmd')
 
-async function each_count(count, action_trigger_count) {
-  if (count % action_trigger_count == 0) {
-    process.stdout.write('.')
-  }
-}
+const appendBuffer = (buffer, ...data) => Buffer.concat([buffer, ...data.map(Buffer.from)])
 
-function execPromiseCallback(resolve, reject, command, counter, _options = {}) {
-  const verbose = opt.default(_options.verbose, true)
-  const returnStdoutOnly = opt.default(_options.returnStdoutOnly, false)
-
-  const child = child_process.exec(command, _options)
-
-  // TODO: evaluate if this is worth re-implementing
-  // if (options.detached) {
-  //   child.unref()
-  //   resolve(child.pid)
-  //   return
-  // }
-  // let match = false
-
-  let outputBuffer = new Buffer.from('')
-  let stdoutOnly = new Buffer.from('')
-
-  function addToOutputBuffer(data) {
-    outputBuffer = Buffer.concat([outputBuffer, Buffer.from(data)])
-  }
-
-  function addToStdoutOnlyBuffer(data) {
-    stdoutOnly = Buffer.concat([stdoutOnly, Buffer.from(data)])
-  }
-
-  child.stdout.on('data', data => {
-    stdoutCallback(
-      data,
-      addToOutputBuffer,
-      addToStdoutOnlyBuffer,
-      counter,
-      verbose
-    )
+async function exec(frame, command, options = {}) {
+  const logger = frame.logAt({
+    service: 'cmd',
+    log_to_console: Boolean(options.log_to_console),
+    log_to_error_file: Boolean(options.log_to_error_file),
+    log_to_combined_file: Boolean(options.log_to_combined_file)
   })
 
-  child.stderr.on('data', data => {
-    stderrCallback(data, addToOutputBuffer, command, verbose)
-  })
+  logger.info(`Executing: ${command}, ${JSON.stringify(options)}`)
 
-  child.on('close', code => {
-    childCloseCallback(
-      code,
-      resolve,
-      reject,
-      outputBuffer,
-      stdoutOnly,
-      command,
-      counter,
-      returnStdoutOnly
-    )
-  })
-}
+  const counter = frame.enable_process_stdout ?
+    new Counter(
+      null,
+      async count => count % 5 === 0 ? process.stdout.write('.') : null,
+      async count => count >= 5 ? process.stdout.write('\n') : null
+    ) : new Counter()
 
-function stdoutCallback(
-  data,
-  addToOutputBuffer,
-  addToStdoutOnlyBuffer,
-  counter,
-  verbose
-) {
-  counter.stop_counting()
-  // TODO: evaluate if this is worth re-implementing (needs documentation for developers possibly)
-  // if (options.matcher && options.matcher.test(data)) {
-  //   match = true
-  //   child.kill('SIGTERM')
-  //   resolve()
-  //   return
-  // }
-  addToOutputBuffer(data)
-  addToStdoutOnlyBuffer(data)
-  if (verbose) {
-    // logger.info(`'${command}':`)
-    counter.count_until_false()
-    process.stdout.write(data.toString())
-  }
-}
+  // TODO(ryan): reject on timeout?
+  return new Promise((resolve) => {
+    let out = new Buffer.from('')
+    let err = new Buffer.from('')
 
-function stderrCallback(data, addToOutputBuffer, command, verbose) {
-  addToOutputBuffer(data)
-  if (verbose) {
-    logger.error(
-      `Error occured during command execution '${command}': \n${data.toString()}`
-    )
-  }
-}
+    const child = child_process.exec(command, options)
 
-async function childCloseCallback(
-  code,
-  resolve,
-  reject,
-  outputBuffer,
-  stdoutOnly,
-  command,
-  counter,
-  returnStdoutOnly
-) {
-  // old conditional with match support
-  // if (code !== 0 && !match) {
+    // TODO: evaluate if this is worth re-implementing
+    // if (options.detached) {
+    //   child.unref()
+    //   resolve(child.pid)
+    //   return
+    // }
 
-  // if non-zero exit code
-  if (code !== 0) {
-    logger.error(`Execution failed with code ${code}: ${command}`)
-    await reject(new Error(code))
-  }
-  // if exit code is zero
-  else {
-    if (returnStdoutOnly === true) {
-      resolve(stdoutOnly)
-    } else {
-      resolve(outputBuffer)
-    }
-  }
-  await counter.stop_counting()
-}
+    counter.start()
 
-async function execCommand(command, _options = {}) {
-  const returnCleanStdout = await opt.default(_options.returnCleanStdout, false)
+    child.stdout.on('data', data => {
+      counter.start()
 
-  if (returnCleanStdout !== true) {
-    logger.info(`Executing: ${command}, ${JSON.stringify(_options)}`)
-  }
+      logger.info(data)
 
-  const counter = new Counter(each_count, 5)
+      out = appendBuffer(out, data)
+    })
 
-  return new Promise((resolve, reject) => {
-    execPromiseCallback(resolve, reject, command, counter, _options)
+    child.stderr.on('data', data => {
+      counter.start()
+
+      logger.error(data)
+
+      err = appendBuffer(err, data)
+    })
+
+    child.on('close', async code => {
+      counter.stop()
+
+      if (code !== 0) {
+        logger.error(`Execution failed with code ${code}: ${command}`)
+      }
+
+      resolve({
+        code,
+        out: out.toString(),
+        err: err.toString()
+      })
+    })
   })
 }
 
 module.exports = {
-  exec: execCommand
+  exec
 }

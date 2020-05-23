@@ -1,32 +1,33 @@
 const winston = require('winston')
+const { format } = winston
+const { combine, timestamp, label, printf, colorize } = format
 
-const { combine, timestamp, label, printf, colorize } = winston.format
-
-const myFormat = printf(({ level, message, label, timestamp, service }) => {
+const consoleFormat = printf(({ level, message, label, timestamp, service }) => {
   return `${timestamp} [${label}] (${service}) ${level}: ${message}`
 })
 
+const meta_filter = name => format(info => info[name] !== false ? info : false)()
+
 const create = options => {
-  const service_name = options.service_name || 'Gantree'
+  const service = options.service || 'Gantree'
   const level = options.level || 'info'
   const error_log_file = options.error_log_file || 'gantree-error.log'
   const combined_log_file = options.combined_log_file || 'gantree-combined.log'
-  const log_to_console = options.log_to_console || false
 
   const logger = winston.createLogger({
     level,
-    format: winston.format.json(),
-    defaultMeta: { service: service_name },
+    ///format: winston.format.json(),
     transports: []
   })
 
-  if (log_to_console) {
+  if (options.log_to_console) {
     const console_transport = new winston.transports.Console({
       format: combine(
+        meta_filter('log_to_console'),
         colorize(),
-        label({ label: service_name }),
+        label({ label: service }),
         timestamp(),
-        myFormat
+        consoleFormat
       )
     })
 
@@ -35,12 +36,23 @@ const create = options => {
 
   if (options.error_log_file) {
     logger.add(
-      new winston.transports.File({ filename: error_log_file, level: 'error' })
+      new winston.transports.File({
+        filename: error_log_file,
+        level: 'error',
+        format: combine(
+          meta_filter('log_to_error_file')
+        )
+      })
     )
   }
 
   if (options.combined_log_file) {
-    logger.add(new winston.transports.File({ filename: combined_log_file }))
+    logger.add(new winston.transports.File({
+      filename: combined_log_file,
+      format: combine(
+        meta_filter('log_to_combined_file')
+      )
+    }))
   }
 
   return logger
