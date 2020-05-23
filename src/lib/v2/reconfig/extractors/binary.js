@@ -25,7 +25,7 @@ const binaryGeneral = extProps => {
     substrate_use_default_spec:
       binary.use_bin_chain_spec || binary.useBinChainSpec || 'false',
     substrate_local_compile:
-      (repo && (repo.local_compile || repo.local_compile)) || 'false',
+      (repo && (repo.local_compile || repo.localCompile)) || 'false',
     substrate_bootnode_argument: binary.bootnodes || [],
     substrate_purge_chain: 'true'
   }
