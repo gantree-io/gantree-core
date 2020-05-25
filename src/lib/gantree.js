@@ -5,6 +5,7 @@ const {
 } = require('./error/gantree-error')
 
 const libV2 = require('./v2/core/core')
+const libV3 = require('./v3/core/core')
 
 const get_gco = args => {
   const { config_object, config_path } = args
@@ -42,15 +43,20 @@ const run = async (args = {}) => {
 
   let gLib = null
   switch (config_version) {
-  case '2':
-    gLib = libV2
-    break
-  default:
-    args.logger.warn(
-      `Unsupported config version '${config_version}', using '2'`
-    )
-    gLib = libV2
-    break
+    case '2':
+      args.logger.info('Matched config version: 2')
+      gLib = libV2
+      break
+    case '3':
+      args.logger.info('Matched config version: 3')
+      gLib = libV3
+      break
+    default:
+      args.logger.warn(
+        `Unsupported config version '${config_version}', using '2'`
+      )
+      gLib = libV2
+      break
   }
 
   gLib.run({ ...args, gco })

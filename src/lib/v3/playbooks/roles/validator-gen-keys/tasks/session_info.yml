@@ -1,0 +1,63 @@
+---
+- name: save session info
+  shell: |
+    set -o pipefail
+    crypto="{{ item }}"
+
+    inspect_result=$(cat /home/{{ substrate_user }}/mnemonic | xargs --null /usr/local/bin/subkey --${crypto} inspect)
+
+    public_key=$(echo -n "${inspect_result}" | grep "Public key" | cut -d':' -f2 | tr -d '[:space:]')
+    address=$(echo -n "${inspect_result}" | grep "Address" | cut -d':' -f2 | tr -d '[:space:]')
+
+    printf '%b\n' "{{ item }}:\n  address: '${address}'\n  public_key: '${public_key}'"
+  args:
+    executable: /bin/bash
+  register: session
+  loop:
+    - ed25519
+    - sr25519
+  changed_when: False
+
+- name: get node key
+  shell: |
+    {{ substrate_bin_name }} --node-key-file /home/{{ substrate_user }}/.local/share/{{ substrate_bin_name }}/chains/{{ substrate_network_id }}/network/secret_ed25519 > nodeoutput 2>&1 &
+
+    sleep 3
+
+    pkill {{ substrate_bin_name }}
+
+    node_id=$(grep "Local node identity is:" < nodeoutput | sed 's/.*://' | tr -d " ")
+
+    echo ${node_id}
+  register: node_key
+
+- name: get bootnode public ip
+  ipify_facts:
+  when: (not is_docker is defined) or (not is_docker == true)
+  register: bootnode_ip
+  retries: 5
+  delay: 5
+  until: bootnode_ip is success
+
+- name: write session info to disk on remote host
+  become: yes
+  template:
+    src: session.yaml.j2
+    dest: /home/{{ substrate_user }}/session.{{ substrate_network_id }}.yaml
+    mode: 0666
+
+- name: ensure host session directory
+  delegate_to: localhost
+  file:
+    path: '{{ gantree_control_working }}/session'
+    state: directory
+  become: no
+
+- name: change owner of substrate user keystore
+  become: yes
+  file:
+    path: /home/{{ substrate_user }}/.local
+    owner: '{{ substrate_user }}'
+    group: '{{ substrate_group }}'
+    recurse: yes
+    mode: 0755
