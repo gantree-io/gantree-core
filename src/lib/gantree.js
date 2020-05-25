@@ -1,7 +1,7 @@
 const StdJson = require('./utils/std-json')
 const {
   GantreeError,
-  ErrorTypes: { MISSING_ARGUMENTS }
+  ErrorTypes: { MISSING_ARGUMENTS, BAD_CONFIG }
 } = require('./error/gantree-error')
 
 const libV2 = require('./v2/core/core')
@@ -26,7 +26,11 @@ const get_gco = args => {
     return config_object
   }
 
-  return StdJson.read(config_path)
+  try {
+    return StdJson.read(config_path)
+  } catch (e) {
+    throw new GantreeError(BAD_CONFIG, `Failed to parse config`, e)
+  }
 }
 
 const get_config_version = gco => {
