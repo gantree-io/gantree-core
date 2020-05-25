@@ -82,7 +82,7 @@ function validateConfig(frame, gco) {
   logger.info('Gantree configuration validated successfully')
 
   validateProviderSpecificKeys(frame, gco)
-  checks.config.nodeNameCharLimit(gco)
+  checks.config.nodeNameCharLimit(frame, gco)
 
   return gco
 }

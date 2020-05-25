@@ -2,28 +2,29 @@ const { Buffer } = require('buffer')
 const child_process = require('child_process')
 const { Counter } = require('./counter')
 
-
-const appendBuffer = (buffer, ...data) => Buffer.concat([buffer, ...data.map(Buffer.from)])
+const appendBuffer = (buffer, ...data) =>
+  Buffer.concat([buffer, ...data.map(Buffer.from)])
 
 async function exec(frame, command, options = {}) {
   const logger = frame.logAt({
     service: 'cmd',
     log_to_console: Boolean(options.log_to_console),
-    log_to_error_file: Boolean(options.log_to_error_file),
-    log_to_combined_file: Boolean(options.log_to_combined_file)
+    log_to_file: Boolean(options.log_to_file),
+    log_to_error_file: Boolean(options.log_to_error_file)
   })
 
   logger.info(`Executing: ${command}, ${JSON.stringify(options)}`)
 
-  const counter = frame.enable_process_stdout ?
-    new Counter(
+  const counter = frame.enable_process_stdout
+    ? new Counter(
       null,
-      async count => count % 5 === 0 ? process.stdout.write('.') : null,
-      async count => count >= 5 ? process.stdout.write('\n') : null
-    ) : new Counter()
+      async count => (count % 5 === 0 ? process.stdout.write('.') : null),
+      async count => (count >= 5 ? process.stdout.write('\n') : null)
+    )
+    : new Counter()
 
   // TODO(ryan): reject on timeout?
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     let out = new Buffer.from('')
     let err = new Buffer.from('')
 

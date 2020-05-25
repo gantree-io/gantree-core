@@ -24,7 +24,7 @@ const assert_arg_has_value = (args, argument_name) => {
 
 const check_args = args => {
   assert_arg_has_value(args, 'strict')
-  assert_arg_has_value(args, 'verbose')
+  //assert_arg_has_value(args, 'verbose')
   assert_arg_has_value(args, 'project_path')
   assert_arg_has_value(args, 'inventory_path')
   assert_arg_has_value(args, 'control_root')

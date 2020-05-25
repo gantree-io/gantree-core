@@ -2,11 +2,14 @@ const winston = require('winston')
 const { format } = winston
 const { combine, timestamp, label, printf, colorize } = format
 
-const consoleFormat = printf(({ level, message, label, timestamp, service }) => {
-  return `${timestamp} [${label}] (${service}) ${level}: ${message}`
-})
+const consoleFormat = printf(
+  ({ level, message, label, timestamp, service }) => {
+    return `${timestamp} [${label}] (${service}) ${level}: ${message}`
+  }
+)
 
-const meta_filter = name => format(info => info[name] !== false ? info : false)()
+const meta_filter = name =>
+  format(info => (info[name] !== false ? info : false))()
 
 const create = options => {
   const service = options.service || 'Gantree'
@@ -39,20 +42,18 @@ const create = options => {
       new winston.transports.File({
         filename: error_log_file,
         level: 'error',
-        format: combine(
-          meta_filter('log_to_error_file')
-        )
+        format: combine(meta_filter('log_to_error_file'))
       })
     )
   }
 
   if (options.combined_log_file) {
-    logger.add(new winston.transports.File({
-      filename: combined_log_file,
-      format: combine(
-        meta_filter('log_to_combined_file')
-      )
-    }))
+    logger.add(
+      new winston.transports.File({
+        filename: combined_log_file,
+        format: combine(meta_filter('log_to_combined_file'))
+      })
+    )
   }
 
   return logger

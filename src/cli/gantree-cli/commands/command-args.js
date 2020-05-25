@@ -1,11 +1,10 @@
-const CliLogger = require('../support/cli-logger')
-const { Utils } = require('../../../lib')
+const { Utils, Logger } = require('../../../lib')
 
 const processCommandArgs = async args => {
   const strict =
     Boolean(args.strict || process.env.GANTREE_STRICT_OPERATIONS) || false
 
-  const verbose = Boolean(args.verbose || process.env.GANTREE_VERBOSE) || true
+  // const verbose = Boolean(args.verbose || process.env.GANTREE_VERBOSE) || true
 
   const verbosity = args.verbosity || process.env.GANTREE_VERBOSITY || 'info'
 
@@ -38,10 +37,12 @@ const processCommandArgs = async args => {
     process.env.GANTREE_CONTROL_PATH ||
     '/tmp/gantree-control'
 
-  const logger = CliLogger.create({
+  const logger = Logger.create({
     level: verbosity,
-    log_to_console: true
-    // combined_log_path: paths.join(project_path, 'logs')
+    console_log: true,
+    // TODO(ryan): make log files argument driven
+    log_file: 'gantree.log',
+    error_log_file: 'gantree-error.log'
   })
 
   const python_interpreter =
@@ -53,8 +54,9 @@ const processCommandArgs = async args => {
     enable_process_stdout,
     config_path,
     strict,
-    verbose,
-    verbosity,
+    // TODO(ryan): remove if verbosity encapsulated by logger and nothing breaks
+    // verbose,
+    // verbosity,
     project_root,
     project_path,
     control_root,

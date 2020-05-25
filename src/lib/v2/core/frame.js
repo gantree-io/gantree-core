@@ -50,10 +50,15 @@ const createFrame = args => {
     project_name,
     project_path,
     control_path,
-    ...oPick(args, 'enable_process_stdout', fallback(false), assertType('boolean')),
+    ...oPick(
+      args,
+      'enable_process_stdout',
+      fallback(false),
+      assertType('boolean')
+    ),
     ...oPick(args, 'strict', notNull),
-    ...oPick(args, 'verbose', notNull),
-    ...oPick(args, 'verbosity', notNull),
+    //...oPick(args, 'verbose', notNull),
+    //...oPick(args, 'verbosity', notNull),
     ...oPick(args, 'logger', notNull),
     ...oPick(args, 'python_interpreter', notNull)
   }
@@ -65,9 +70,13 @@ const createFrame = args => {
       meta = { service: meta }
     }
 
-    const log = (level, message = '', more_meta = {}) => frame.logger.log({ ...meta, ...more_meta, level, message })
-    const build = level => ({ [level]: (message, more_meta) => log(level, message, more_meta) })
-    const buildAll = (...levels) => levels.reduce((res, level) => ({ ...res, ...build(level) }), {})
+    const log = (level, message = '', more_meta = {}) =>
+      frame.logger.log({ ...meta, ...more_meta, level, message })
+    const build = level => ({
+      [level]: (message, more_meta) => log(level, message, more_meta)
+    })
+    const buildAll = (...levels) =>
+      levels.reduce((res, level) => ({ ...res, ...build(level) }), {})
 
     return {
       log,

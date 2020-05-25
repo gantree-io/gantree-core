@@ -8,35 +8,30 @@ function getChecksum(dataStr, algorithm, encoding) {
 }
 
 function validateChecksum(
+  frame,
   // dataStr,
   realChecksum,
-  expectedChecksum,
-  algorithm,
-  encoding,
-  _options = {}
+  expectedChecksum
+  //algorithm,
+  //encoding
 ) {
-  // note: newlines and whitespace considered in checksum
-  const verbose = _options.verbose || false
+  const logger = frame.logAt('validateChecksum')
 
+  // note: newlines and whitespace considered in checksum
   const hashA = realChecksum
   // const hashA = getChecksum(dataStr, algorithm, encoding)
   const hashB = expectedChecksum
-  if (verbose === true) {
-    console.log(`A: ${hashA}`)
-    console.log(`B: ${hashB}`)
-  }
+
+  logger.verbose(`A: ${hashA}`)
+  logger.verbose(`B: ${hashB}`)
 
   if (hashA === hashB) {
-    if (verbose === true) {
-      console.log('checksum match.')
-    }
+    logger.verbose('checksum match.')
     return true
-  } else {
-    if (verbose === true) {
-      console.log('checksum mismatch!')
-    }
-    return false
   }
+
+  logger.verbose('checksum mismatch!')
+  return false
 }
 
 // function getFileChecksum(filePath, algorithm, encoding) {

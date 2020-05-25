@@ -4,12 +4,11 @@ const program = require('commander')
 const packageMeta = require('../../package/package-meta')
 const { syncWrapper } = require('./commands/sync')
 const { cleanWrapper } = require('./commands/clean')
-const gantreeLib = require('../../lib')
 
 function returnVersionString() {
   const name = packageMeta.getName()
   const version = packageMeta.getVersion()
-  return `${name} ${version}\n⮡ ${gantreeLib.name} ${gantreeLib.version}`
+  return `gantree-cli | ${name} ${version}`
 }
 
 const standardCommand = (name, desc, func) => {

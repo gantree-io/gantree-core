@@ -23,8 +23,8 @@ async function runPlaybook(frame, playbook_filename) {
 
   const result = await cmd.exec(frame, playbook_command, {
     log_to_console: true,
-    log_to_error_file: true,
-    log_to_combined_file: true
+    log_to_file: true,
+    log_to_error_file: true
   })
 
   logger.info(`playbook finished: ${playbook_filepath}`)

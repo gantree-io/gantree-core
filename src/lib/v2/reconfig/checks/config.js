@@ -6,24 +6,23 @@ const {
 } = require('../../../error/gantree-error')
 const { hasOwnProp } = require('../../../utils/has-own-prop')
 
-async function nodeNameCharLimit(gantreeConfigObj, _options = {}) {
+async function nodeNameCharLimit(frame, gco, _options = {}) {
+  const logger = frame.logAt('nodeNameCharLimit')
+
   const charLimit = _options.charLimit || 18
   const extraAutoChars = _options.extraAutoChars || '-'
-  const verbose = _options.verbose || false
 
-  const c = gantreeConfigObj
-  const projectName = c.metadata.project
-  const nodeCount = c.nodes.length
+  const projectName = gco.metadata.project
+  const nodeCount = gco.nodes.length
   const suffixString = extraAutoChars + nodeCount.toString()
   const suffixChars = suffixString.length
-  if (verbose === true) {
-    console.log(`project name: ${projectName}`)
-    console.log(`node count: ${nodeCount}`)
-    console.log(`suffix string: '${suffixString}'`)
-    console.log(`suffix string chars: ${suffixChars}`)
-  }
 
-  c.nodes.forEach(node_n => {
+  logger.verbose(`project name: ${projectName}`)
+  logger.verbose(`node count: ${nodeCount}`)
+  logger.verbose(`suffix string: '${suffixString}'`)
+  logger.verbose(`suffix string chars: ${suffixChars}`)
+
+  gco.nodes.forEach(node_n => {
     // if node has name
     if (hasOwnProp(node_n, 'name')) {
       // check name isn't over max

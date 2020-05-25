@@ -21,7 +21,7 @@ const checkHash = (frame, gco) => {
   if (prevHashExists === true) {
     logger.info('Gantree config hash found')
     const expectedHash = fs.readFileSync(hash_path, 'utf-8')
-    const valid = hash.validateChecksum(gcoHash, expectedHash)
+    const valid = hash.validateChecksum(frame, gcoHash, expectedHash)
     if (valid === true) {
       logger.info('Gantree config hash valid')
       return
