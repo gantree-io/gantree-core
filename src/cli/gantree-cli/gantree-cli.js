@@ -2,8 +2,7 @@
 
 const program = require('commander')
 const packageMeta = require('../../package/package-meta')
-const { syncWrapper } = require('./commands/sync')
-const { cleanWrapper } = require('./commands/clean')
+const { syncWrapper, cleanWrapper } = require('./commands/operations')
 
 function returnVersionString() {
   const name = packageMeta.getName()

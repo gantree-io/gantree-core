@@ -4,7 +4,11 @@ const JsonBigint = require('json-bigint')({ strict: true })
 
 const stringify = o => JsonBigint.stringify(o, null, 2)
 
-const parse = s => JsonBigint.parse(s)
+const parse = s => {
+  // try normal JSON parse first for its more helpful syntax errors
+  JSON.parse(s)
+  return JsonBigint.parse(s)
+}
 
 const read = file_path => {
   const abs_file_path = path.resolve(process.cwd(), file_path)
