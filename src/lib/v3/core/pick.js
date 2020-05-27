@@ -33,7 +33,7 @@ const fallback = fallback_value => {
   }
 }
 
-const fallfunc = (fallback_func, ...params) => {
+const funcback = (fallback_func, ...params) => {
   return (args, arg_name) => {
     if (args[arg_name] === undefined) {
       return { ...args, [arg_name]: fallback_func(...params) }
@@ -64,8 +64,8 @@ const oPick = (args, arg_name, ...mods) => {
 module.exports = {
   oPick,
   fallback,
-  fallfunc,
+  funcback,
   notUndef,
   notNull,
-  assertType,
+  assertType
 }

@@ -7,7 +7,7 @@ const { hasOwnProp } = require('../../../utils/has-own-prop')
 
 const envRegex = /(?<=^\$(env|ENV):)[A-Za-z_]+(?=$)/
 
-function dynamicEnvVarCustomizer(value) {
+const createEnvVarCustomizer = (env = {}) => value => {
   if (typeof value !== 'string') {
     return
   }
@@ -17,9 +17,9 @@ function dynamicEnvVarCustomizer(value) {
     return
   }
 
-  const exists = hasOwnProp(process.env, match[0])
+  const exists = hasOwnProp(env, match[0])
   if (exists) {
-    return process.env[match[0]]
+    return env[match[0]]
   }
 
   throw new GantreeError(
@@ -29,10 +29,11 @@ function dynamicEnvVarCustomizer(value) {
 }
 
 function processor(procProps) {
-  const logger = procProps.frame.logAt('processor/inject-env-vars')
+  const { frame } = procProps
+  const logger = frame.logAt('processor/inject-env-vars')
   logger.info('injecting environment variables into config')
 
-  return cloneDeepWith(procProps.gco, dynamicEnvVarCustomizer)
+  return cloneDeepWith(procProps.gco, createEnvVarCustomizer(frame.env))
 }
 
 module.exports = {

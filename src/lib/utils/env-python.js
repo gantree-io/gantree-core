@@ -1,23 +1,21 @@
-const util = require('util')
+const { execSync } = require('child_process')
 
-const exec = util.promisify(require('child_process').exec)
-
-const findPython = async binary_name => {
+const findPythonSync = binary_name => {
   try {
-    const raw = await exec(
+    const raw = execSync(
       `${binary_name} -c "import sys; print(sys.executable)"`
-    )
-    return raw.stdout.trim()
+    ).toString()
+    return raw.trim()
   } catch (e) {
     return null
   }
 }
 
-const getInterpreterPath = async () => {
-  let localPython = await findPython('python3')
+const getInterpreterPathSync = () => {
+  let localPython = findPythonSync('python3')
 
   if (!localPython) {
-    await findPython('python')
+    findPythonSync('python')
   }
 
   if (!localPython) {
@@ -27,6 +25,9 @@ const getInterpreterPath = async () => {
   return localPython
 }
 
+const getInterpreterPath = async () => await getInterpreterPathSync()
+
 module.exports = {
-  getInterpreterPath
+  getInterpreterPath,
+  getInterpreterPathSync
 }

@@ -15,7 +15,7 @@ const create = options => {
   // TODO(ryan): add logging to socket
   const service = options.service || 'Gantree'
   const level = options.level || 'info'
-  const console_log = options.console_log === true || false
+  const console_log = options.console_log === true
   const log_file = options.log_file || false
   const error_log_file = options.error_log_file || false
 

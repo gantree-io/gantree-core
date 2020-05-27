@@ -1,0 +1,44 @@
+{
+    "metadata": {
+        "version": "3",
+        "project": "sunshine-demo"
+    },
+    "binary": {
+        "repository": {
+            "url": "https://github.com/web3garden/sunshine-node.git",
+            "version": "master"
+        },
+        "filename": "sunshine-node",
+        "useBinChainSpec": "false"
+    },
+    "nodes": [
+        {
+            "validator": false,
+            "binaryOptions": {
+                "substrateOptions": [
+                    "--dev"
+                ]
+            },
+            "instance": {
+                "provider": "do",
+                "dropletSize": "s-6vcpu-16gb",
+                "region": "nyc3",
+                "sshPrivateKeyPath": "$env:DRIFT_TEST_PRIVATE_KEY_PATH"
+            }
+        },
+        {
+            "validator": false,
+            "binaryOptions": {
+                "substrateOptions": [
+                    "--dev"
+                ]
+            },
+            "instance": {
+                "provider": "do",
+                "dropletSize": "s-1vcpu-1gb",
+                "region": "nyc3",
+                "sshPrivateKeyPath": "$env:DRIFT_TEST_PRIVATE_KEY_PATH"
+            }
+        }
+    ]
+}

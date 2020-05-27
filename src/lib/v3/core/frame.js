@@ -1,6 +1,7 @@
 const path = require('path')
-const { oPick, notNull, fallback, assertType } = require('./pick')
+const { oPick, notNull, fallback, funcback, assertType } = require('./pick')
 const { ensurePath } = require('../../utils/path-helpers')
+const envPython = require('../../utils/env-python')
 const {
   GantreeError,
   ErrorTypes: { BAD_CONFIG, MISSING_ARGUMENTS }
@@ -43,8 +44,8 @@ const getControlPath = (args, project_name) => {
 
 const createFrame = args => {
   const project_name = getProjectName(args)
-  const project_path = getProjectPath(args, project_name)
-  const control_path = getControlPath(args, project_name)
+  const project_path = ensurePath(getProjectPath(args, project_name))
+  const control_path = ensurePath(getControlPath(args, project_name))
 
   const frame = {
     project_name,
@@ -57,10 +58,14 @@ const createFrame = args => {
       assertType('boolean')
     ),
     ...oPick(args, 'strict', notNull),
-    //...oPick(args, 'verbose', notNull),
-    //...oPick(args, 'verbosity', notNull),
     ...oPick(args, 'logger', notNull),
-    ...oPick(args, 'python_interpreter', notNull)
+    ...oPick(
+      args,
+      'python_interpreter',
+      funcback(envPython.getInterpreterPathSync),
+      notNull
+    ),
+    ...oPick(args, 'env', fallback(process.env), notNull)
   }
 
   frame.active_path = ensurePath(frame.project_path, 'active')

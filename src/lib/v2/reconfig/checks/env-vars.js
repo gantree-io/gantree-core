@@ -18,7 +18,7 @@ function envVars(frame, gco) {
     }
 
     for (const ev of env_vars) {
-      if (!(ev in process.env)) {
+      if (!(ev in frame.env)) {
         const msg = `Required environment variable not found: ${ev.name}`
         logger.error(msg)
         throw new GantreeError(ENVIRONMENT_VARIABLE_MISSING, msg)
