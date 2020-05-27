@@ -10,7 +10,10 @@ const { processor: full_preprocess } = require('../preprocessors/full')
 
 const getTestFrame = gco =>
   createFrame({
-    logger: Logger.create({ service_name: 'Reconfig Tests' }),
+    logger: Logger.create({
+      service_name: 'Reconfig Tests',
+      null_transport: true
+    }),
     project_path: '/tmp/gantree-test-project/',
     control_root: '/tmp/gantree-test-control/',
     strict: false,

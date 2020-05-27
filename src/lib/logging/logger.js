@@ -1,4 +1,5 @@
 const winston = require('winston')
+const NullTransport = require('./null-transport')
 const { format } = winston
 const { combine, timestamp, label, printf, colorize } = format
 
@@ -18,10 +19,10 @@ const create = options => {
   const console_log = options.console_log === true
   const log_file = options.log_file || false
   const error_log_file = options.error_log_file || false
+  const null_transport = options.null_transport || false
 
   const logger = winston.createLogger({
     level,
-    ///format: winston.format.json(),
     transports: []
   })
 
@@ -57,6 +58,10 @@ const create = options => {
         format: combine(meta_filter('log_to_error_file'))
       })
     )
+  }
+
+  if (null_transport) {
+    logger.add(new NullTransport())
   }
 
   return logger
