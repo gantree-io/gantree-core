@@ -7,12 +7,12 @@
             "localhost"
         ],
         "vars": {
-            "ansible_python_interpreter": "/home/rozifus/.virtualenvs/gantree-p3/bin/python3",
+            "ansible_python_interpreter": "SANITIZED_PYTHON_INTERPRETER/",
             "ansible_connection": "local",
             "gantree_root": "../",
             "gantree_working": "/home/subuser/tmp/gantree-validator",
             "gantree_control_working": "/tmp/gantree-test-control/sunshine-demo/operation",
-            "gantree_tools_root": "/home/rozifus/Work/gantree-core/src/cli/tools-cli"
+            "gantree_tools_root": "SANITIZED_GANTREE/src/cli/tools-cli"
         }
     },
     "validator": {
@@ -39,7 +39,7 @@
     "sunshine-demo-0": {
         "vars": {
             "ansible_user": "root",
-            "ansible_ssh_private_key_file": "/home/rozifus/Work/gantree-core/src/lib/v3/reconfig/drift/support/drift_test_private_key",
+            "ansible_ssh_private_key_file": "SANITIZED_GANTREE/src/lib/v3/reconfig/test/test-assets/drift_test_private_key",
             "ansible_ssh_common_args": "-o StrictHostKeyChecking=no -o ControlMaster=no  -o UserKnownHostsFile=/dev/null -o ServerAliveInterval=30 -o ControlPersist=60s",
             "substrate_binary_url": "false",
             "substrate_binary_sha256": "false",
@@ -61,7 +61,7 @@
             "gantree_root": "../",
             "gantree_working": "/home/subuser/tmp/gantree-validator",
             "gantree_control_working": "/tmp/gantree-test-control/sunshine-demo/operation",
-            "gantree_tools_root": "/home/rozifus/Work/gantree-core/src/cli/tools-cli",
+            "gantree_tools_root": "SANITIZED_GANTREE/src/cli/tools-cli",
             "metadata_version": "3",
             "project_name": "sunshine-demo",
             "substrate_network_id": "local_testnet",
@@ -83,7 +83,7 @@
     "sunshine-demo-1": {
         "vars": {
             "ansible_user": "root",
-            "ansible_ssh_private_key_file": "/home/rozifus/Work/gantree-core/src/lib/v3/reconfig/drift/support/drift_test_private_key",
+            "ansible_ssh_private_key_file": "SANITIZED_GANTREE/src/lib/v3/reconfig/test/test-assets/drift_test_private_key",
             "ansible_ssh_common_args": "-o StrictHostKeyChecking=no -o ControlMaster=no  -o UserKnownHostsFile=/dev/null -o ServerAliveInterval=30 -o ControlPersist=60s",
             "substrate_binary_url": "false",
             "substrate_binary_sha256": "false",
@@ -105,7 +105,7 @@
             "gantree_root": "../",
             "gantree_working": "/home/subuser/tmp/gantree-validator",
             "gantree_control_working": "/tmp/gantree-test-control/sunshine-demo/operation",
-            "gantree_tools_root": "/home/rozifus/Work/gantree-core/src/cli/tools-cli",
+            "gantree_tools_root": "SANITIZED_GANTREE/src/cli/tools-cli",
             "metadata_version": "3",
             "project_name": "sunshine-demo",
             "substrate_network_id": "local_testnet",
