@@ -1,0 +1,55 @@
+---
+- name: install git
+  apt:
+    update_cache: yes
+    pkg:
+      - git
+
+- name: download {{ binary_name }} rust source
+  git:
+    repo: '{{ rust__repository }}'
+    version: '{{ rust__repository_version }}'
+    dest: '{{ rust__build_path }}/{{ rust__src_folder }}'
+
+- name: install build requirements for ubuntu
+  apt:
+    update_cache: no
+    pkg: "{{ apt_requirements }}"
+
+- name: setup cargo and rustup
+  include_role:
+    name: ansible-role-cargo
+  when: 'install_cargo != "false"'
+
+- name: configure toolchain
+  shell: "{{ rust__toolchain }}"
+
+- debug:
+    msg: "Note: beginning build, this may take a long time..."
+
+- name: compile {{ binary_name }}
+  shell: |
+    cargo build {{ rust__build_arguments }}
+  args:
+    chdir: '{{ build_path }}/{{ src_folder }}/{{ src_subfolder }}/'
+  register: build_result
+  changed_when: false
+
+- debug:
+    msg: "Build stdout: {{ build_result.stdout }}"
+
+- name: create host bin directory
+  file:
+    path: '{{ gantree_control_working }}/bin'
+    state: directory
+
+- name: delete any existing binary
+  file:
+    path: '{{ gantree_control_working }}/bin/{{ binary_name }}'
+    state: absent
+
+- name: copy node bin to working dir
+  fetch:
+    src: '{{ rust__build_path }}/{{ rust__src_folder }}/{{ rust__src_subfolder }}/{{ rust__compile_path }}/{{ binary_name }}'
+    dest: '{{ gantree_control_working }}/bin/{{ binary_name }}'
+    flat: true

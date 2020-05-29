@@ -1,4 +1,4 @@
-const { createExtractor } = require('./create-extractor')
+const { createExtractor } = require('../creators/create-extractor')
 
 const extract = createExtractor('system-account', () => ({
   substrate_user: 'subuser', // TODO(ryan): rename to system_user

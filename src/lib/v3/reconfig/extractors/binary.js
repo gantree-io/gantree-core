@@ -2,7 +2,7 @@ const {
   GantreeError,
   ErrorTypes: { BAD_CONFIG }
 } = require('../../../error/gantree-error')
-const { createExtractor } = require('./create-extractor')
+const { createExtractor } = require('../creators/create-extractor')
 
 const { extract: System } = require('./system-account')
 

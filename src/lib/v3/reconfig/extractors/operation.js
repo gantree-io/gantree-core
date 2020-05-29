@@ -1,4 +1,4 @@
-const { createExtractor } = require('./create-extractor')
+const { createExtractor } = require('../creators/create-extractor')
 
 const { extract: Ansible } = require('./ansible')
 const { extract: Binary } = require('./binary')

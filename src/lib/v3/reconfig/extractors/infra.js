@@ -1,4 +1,4 @@
-const { createExtractor } = require('./create-extractor')
+const { createExtractor } = require('../creators/create-extractor')
 
 const extractorGcp = require('../../providers/gcp/extractor')
 const extractorAws = require('../../providers/aws/extractor')

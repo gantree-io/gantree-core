@@ -1,5 +1,5 @@
 const { ensurePath, getToolsPath } = require('../../../utils/path-helpers')
-const { createExtractor } = require('./create-extractor')
+const { createExtractor } = require('../creators/create-extractor')
 
 const { extract: System } = require('./system-account')
 

@@ -1,0 +1,9 @@
+---
+# tasks file for substrate-builder
+- name: build rust binary {{ binary_name }}
+  include_tasks: 1_build_binary.yml
+  when: 'operation == "rust-build"'
+
+- name: fetch binary {{ binary_name }}
+  include_tasks: 1_fetch_binary.yml
+  when: 'operation == "fetch"'

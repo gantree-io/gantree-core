@@ -1,4 +1,4 @@
-const { createExtractor } = require('./create-extractor')
+const { createExtractor } = require('../creators/create-extractor')
 
 const extractor = createExtractor('telemetry', ({ gco }) => {
   return {

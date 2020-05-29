@@ -1,4 +1,4 @@
-const { createExtractor } = require('./create-extractor')
+const { createExtractor } = require('../creators/create-extractor')
 
 const extract = createExtractor('metadata', ({ gco, defaults }) => {
   const metadata_version = gco.metadata.version || defaults.metadata.version

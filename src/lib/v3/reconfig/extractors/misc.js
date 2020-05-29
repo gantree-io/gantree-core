@@ -1,4 +1,4 @@
-const { createExtractor } = require('./create-extractor')
+const { createExtractor } = require('../creators/create-extractor')
 
 const extract = createExtractor('misc', () => ({
   substrate_network_id: 'local_testnet', // TODO: this probably shouldn't be hard-coded

@@ -25,10 +25,18 @@ const getTestFrame = gco => {
     strict: false,
     gco,
     env: {
-      DRIFT_TEST_PRIVATE_KEY_PATH
+      DRIFT_TEST_PRIVATE_KEY_PATH,
+      GANTREE_INSTANCE_PRIVATE_KEY_PATH: DRIFT_TEST_PRIVATE_KEY_PATH,
+      GCP_PROJECT_NAME: 'GCP_PROJECT_TEST_VALUE'
     }
   })
 }
+
+const getSamples = () => [
+  'config/fetch/polkadot_aws.sample.json',
+  'config/fetch/polkadot_do.sample.json',
+  'config/fetch/polkadot_gcp.sample.json'
+]
 
 const getFilesWithExtension = (files_path, ext) => {
   if (typeof ext !== 'string' || ext.trim() === "") {
@@ -63,13 +71,16 @@ const sanitizeLocalPaths = (frame, inventory) => {
 }
 
 const run = async () => {
-  const data_path = path.join(__dirname, 'drift-pairs')
-  const config_filepaths = getFilesWithExtension(data_path, 'json')
+  const sample_path = PathHelpers.getGantreePath('samples')
+  const sample_inventory_path = path.join(__dirname, 'sample_inventories')
+  const sample_config_files = getSamples()
 
-  config_filepaths.forEach(config_filepath => {
+  sample_config_files.forEach(sample_config => {
+    const config_filepath = path.join(sample_path, sample_config)
+    const result_filepath = replaceExtension(path.join(sample_inventory_path, sample_config), 'inventory')
+
     let expected_inventory
     try {
-      const result_filepath = replaceExtension(config_filepath, 'inventory')
       expected_inventory = StdJson.read(result_filepath)
     } catch (e) {
       console.log(
