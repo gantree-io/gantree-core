@@ -1,12 +1,14 @@
-const { extract: extractInfra } = require('./infra')
+const { createExtractor } = require('./create-extractor')
 
-const extract = extProps => {
-  const { infra } = extractInfra(extProps)
+const { extract: Infra } = require('./infra')
+
+const extract = createExtractor('inventory-group', props => {
+  const { infra } = Infra.node(props)
 
   return {
     inventory_group: infra.group_name
   }
-}
+})
 
 module.exports = {
   extract

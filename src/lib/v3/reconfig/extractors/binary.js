@@ -2,7 +2,9 @@ const {
   GantreeError,
   ErrorTypes: { BAD_CONFIG }
 } = require('../../../error/gantree-error')
-const { extract: system } = require('./system-account')
+const { createExtractor } = require('./create-extractor')
+
+const { extract: System } = require('./system-account')
 
 const binaryGeneral = extProps => {
   const {
@@ -33,7 +35,7 @@ const binaryGeneral = extProps => {
 
 const nodeBinaryOptions = extProps => {
   const { nco } = extProps
-  const { substrate_user } = system(extProps)
+  const { substrate_user } = System.node(extProps)
 
   const bo = nco.binary_options || nco.binaryOptions || {}
 
@@ -88,15 +90,15 @@ const binaryRepository = ({ gco }) => {
   }
 }
 
-const extract = extProps => {
+const extract = createExtractor('binary', props => {
   return {
-    ...binaryFetch(extProps),
-    ...binaryRepository(extProps),
-    ...binaryGeneral(extProps),
-    ...binaryLocal(extProps),
-    ...nodeBinaryOptions(extProps)
+    ...binaryFetch(props),
+    ...binaryRepository(props),
+    ...binaryGeneral(props),
+    ...binaryLocal(props),
+    ...nodeBinaryOptions(props)
   }
-}
+})
 
 module.exports = {
   extract

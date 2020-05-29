@@ -1,4 +1,4 @@
-const { extract: extractAnsible } = require('../extractors/gantree')
+const { extract: Ansible } = require('../extractors/gantree')
 
 const inventory = invProps => ({
   _meta: {
@@ -9,7 +9,7 @@ const inventory = invProps => ({
     vars: {
       ansible_python_interpreter: invProps.frame.python_interpreter,
       ansible_connection: 'local',
-      ...extractAnsible(invProps)
+      ...Ansible.node(invProps)
     }
   }
 })

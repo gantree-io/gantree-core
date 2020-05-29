@@ -1,10 +1,11 @@
-const { extract: extractInfra } = require('./infra')
+const { createExtractor } = require('./create-extractor')
+const { extract: Infra } = require('./infra')
 
-const extract = extProps => {
+const extract = createExtractor('ansible', props => {
   const {
     nco: { instance = {} }
-  } = extProps
-  const { ssh_user } = extractInfra(extProps)
+  } = props
+  const { ssh_user } = Infra.node(props)
 
   return {
     ansible_user: ssh_user,
@@ -18,7 +19,7 @@ const extract = extProps => {
       '-o ControlPersist=60s'
     ].join(' ')
   }
-}
+})
 
 module.exports = {
   extract

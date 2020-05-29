@@ -1,4 +1,6 @@
-const extract = ({ gco }) => {
+const { createExtractor } = require('./create-extractor')
+
+const extractor = createExtractor('telemetry', ({ gco }) => {
   return {
     telemetry: {
       repository: 'https://github.com/flex-dapps/substrate-telemetry.git',
@@ -11,8 +13,8 @@ const extract = ({ gco }) => {
     },
     substrate_telemetry_argument: gco.telemetry || 'ws://127.0.0.1:8000/submit'
   }
-}
+})
 
 module.exports = {
-  extract
+  extractor
 }

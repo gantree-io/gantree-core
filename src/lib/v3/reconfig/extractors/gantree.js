@@ -1,10 +1,11 @@
 const { ensurePath, getToolsPath } = require('../../../utils/path-helpers')
+const { createExtractor } = require('./create-extractor')
 
-const { extract: system } = require('./system-account')
+const { extract: System } = require('./system-account')
 
-const extract = extProps => {
-  const { control_path } = extProps.frame
-  const { substrate_user } = system(extProps)
+const extract = createExtractor('system', props => {
+  const { control_path } = props.frame
+  const { substrate_user } = System.node(props)
 
   return {
     gantree_root: '../',
@@ -13,7 +14,7 @@ const extract = extProps => {
     gantree_control_working: ensurePath(control_path, 'operation'),
     gantree_tools_root: getToolsPath()
   }
-}
+})
 
 module.exports = {
   extract

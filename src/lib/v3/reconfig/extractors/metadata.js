@@ -1,4 +1,6 @@
-const extract = ({ gco, defaults }) => {
+const { createExtractor } = require('./create-extractor')
+
+const extract = createExtractor('metadata', ({ gco, defaults }) => {
   const metadata_version = gco.metadata.version || defaults.metadata.version
   const project_name = gco.metadata.project
 
@@ -6,7 +8,7 @@ const extract = ({ gco, defaults }) => {
     metadata_version,
     project_name
   }
-}
+})
 
 module.exports = {
   extract

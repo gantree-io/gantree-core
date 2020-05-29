@@ -1,28 +1,30 @@
-const { extract: ansible } = require('./ansible')
-const { extract: binary } = require('./binary')
-const { extract: edgeware } = require('./edgeware')
-const { extract: gantree } = require('./gantree')
-const { extract: inventory_group } = require('./inventory-group')
-const { extract: metadata } = require('./metadata')
-const { extract: misc } = require('./misc')
-const { extract: name } = require('./name')
-const { extract: system_account } = require('./system-account')
-const { extract: telemetry } = require('./telemetry')
+const { createExtractor } = require('./create-extractor')
 
-const extract = props => {
+const { extract: Ansible } = require('./ansible')
+const { extract: Binary } = require('./binary')
+const { extract: Edgeware } = require('./edgeware')
+const { extract: Gantree } = require('./gantree')
+const { extract: InventoryGroup } = require('./inventory-group')
+const { extract: Metadata } = require('./metadata')
+const { extract: Misc } = require('./misc')
+const { extract: Name } = require('./name')
+const { extract: SystemAccount } = require('./system-account')
+const { extractor: Telemetry } = require('./telemetry')
+
+const extract = createExtractor('operation', props => {
   return {
-    ...ansible(props),
-    ...binary(props),
-    ...edgeware(props),
-    ...gantree(props),
-    ...metadata(props),
-    ...misc(props),
-    ...name(props),
-    ...telemetry(props),
-    ...system_account(props),
-    ...inventory_group(props)
+    ...Ansible.node(props),
+    ...Binary.node(props),
+    ...Edgeware.node(props),
+    ...Gantree.node(props),
+    ...Metadata.node(props),
+    ...Misc.node(props),
+    ...Name.node(props),
+    ...Telemetry.node(props),
+    ...SystemAccount.node(props),
+    ...InventoryGroup.node(props)
   }
-}
+})
 
 module.exports = {
   extract
