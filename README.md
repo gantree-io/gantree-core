@@ -1,8 +1,7 @@
 # Gantree Core
 
 NOTE: This is a WIP to merge gantree-cli and gantree-lib into a single project
-
-For the time being you should continue to use gantree-cli in favor of this repository
+For the time being you should continue to use gantree-cli rather than this repository
 
 
 - [Gantree Library](#gantree-library)
