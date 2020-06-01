@@ -4,7 +4,7 @@ const extractorGcp = require('../../providers/gcp/extractor')
 const extractorAws = require('../../providers/aws/extractor')
 const extractorDo = require('../../providers/do/extractor')
 
-const { extract: Name } = require('./name')
+const { extract: InstanceName } = require('./instance-name')
 const { extract: Metadata } = require('./metadata')
 
 const providerExtractors = {
@@ -32,7 +32,7 @@ const getProviderExtractor = ({ nco, index }) => {
 const extract = createExtractor('infra', props => {
   const ProviderExtractor = getProviderExtractor(props)
 
-  const { name } = Name.node(props)
+  const { name } = InstanceName.node(props)
   const { project_name } = Metadata.node(props)
 
   const infraProps = { name, project_name }

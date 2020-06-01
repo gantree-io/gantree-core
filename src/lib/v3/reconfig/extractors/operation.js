@@ -7,9 +7,9 @@ const { extract: Gantree } = require('./gantree')
 const { extract: InventoryGroup } = require('./inventory-group')
 const { extract: Metadata } = require('./metadata')
 const { extract: Misc } = require('./misc')
-const { extract: Name } = require('./name')
+const { extract: InstanceName } = require('./instance-name')
 const { extract: SystemAccount } = require('./system-account')
-const { extractor: Telemetry } = require('./telemetry')
+const { extract: Telemetry } = require('./telemetry')
 
 const extract = createExtractor('operation', props => {
   return {
@@ -19,7 +19,7 @@ const extract = createExtractor('operation', props => {
     ...Gantree.node(props),
     ...Metadata.node(props),
     ...Misc.node(props),
-    ...Name.node(props),
+    ...InstanceName.node(props),
     ...Telemetry.node(props),
     ...SystemAccount.node(props),
     ...InventoryGroup.node(props)

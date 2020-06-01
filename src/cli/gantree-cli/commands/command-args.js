@@ -61,7 +61,7 @@ const processCommandArgs = async args => {
     project_path,
     control_root,
     logger,
-    python_interpreter
+    python_interpreter,
   }
 }
 

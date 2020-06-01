@@ -1,6 +1,6 @@
 const { createExtractor } = require('../creators/create-extractor')
 
-const extractor = createExtractor('telemetry', ({ gco }) => {
+const extract = createExtractor('telemetry', ({ gco }) => {
   return {
     telemetry: {
       repository: 'https://github.com/flex-dapps/substrate-telemetry.git',
@@ -11,10 +11,11 @@ const extractor = createExtractor('telemetry', ({ gco }) => {
       src_subfolder: 'backend',
       operation: 'fetch'
     },
-    substrate_telemetry_argument: gco.telemetry || 'ws://127.0.0.1:8000/submit'
+    substrate_telemetry_argument: gco.telemetry || 'ws://127.0.0.1:8000/submit',
+    telemetry_urls: [gco.telemetry || 'ws://127.0.0.1:8000/submit']
   }
 })
 
 module.exports = {
-  extractor
+  extract
 }

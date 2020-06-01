@@ -9,6 +9,7 @@ const { extract: BinaryRepository } = require('./binary-repository')
 const { extract: BinaryGeneral } = require('./binary-general')
 const { extract: BinaryLocal } = require('./binary-local')
 const { extract: BinaryOptions } = require('./binary-options')
+const { extract: BinaryArguments } = require('./binary-arguments')
 
 
 const extract = createExtractor('binary', props => {
@@ -17,9 +18,11 @@ const extract = createExtractor('binary', props => {
     ...BinaryRepository.node(props),
     ...BinaryGeneral.node(props),
     ...BinaryLocal.node(props),
-    ...BinaryOptions.node(props)
+    ...BinaryOptions.node(props),
+    ...BinaryArguments.node(props)
   }
 })
+
 
 module.exports = {
   extract

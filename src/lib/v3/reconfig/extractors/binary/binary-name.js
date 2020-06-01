@@ -7,13 +7,11 @@ const { createExtractor } = require('../../creators/create-extractor')
 const { extract: System } = require('../system-account')
 
 
-const extract = createExtractor('binary-options', props => {
+const extract = createExtractor('binary-name', props => {
   const { nco } = props
   const { substrate_user } = System.node(props)
 
   const bo = nco.binary_options || nco.binaryOptions || {}
-
-  //const substrate_node_name = bo.name ||
 
   return {
     substrate_chain: `/home/${substrate_user}/tmp/gantree-validator/spec/chainSpecRaw.raw`,
