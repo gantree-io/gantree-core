@@ -1,0 +1,80 @@
+{
+  "_meta": {
+    "hostvars": {}
+  },
+  "local": {
+    "hosts": [
+      "localhost"
+    ],
+    "vars": {
+      "ansible_python_interpreter": "SANITIZED_PYTHON_INTERPRETER/",
+      "ansible_connection": "local",
+      "gantree_root": "../",
+      "gantree_working": "/home/subuser/tmp/gantree-validator",
+      "gantree_control_working": "/tmp/gantree-test-control/s-r-gcp-pol-kus/operation",
+      "gantree_tools_root": "SANITIZED_GANTREE/src/cli/tools-cli"
+    }
+  },
+  "validator": {
+    "children": [
+      "s_r_gcp_pol_kus_0"
+    ]
+  },
+  "builder_bin": {
+    "children": [
+      "s_r_gcp_pol_kus_0"
+    ]
+  },
+  "builder_spec": {
+    "children": [
+      "s_r_gcp_pol_kus_0"
+    ]
+  },
+  "builder_telemetry": {
+    "children": [
+      "s_r_gcp_pol_kus_0"
+    ]
+  },
+  "s_r_gcp_pol_kus_0": {
+    "vars": {
+      "ansible_user": "root",
+      "ansible_ssh_private_key_file": "SANITIZED_GANTREE/src/lib/v3/reconfig/test/test-assets/drift_test_private_key",
+      "ansible_ssh_common_args": "-o StrictHostKeyChecking=no -o ControlMaster=no  -o UserKnownHostsFile=/dev/null -o ServerAliveInterval=30 -o ControlPersist=60s",
+      "substrate_binary_url": "false",
+      "substrate_binary_sha256": "false",
+      "substrate_repository_url": "https://github.com/paritytech/polkadot",
+      "substrate_repository_version": "HEAD",
+      "substrate_bin_name": "polkadot",
+      "substrate_chain_argument": "false",
+      "substrate_use_default_spec": "true",
+      "substrate_local_compile": "false",
+      "substrate_bootnode_argument": [],
+      "substrate_purge_chain": "true",
+      "substrate_chain": "/home/subuser/tmp/gantree-validator/spec/chainSpecRaw.raw",
+      "substrate_options": [],
+      "substrate_rpc_port": 9933,
+      "substrate_node_name": "false",
+      "edgeware": "false",
+      "gantree_root": "../",
+      "gantree_working": "/home/subuser/tmp/gantree-validator",
+      "gantree_control_working": "/tmp/gantree-test-control/s-r-gcp-pol-kus/operation",
+      "gantree_tools_root": "SANITIZED_GANTREE/src/cli/tools-cli",
+      "metadata_version": "2.0",
+      "project_name": "s-r-gcp-pol-kus",
+      "substrate_network_id": "local_testnet",
+      "name": "s-r-gcp-pol-kus-0",
+      "telemetry": {
+        "repository": "https://github.com/flex-dapps/substrate-telemetry.git",
+        "binary_url": "https://nyc3.digitaloceanspaces.com/gantree-rozifus-00/flexdapps-telemetry-0.1.0",
+        "binary_name": "telemetry",
+        "src_folder": "telemetry_src",
+        "src_subfolder": "backend",
+        "operation": "fetch"
+      },
+      "substrate_telemetry_argument": "ws://127.0.0.1:8000/submit",
+      "substrate_user": "subuser",
+      "substrate_group": "subgroup",
+      "inventory_group": "s_r_gcp_pol_kus_0"
+    }
+  }
+}

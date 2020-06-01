@@ -1,6 +1,5 @@
 const fs = require('fs')
 const path = require('path')
-const { diff: JsonDiff } = require('json-diff')
 const cloneDeepWith = require('lodash.clonedeepwith')
 
 const StdJson = require('../../../utils/std-json')
@@ -9,6 +8,8 @@ const Logger = require('../../../logging/logger')
 const { createFrame } = require('../../core/frame')
 const operation = require('../inventories/operation')
 const { processor: full_preprocess } = require('../preprocessors/full')
+
+const SAMPLE_SUBPATHS = require('./sample-subpaths')
 
 const replaceExtension = (filename, new_ext) => [...filename.split('.').slice(0, -1), new_ext].join('.')
 
@@ -31,12 +32,6 @@ const getTestFrame = gco => {
     }
   })
 }
-
-const getSamples = () => [
-  'config/fetch/polkadot_aws.sample.json',
-  'config/fetch/polkadot_do.sample.json',
-  'config/fetch/polkadot_gcp.sample.json'
-]
 
 const getFilesWithExtension = (files_path, ext) => {
   if (typeof ext !== 'string' || ext.trim() === "") {
@@ -70,43 +65,42 @@ const sanitizeLocalPaths = (frame, inventory) => {
   })
 }
 
-const run = async () => {
-  const sample_path = PathHelpers.getGantreePath('samples')
-  const sample_inventory_path = path.join(__dirname, 'sample_inventories')
-  const sample_config_files = getSamples()
+const readJsonOrNull = file_path => {
+  try {
+    return StdJson.read(file_path)
+  }
+  catch (e) {
+    return null
+  }
+}
 
-  sample_config_files.forEach(sample_config => {
-    const config_filepath = path.join(sample_path, sample_config)
-    const result_filepath = replaceExtension(path.join(sample_inventory_path, sample_config), 'inventory')
+const getFileSets = (config_root, inventory_root) => {
+  return SAMPLE_SUBPATHS.map(sample => {
+    const config_path = path.join(config_root, sample)
+    const inventory_path = replaceExtension(path.join(inventory_root, sample), 'inventory')
 
-    let expected_inventory
-    try {
-      expected_inventory = StdJson.read(result_filepath)
-    } catch (e) {
-      console.log(
-        `No expected inventory for '${config_filepath}. Invalid inventory json at: '${result_filepath}'`
-      )
-      expected_inventory = {}
+    return {
+      config_path,
+      config_data: readJsonOrNull(config_path),
+      inventory_path,
+      inventory_data: readJsonOrNull(inventory_path)
     }
-
-    const raw_gco = StdJson.read(config_filepath)
-    const frame = getTestFrame(raw_gco)
-    const gco = full_preprocess({ frame, gco: raw_gco })
-
-    const gen_inv = operation.inventory({ frame, gco })
-
-    const san_gen_inv = sanitizeLocalPaths(frame, gen_inv)
-
-    const diff = JsonDiff(expected_inventory, san_gen_inv)
-
-    console.log(`#### ${config_filepath} ####`)
-    if (diff) {
-      console.log(StdJson.stringify(diff, null, 2))
-    } else {
-      console.log('NO CHANGE')
-    }
-    console.log()
   })
 }
 
-run()
+const createTestInventory = raw_gco => {
+  const frame = getTestFrame(raw_gco)
+
+  const gco = full_preprocess({ frame, gco: raw_gco })
+
+  const gen_inv = operation.inventory({ frame, gco })
+
+  const san_gen_inv = sanitizeLocalPaths(frame, gen_inv)
+
+  return san_gen_inv
+}
+
+module.exports = {
+  getFileSets,
+  createTestInventory,
+}

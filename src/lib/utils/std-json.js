@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const JsonBigint = require('json-bigint')({ strict: true })
+const { ensurePath } = require('./path-helpers')
 
 const stringify = o => JsonBigint.stringify(o, null, 2)
 
@@ -16,8 +17,10 @@ const read = file_path => {
   return parse(object_text)
 }
 
-const write = () => {
-  throw new Error('not implmented')
+const write = (file_path, data) => {
+  const abs_file_path = path.resolve(process.cwd(), file_path)
+  ensurePath(path.dirname(abs_file_path))
+  fs.writeFileSync(abs_file_path, stringify(data))
 }
 
 module.exports = {
