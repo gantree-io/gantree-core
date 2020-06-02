@@ -60,9 +60,9 @@ const extract = createExtractor('binary-arguments', props => {
 
   // node-key-file
   const { substrate_user } = SystemAccounts.node(props)
-  const { sb_bin_filename } = BinaryFilename.node(props)
+  const { binary_filename } = BinaryFilename.node(props)
   const { substrate_network_id } = Misc.node(props)
-  const node_key_file = `/home/${substrate_user}/.local/share/${sb_bin_filename}/chains/${substrate_network_id}/network/secret_ed25519`
+  const node_key_file = `/home/${substrate_user}/.local/share/${binary_filename}/chains/${substrate_network_id}/network/secret_ed25519`
   barg = addLine(barg, `--node-key-file="${node_key_file}"`)
 
   return {

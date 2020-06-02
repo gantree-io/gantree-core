@@ -7,14 +7,14 @@
 
 - name: download {{ binary_name }} rust source
   git:
-    repo: '{{ rust__repository }}'
-    version: '{{ rust__repository_version }}'
-    dest: '{{ rust__build_path }}/{{ rust__src_folder }}'
+    repo: '{{ rust_build__repository }}'
+    version: '{{ rust_build__repository_version }}'
+    dest: '{{ rust_build__build_path }}/{{ rust_build__src_folder }}'
 
 - name: install build requirements for ubuntu
   apt:
     update_cache: no
-    pkg: "{{ apt_requirements }}"
+    pkg: "{{ rust_build__apt_requirements }}"
 
 - name: setup cargo and rustup
   include_role:
@@ -22,16 +22,16 @@
   when: 'install_cargo != "false"'
 
 - name: configure toolchain
-  shell: "{{ rust__toolchain }}"
+  shell: "{{ rust_build__toolchain }}"
 
 - debug:
     msg: "Note: beginning build, this may take a long time..."
 
 - name: compile {{ binary_name }}
   shell: |
-    cargo build {{ rust__build_arguments }}
+    cargo build {{ rust_build__build_arguments }}
   args:
-    chdir: '{{ build_path }}/{{ src_folder }}/{{ src_subfolder }}/'
+    chdir: '{{ rust_build__build_path }}/{{ rust_build__src_folder }}/{{ rust_build__src_subfolder }}/'
   register: build_result
   changed_when: false
 
@@ -50,6 +50,6 @@
 
 - name: copy node bin to working dir
   fetch:
-    src: '{{ rust__build_path }}/{{ rust__src_folder }}/{{ rust__src_subfolder }}/{{ rust__compile_path }}/{{ binary_name }}'
+    src: '{{ rust_build__build_path }}/{{ rust_build__src_folder }}/{{ rust_build__src_subfolder }}/{{ rust_build__compile_path }}/{{ rust_build__binary_filename }}'
     dest: '{{ gantree_control_working }}/bin/{{ binary_name }}'
     flat: true

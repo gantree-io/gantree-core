@@ -9,7 +9,7 @@ const getInventorySubstring = inv_paths =>
     .join(' ')
 
 const getPlaybookFilepath = filename =>
-  pathHelpers.getGantreePath('src', 'lib', 'v2', 'playbooks', filename)
+  pathHelpers.getGantreePath('src', 'lib', 'v3', 'playbooks', filename)
 
 async function runPlaybook(frame, playbook_filename) {
   const logger = frame.logAt('ansible/commands/runPlaybook')

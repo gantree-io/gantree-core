@@ -19,7 +19,7 @@ const extract = createExtractor('binary-filename', props => {
   }
 
   return {
-    sb_bin_filename: binary.filename,
+    binary_filename: binary.filename,
   }
 })
 

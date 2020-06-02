@@ -5,7 +5,8 @@ const { combine, timestamp, label, printf, colorize } = format
 
 const consoleFormat = printf(
   ({ level, message, label, timestamp, service }) => {
-    return `${timestamp} [${label}] (${service}) ${level}: ${message}`
+    //return `${timestamp} [${label}] (${service}) ${level}: ${message}`
+    return `${level} ${message}`
   }
 )
 

@@ -10,6 +10,7 @@ const { extract: Misc } = require('./misc')
 const { extract: InstanceName } = require('./instance-name')
 const { extract: SystemAccount } = require('./system-account')
 const { extract: Telemetry } = require('./telemetry')
+const { extract: Sode } = require('./sode')
 
 const extract = createExtractor('operation', props => {
   return {
@@ -22,7 +23,8 @@ const extract = createExtractor('operation', props => {
     ...InstanceName.node(props),
     ...Telemetry.node(props),
     ...SystemAccount.node(props),
-    ...InventoryGroup.node(props)
+    ...InventoryGroup.node(props),
+    ...Sode.node(props)
   }
 })
 

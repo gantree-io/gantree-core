@@ -43,16 +43,19 @@
     binary_config: "{{ telemetry }}"
 
 - hosts: builder_bin
+  gather_facts: no
   roles:
-    - builder-build-bin
-  become: yes
+    - binary-collect
+  vars:
+    binary_config: "{{ sode.sode_binary }}"
 
 - hosts: validator:builder_spec
   gather_facts: no
   strategy: free
   roles:
-    - validator-push-bin
-  become: yes
+    - binary-push
+  vars:
+    binary_config: "{{ sode.sode_binary }}"
 
 - hosts: validator
   gather_facts: no
@@ -84,7 +87,9 @@
 - hosts: validator
   gather_facts: no
   roles:
-    - validator-service
+    - binary-service
+  vars:
+    binary_config: "{{ sode.sode_service }}"
 
 - hosts: validator
   gather_facts: no
@@ -94,4 +99,6 @@
 - hosts: validator
   gather_facts: no
   roles:
-    - validator-service-restart
+    - binary-service-restart
+  vars:
+    binary_config: "{{ sode.sode_binary }}"

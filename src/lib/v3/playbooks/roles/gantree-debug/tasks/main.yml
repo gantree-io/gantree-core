@@ -26,6 +26,8 @@
         substrate_purge_chain: {{ substrate_purge_chain|default(NO_KEY) }}
         substrate_options: {{ substrate_options|default(NO_KEY) }}
 
+        sode: {{ sode }}
+
         telemetry: {{ telemetry|default(NO_KEY) }}
         substrate_telemetry_argument: {{ substrate_telemetry_argument|default(NO_KEY) }}
 
