@@ -1,0 +1,6 @@
+---
+- name: service restart '{{ binary_config.service_name }}'
+  import_tasks: restart.yml
+  vars:
+    service_name: "{{ purge_config.service_name | default(default_service_name) }}"
+    binary_name: "{{ purge_config.binary_name | default(default_binary_name) }}"

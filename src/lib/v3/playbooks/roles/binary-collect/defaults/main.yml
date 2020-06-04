@@ -24,3 +24,7 @@ default_binary_name: binary
 default_src_folder: binary_src
 default_src_subfolder: ''
 default_operation: NOT_SET
+default_rust_build__rustup:
+  - "default stable"
+  - "update --no-self-update nightly"
+  - "target add wasm32-unknown-unknown --toolchain nightly"

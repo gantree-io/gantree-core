@@ -6,7 +6,7 @@
   vars:
     config: "{{ binary_config.rust_build }}"
     binary_name: "{{ binary_config.binary_name }}"
-
+    rust_build: "{{ binary_config.rust_build }}"
 
 - name: fetch binary {{ binary_config.binary_name }}
   include_tasks: 1_fetch.yml
@@ -14,4 +14,4 @@
   vars:
     config: "{{ binary_config.fetch }}"
     binary_name: "{{ binary_config.binary_name }}"
-    fetch__url: "{{ binary_config.fetch.url }}"
+    fetch: "{{ binary_config.fetch }}"

@@ -8,7 +8,7 @@ const PathHelpers = require('../../../utils/path-helpers')
 const { createTestInventory, getFileSets } = require('./shared')
 
 const runTest = () => {
-  const config_root = PathHelpers.getGantreePath('samples')
+  const config_root = PathHelpers.getGantreePath('samples/v3')
   const inventory_root = path.join(__dirname, 'sample_inventories')
 
   const file_sets = getFileSets(config_root, inventory_root)

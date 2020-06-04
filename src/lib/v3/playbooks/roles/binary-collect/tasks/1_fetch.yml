@@ -8,6 +8,6 @@
   delegate_to: localhost
   get_url:
     force: yes # redownload the binary every time and replace if changed
-    url: '{{ fetch__url | quote }}'
+    url: '{{ fetch.url | quote }}'
     dest: '{{ gantree_control_working }}/bin/{{ binary_name }}'
     validate_certs: no #TODO: figure out why this is sometimes needed and fix

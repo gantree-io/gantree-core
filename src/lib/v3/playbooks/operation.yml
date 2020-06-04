@@ -19,12 +19,12 @@
 
 - hosts: validator
   roles:
-    - role: validator-env-gantree
+    - role: sode-env-gantree
   become: yes
 
 - hosts: builder_telemetry
   roles:
-    - binary-rust-compile
+    - binary-collect
   vars:
     binary_config: "{{ telemetry }}"
 
@@ -51,7 +51,6 @@
 
 - hosts: validator:builder_spec
   gather_facts: no
-  strategy: free
   roles:
     - binary-push
   vars:
@@ -71,18 +70,15 @@
 - hosts: builder_spec
   roles:
     - role: builder-build-spec
-      when: 'substrate_use_default_spec|default(false)|bool == false and substrate_chain_argument|default(false)|bool == false and edgeware|default(false)|bool == false'
-
-- hosts: builder_spec
-  roles:
-    - role: builder-build-edgeware-spec
-      when: 'edgeware|default(false)|bool != false'
+      when: ' sode.sb_build_spec|default(false)|bool == true'
+      # when: 'substrate_use_default_spec|default(false)|bool == false and substrate_chain_argument|default(false)|bool == false'
 
 - hosts: validator
   gather_facts: no
   roles:
     - role: validator-push-spec
-      when: 'substrate_use_default_spec|default(false)|bool == false and substrate_chain_argument|default(false)|bool == false'
+      when: ' sode.sb_build_spec|default(false)|bool == true'
+      #when: 'substrate_use_default_spec|default(false)|bool == false and substrate_chain_argument|default(false)|bool == false'
 
 - hosts: validator
   gather_facts: no
@@ -99,6 +95,13 @@
 - hosts: validator
   gather_facts: no
   roles:
-    - binary-service-restart
+    - sode-purge-db
   vars:
-    binary_config: "{{ sode.sode_binary }}"
+    purge_config: "{{ sode.sode_restart }}"
+
+#- hosts: validator
+#  gather_facts: no
+#  roles:
+#    - binary-service-restart
+#  vars:
+#    binary_config: "{{ sode.sode_binary }}"
