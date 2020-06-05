@@ -7,7 +7,9 @@ const { createExtractor } = require('../../creators/create-extractor')
 const { extract: SodeService } = require('./sode-service')
 const { extract: SodeBinary } = require('./sode-binary')
 const { extract: SodeRestart } = require('./sode-restart')
+const { extract: SodeNames } = require('./sode-names')
 const { extract: BinaryChain } = require('../binary/binary-chain')
+const { extract: BinaryNodeKeyFile } = require('../binary/binary-node-key-file')
 
 
 const extract = createExtractor('binary', props => {
@@ -16,7 +18,9 @@ const extract = createExtractor('binary', props => {
       ...SodeService.node(props),
       ...SodeBinary.node(props),
       ...SodeRestart.node(props),
-      ...BinaryChain.node(props)
+      ...SodeNames.node(props),
+      ...BinaryChain.node(props),
+      ...BinaryNodeKeyFile.node(props)
     }
   }
 })

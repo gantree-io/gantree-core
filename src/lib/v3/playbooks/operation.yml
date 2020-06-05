@@ -60,6 +60,8 @@
   gather_facts: no
   roles:
     - validator-gen-keys
+  vars:
+    binary_config: "{{ sode }}"
 
 - hosts: validator
   gather_facts: no

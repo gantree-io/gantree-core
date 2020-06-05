@@ -1,7 +1,7 @@
 {
     "metadata": {
         "version": "3",
-        "project": "s-f-gcp-pol-kus"
+        "project": "dev-debug-do"
     },
     "binary": {
         "fetch": {
@@ -9,19 +9,16 @@
             "sha256": "1526168270c33b9fd2d650887e85599a6b111c6fde9d90cc10c9f1077bb415ff"
         },
         "filename": "polkadot",
-        "useBinChainSpec": "true"
+        "comment_useBinChainSpec": "true"
     },
     "nodes": [
         {
             "validator": false,
             "instance": {
-                "provider": "gcp",
-                "type": "n1-standard-2",
-                "deletionProtection": "false",
-                "sizeGb": 100,
-                "zone": "us-east1-b",
-                "sshPrivateKeyPath": "$env:GANTREE_INSTANCE_PRIVATE_KEY_PATH",
-                "projectId": "$env:GCP_PROJECT_NAME"
+                "provider": "do",
+                "dropletSize": "s-1vcpu-1gb",
+                "region": "nyc3",
+                "sshPrivateKeyPath": "$env:GANTREE_INSTANCE_PRIVATE_KEY_PATH"
             }
         }
     ]

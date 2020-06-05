@@ -4,7 +4,6 @@
         "project": "s-r-do-pol-kus"
     },
     "binary": {
-        "chain": false,
         "repository": {
             "url": "https://github.com/paritytech/polkadot",
             "version": "HEAD"

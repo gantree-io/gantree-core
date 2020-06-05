@@ -6,10 +6,8 @@ const { createExtractor } = require('../../creators/create-extractor')
 
 const { extract: InstanceName } = require('../instance-name')
 const { extract: Telemetry } = require('../telemetry')
-const { extract: SystemAccounts } = require('../system-account')
-const { extract: Misc } = require('../misc')
 const { extract: BinaryChain } = require('./binary-chain')
-const { extract: BinaryFilename } = require('./binary-filename')
+const { extract: BinaryNodeKeyFile } = require('./binary-node-key-file')
 
 
 const addLine = (s, text) => s + " \\\n" + text
@@ -33,7 +31,7 @@ const extract = createExtractor('binary-arguments', props => {
   // validator
   barg = addLine(barg, `--validator`)
 
-  // rpc
+  // rpc-port
   const bo_rpc_port = bo.rpc_port || bo.rpcPort || 9933
   barg = addLine(barg, `--rpc-port=${bo_rpc_port}`)
 
@@ -43,7 +41,7 @@ const extract = createExtractor('binary-arguments', props => {
     barg = addLine(barg, `--chain=${chain}`)
   }
 
-  // options
+  // (user defined options)
   const bo_options = bo.substrate_options || bo.substrateOptions || []
   barg = addLineEach(barg, bo_options, opt => opt)
 
@@ -59,10 +57,7 @@ const extract = createExtractor('binary-arguments', props => {
   }
 
   // node-key-file
-  const { substrate_user } = SystemAccounts.node(props)
-  const { binary_filename } = BinaryFilename.node(props)
-  const { substrate_network_id } = Misc.node(props)
-  const node_key_file = `/home/${substrate_user}/.local/share/${binary_filename}/chains/${substrate_network_id}/network/secret_ed25519`
+  const { node_key_file } = BinaryNodeKeyFile.node(props)
   barg = addLine(barg, `--node-key-file="${node_key_file}"`)
 
   return {
