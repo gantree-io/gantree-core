@@ -47,25 +47,27 @@ const run = async (args = {}) => {
 
   let gLib = null
   switch (config_version) {
-    case '2.0':
-      args.logger.warn("Config point versions deprecated, use '2' rather than '2.0'")
-      args.logger.info('Matched config version: 2')
-      gLib = libV2
-      break
-    case '2':
-      args.logger.info('Matched config version: 2')
-      gLib = libV2
-      break
-    case '3':
-      args.logger.info('Matched config version: 3')
-      gLib = libV3
-      break
-    default:
-      args.logger.warn(
-        `Unsupported config version '${config_version}', using '2'`
-      )
-      gLib = libV2
-      break
+  case '2.0':
+    args.logger.warn(
+      "Config point versions deprecated, use '2' rather than '2.0'"
+    )
+    args.logger.info('Matched config version: 2')
+    gLib = libV2
+    break
+  case '2':
+    args.logger.info('Matched config version: 2')
+    gLib = libV2
+    break
+  case '3':
+    args.logger.info('Matched config version: 3')
+    gLib = libV3
+    break
+  default:
+    args.logger.warn(
+      `Unsupported config version '${config_version}', using '3'`
+    )
+    gLib = libV3
+    break
   }
 
   gLib.run({ ...args, gco })
