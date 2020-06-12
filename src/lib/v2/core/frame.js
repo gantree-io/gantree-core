@@ -60,7 +60,8 @@ const createFrame = args => {
     //...oPick(args, 'verbose', notNull),
     //...oPick(args, 'verbosity', notNull),
     ...oPick(args, 'logger', notNull),
-    ...oPick(args, 'python_interpreter', notNull)
+    ...oPick(args, 'python_interpreter', notNull),
+    ...oPick(args, 'env', fallback(process.env), notNull)
   }
 
   frame.active_path = ensurePath(frame.project_path, 'active')

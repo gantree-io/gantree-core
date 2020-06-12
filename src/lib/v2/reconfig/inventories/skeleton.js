@@ -9,7 +9,7 @@ const inventory = invProps => ({
     vars: {
       ansible_python_interpreter: invProps.frame.python_interpreter,
       ansible_connection: 'local',
-      ...Ansible.node(invProps)
+      ...Ansible(invProps)
     }
   }
 })
