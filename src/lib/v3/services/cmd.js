@@ -2,8 +2,9 @@ const { Buffer } = require('buffer')
 const child_process = require('child_process')
 const { Counter } = require('./counter')
 
-const appendBuffer = (buffer, ...data) =>
+const appendBuffer = (buffer, ...data) => {
   Buffer.concat([buffer, ...data.map(Buffer.from)])
+}
 
 async function exec(frame, command, options = {}) {
   const logger = frame.logAt({
