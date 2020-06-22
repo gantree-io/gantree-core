@@ -3,9 +3,25 @@ const NullTransport = require('./null-transport')
 const { format } = winston
 const { combine, timestamp, label, printf, colorize } = format
 
+const getValidLevels = () => {
+  return {
+    emerg: 0,
+    alert: 1,
+    crit: 2,
+    error: 3,
+    warning: 4,
+    notice: 5,
+    info: 6,
+    debug: 7
+  }
+}
+const getDefaultLevel = () => {
+  return 'info'
+}
+
 const consoleFormat = printf(
-  ({ level, message, label, timestamp, service }) => {
-    //return `${timestamp} [${label}] (${service}) ${level}: ${message}`
+  // ({ level, message, label, timestamp, service }) => { return `${timestamp} [${label}] (${service}) ${level}: ${message}` },
+  ({ level, message }) => {
     return `${level} ${message}`
   }
 )
@@ -69,5 +85,7 @@ const create = options => {
 }
 
 module.exports = {
-  create
+  create,
+  getValidLevels,
+  getDefaultLevel
 }

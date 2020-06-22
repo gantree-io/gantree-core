@@ -6,7 +6,12 @@ const processCommandArgs = async args => {
 
   // const verbose = Boolean(args.verbose || process.env.GANTREE_VERBOSE) || true
 
-  const verbosity = args.verbosity || process.env.GANTREE_VERBOSITY || 'info'
+  const verbosity =
+    args.verbosity === true
+      ? 'debug'
+      : args.verbosity ||
+        process.env.GANTREE_VERBOSITY ||
+        Logger.getDefaultLevel()
 
   const enable_process_stdout = true
 
@@ -56,12 +61,12 @@ const processCommandArgs = async args => {
     strict,
     // TODO(ryan): remove if verbosity encapsulated by logger and nothing breaks
     // verbose,
-    // verbosity,
+    verbosity,
     project_root,
     project_path,
     control_root,
     logger,
-    python_interpreter,
+    python_interpreter
   }
 }
 
