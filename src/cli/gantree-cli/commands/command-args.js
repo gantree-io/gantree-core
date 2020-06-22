@@ -23,7 +23,7 @@ const processCommandArgs = async args => {
     process.env.GANTREE_OVERRIDE_INVENTORY_PATH ||
     process.env.GANTREE_INVENTORY_PATH ||
     process.env.GANTREE_INVENTORY_ROOT ||
-    '~/.gantree/gantree-inventory'
+    `${Utils.getOperationsPath()}/gantree-inventory`
 
   const project_path =
     args.project ||
@@ -35,7 +35,7 @@ const processCommandArgs = async args => {
     args.control ||
     process.env.GANTREE_CONTROL_ROOT ||
     process.env.GANTREE_CONTROL_PATH ||
-    '~/.gantree/gantree-control'
+    `${Utils.getOperationsPath()}/gantree-control`
 
   const logger = Logger.create({
     level: verbosity,

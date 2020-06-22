@@ -26,8 +26,8 @@ const getTestFrame = gco => {
       service_name: 'Reconfig Tests',
       null_transport: true
     }),
-    project_path: '~/.gantree/gantree-test-project/',
-    control_root: '~/.gantree/gantree-test-control/',
+    project_path: `${PathHelpers.getOperationsPath()}/gantree-test-project/`,
+    control_root: `${PathHelpers.getOperationsPath()}/gantree-test-control/`,
     strict: false,
     gco,
     env: {
