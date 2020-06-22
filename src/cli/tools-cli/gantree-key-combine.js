@@ -10,7 +10,7 @@ program
   .option(
     '-d, --directory [path]',
     'Path to session directory.',
-    '/tmp/gantree_host/session'
+    '~/.gantree/gantree_host/session'
   )
   .action(keyCombine_CLI)
 

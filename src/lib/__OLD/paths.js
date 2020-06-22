@@ -45,7 +45,7 @@ class Paths {
     if (process.env.GANTREE_CONTROL_PATH) {
       controlPath = path.resolve(process.env.GANTREE_CONTROL_PATH)
     } else {
-      controlPath = '/tmp/gantree-control'
+      controlPath = '~/.gantree/gantree-control'
     }
 
     fs.mkdirSync(controlPath, { recursive: true })
