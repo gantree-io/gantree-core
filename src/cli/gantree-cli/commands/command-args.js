@@ -6,7 +6,21 @@ const processCommandArgs = async args => {
 
   // const verbose = Boolean(args.verbose || process.env.GANTREE_VERBOSE) || true
 
-  const verbosity = args.verbosity || process.env.GANTREE_VERBOSITY || 'info'
+  const verbosity =
+    args.verbosity === true
+      ? 'debug'
+      : args.verbosity ||
+        process.env.GANTREE_VERBOSITY ||
+        Logger.getDefaultLevel()
+  if (!(verbosity in Logger.getValidLevels())) {
+    throw new Error(
+      `Invalid verbosity level - [options: ${Object.keys(
+        Logger.getValidLevels()
+      ).join(', ')}]`
+    )
+  }
+  // TODO(Denver): Find a way to do below outside of this data-focused script (also for all other overrides)
+  // if (verbosity !== Logger.getDefaultLevel()) { console.log(`[!] Verbosity set manually - '${verbosity}'\n`) }
 
   const enable_process_stdout = true
 
@@ -61,7 +75,7 @@ const processCommandArgs = async args => {
     strict,
     // TODO(ryan): remove if verbosity encapsulated by logger and nothing breaks
     // verbose,
-    // verbosity,
+    verbosity,
     project_root,
     project_path,
     control_root,
