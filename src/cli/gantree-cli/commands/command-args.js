@@ -12,6 +12,13 @@ const processCommandArgs = async args => {
       : args.verbosity ||
         process.env.GANTREE_VERBOSITY ||
         Logger.getDefaultLevel()
+  if (!(verbosity in Logger.getValidLevels())) {
+    throw new Error(
+      `Invalid verbosity level - [options: ${Object.keys(
+        Logger.getValidLevels()
+      ).join(', ')}]`
+    )
+  }
 
   const enable_process_stdout = true
 
