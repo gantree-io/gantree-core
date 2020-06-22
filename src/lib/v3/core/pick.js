@@ -1,3 +1,6 @@
+/** @typedef {Object.<string,*>} lib_args Arguments for Gantree library*/
+/** @typedef {(lib_args: lib_args, arg_name: String) => lib_args} Mod Argument modification function */
+
 const {
   GantreeError,
   ErrorTypes: { MISSING_ARGUMENTS }
@@ -58,7 +61,7 @@ const assertType = type_name => {
  * Return single arg from args after processing with mods. Returns null if arg name missing.
  * @param {Object} args - All args. Obj shape is {arg: value, arg: value}
  * @param {String} arg_name - Arg to return
- * @param  {...Function} mods - Functions to modify target arg
+ * @param {...Mod} mods - Functions to modify target arg
  */
 const oPick = (args, arg_name, ...mods) => {
   const modArgs = mods.reduce((p, mod) => ({ ...mod(p, arg_name) }), args)
