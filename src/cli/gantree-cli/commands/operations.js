@@ -9,7 +9,7 @@ const wrapper = command => async args => {
     const processedArgs = await processCommandArgs(args)
 
     await Gantree.run({
-      ...args,
+      ...args, // NOTE(Denver): check if this is needed
       ...processedArgs,
       command
     })

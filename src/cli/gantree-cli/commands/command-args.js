@@ -10,6 +10,7 @@ const processCommandArgs = async args => {
 
   const enable_process_stdout = true
 
+  /** @type {String} */
   const config_path = args.config || process.env.GANTREE_CONFIG_PATH
   if (!config_path) {
     throw new Error(
@@ -17,6 +18,7 @@ const processCommandArgs = async args => {
     )
   }
 
+  /** @type {String} */
   const project_root =
     args.project_root ||
     process.env.GANTREE_PROJECT_ROOT ||
@@ -25,12 +27,14 @@ const processCommandArgs = async args => {
     process.env.GANTREE_INVENTORY_ROOT ||
     '/tmp/gantree-inventory'
 
+  /** @type {String} */
   const project_path =
     args.project ||
     process.env.GANTREE_OVERRIDE_PROJECT_PATH ||
     process.env.GANTREE_PROJECT_PATH ||
     null
 
+  /** @type {String} */
   const control_root =
     args.control ||
     process.env.GANTREE_CONTROL_ROOT ||
@@ -45,6 +49,7 @@ const processCommandArgs = async args => {
     error_log_file: 'gantree-error.log'
   })
 
+  /** @type {String} */
   const python_interpreter =
     args.python_interpreter ||
     process.env.GANTREE_PYTHON_INTERPRETER ||
@@ -61,7 +66,7 @@ const processCommandArgs = async args => {
     project_path,
     control_root,
     logger,
-    python_interpreter,
+    python_interpreter
   }
 }
 
