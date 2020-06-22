@@ -10,7 +10,7 @@ const { checkHash } = require('./check-hash')
 const StdJson = require('../../../utils/std-json')
 
 async function createInventory(frame, gco) {
-  const logger = frame.logAt('lib/ansible/inventory')
+  const logger = frame.logAt('lib/ansible/inventory') // TODO(Denver): update these, more to do
   logger.info('creating Gantree inventory')
 
   activateProviders(frame, gco)
