@@ -37,7 +37,7 @@ const get_gco = args => {
 const get_config_version = gco => {
   return (
     (gco.metadata && gco.metadata.version && gco.metadata.version.toString()) ||
-    '2'
+    '2' // NOTE(Denver): this default differs from run function default
   )
 }
 
@@ -64,7 +64,7 @@ const run = async (args = {}) => {
     break
   default:
     args.logger.warn(
-      `Unsupported config version '${config_version}', using '3'`
+      `Unsupported config version '${config_version}', using '3'` // NOTE(Denver): this default differs from get_config_version default
     )
     gLib = libV3
     break
