@@ -4,16 +4,7 @@ const { format } = winston
 const { combine, timestamp, label, printf, colorize } = format
 
 const getValidLevels = () => {
-  return {
-    emerg: 0,
-    alert: 1,
-    crit: 2,
-    error: 3,
-    warning: 4,
-    notice: 5,
-    info: 6,
-    debug: 7
-  }
+  return winston.config.syslog.levels
 }
 const getDefaultLevel = () => {
   return 'info'
@@ -32,7 +23,7 @@ const meta_filter = name =>
 const create = options => {
   // TODO(ryan): add logging to socket
   const service = options.service || 'Gantree'
-  const level = options.level || 'info'
+  const level = options.level || getDefaultLevel()
   const console_log = options.console_log === true
   const log_file = options.log_file || false
   const error_log_file = options.error_log_file || false
