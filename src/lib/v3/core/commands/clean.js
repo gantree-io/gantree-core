@@ -21,7 +21,7 @@ const clean = async (frame, gco) => {
       )
     }
 
-    logger.warn('nothing to clean')
+    logger.warning('nothing to clean')
     return
   }
 
