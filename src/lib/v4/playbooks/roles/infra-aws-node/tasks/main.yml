@@ -1,0 +1,10 @@
+---
+- include_tasks: 0_select.yml
+  vars:
+    instance_name: "{{ config.instance_name }}"
+    region: "{{ config.region }}"
+    instance_type: "{{ config.instance_type }}"
+    volume_size: "{{ config.volume_size }}"
+    ssh_user: "{{ config.ssh_user }}"
+    ssh_key: "{{ config.ssh_key }}"
+    ssh_key_name: "{{ config.ssh_key_name }}"

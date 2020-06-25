@@ -1,0 +1,36 @@
+- name: stop {{ service_name }}
+  become: yes
+  systemd:
+    name: "{{ service_name }}"
+    state: stopped
+
+#    if [ "{{ edgeware|default('false') }}" != "false" ]; then
+#      chain=" --chain=/home/{{ substrate_user }}/tmp/gantree-validator/spec/chainSpecRaw.raw"
+#    elif [ {{ substrate_chain_argument }} != "false" ]; then
+#      chain=" --chain={{ substrate_chain_argument }}"
+#    else
+#      chain=""
+#    fi
+
+#    nochain="{{ binary_name }} purge-chain -d /home/{{ substrate_user }}/.local/share/{{ binary_name }} -y"
+#    command="$nochain$chain"
+
+#    eval $command
+
+- name: clean substrate db
+  become: yes
+  when: "purge_config.restart|default(false)|bool == true"
+  shell: |
+    if [ "{{ purge_config.chain|default('false') }}" != "false" ]; then
+      chain_command=" --chain={{ purge_config.chain }}"
+    else
+      chain_command=""
+    fi
+
+    eval {{ binary_name }} purge-chain -d {{ purge_config.chain_dir }} -y $chain_command
+
+- name: start {{ service_name }}
+  become: yes
+  systemd:
+    name: "{{ service_name }}"
+    state: started

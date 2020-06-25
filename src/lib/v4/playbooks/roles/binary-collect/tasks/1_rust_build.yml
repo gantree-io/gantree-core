@@ -1,0 +1,72 @@
+---
+- name: install git
+  apt:
+    update_cache: yes
+    pkg:
+      - git
+
+- name: download {{ binary_name }} rust source
+  git:
+    repo: '{{ rust_build.repository_url }}'
+    version: '{{ rust_build.repository_version }}'
+    dest: '{{ rust_build.build_path }}'
+
+- name: install base build requirements for ubuntu
+  apt:
+    update_cache: yes
+    pkg:
+      - cmake
+      - pkg-config
+      - libssl-dev
+      - git
+      - gcc
+      - build-essential
+      - clang
+      - libclang-dev
+
+- name: install extra build requirements for ubuntu
+  apt:
+    name: "{{ item }}"
+    update_cache: no
+  with_items: "{{ rust_build.apt_requirements|default([]) }}"
+
+- name: setup cargo and rustup
+  include_role:
+    name: ansible-role-cargo
+  when: 'rust_build.install_cargo|default(true)|bool != "false"'
+
+- name: configure rustup
+  shell: "rustup {{ item }}"
+  changed_when: false
+  with_items: "{{ rust_build.rustup|default(default_rust_build__rustup) }}"
+
+- debug:
+    msg: "Note: beginning build, this may take a long time..."
+
+- name: compile {{ binary_name }}
+  shell: |
+    cargo build {{ rust_build.build_arguments|default("") }}
+  args:
+    chdir: '{{ rust_build.build_path }}/{{ rust_build.src_subfolder }}/'
+  register: build_result
+  changed_when: false
+
+- debug:
+    msg: "Build stdout: {{ build_result.stdout }}"
+
+- name: create host bin directory
+  file:
+    path: '{{ gantree_control_working }}/bin'
+    state: directory
+
+- name: delete any existing binary
+  delegate_to: localhost
+  file:
+    path: '{{ gantree_control_working }}/bin/{{ binary_name }}'
+    state: absent
+
+- name: copy node bin to working dir
+  fetch:
+    src: '{{ rust_build.build_path }}/{{ rust_build.src_subfolder }}/{{ rust_build.compile_path }}/{{ rust_build.binary_filename }}'
+    dest: '{{ gantree_control_working }}/bin/{{ binary_name }}'
+    flat: true

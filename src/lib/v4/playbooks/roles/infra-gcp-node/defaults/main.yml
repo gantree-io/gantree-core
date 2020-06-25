@@ -1,0 +1,16 @@
+---
+instance_name: NOT_SET
+zone: NOT_SET
+region: NOT_SET
+machine_type: NOT_SET
+machine_disk_size: NOT_SET
+deletion_protection: no
+gcp_project: NOT_SET
+gcp_cred_kind: serviceaccount
+gcp_cred_file: NOT_SET
+ssh_user: root
+ssh_key: NOT_SET
+provider_groups:
+  - provider_gcp
+
+state: present

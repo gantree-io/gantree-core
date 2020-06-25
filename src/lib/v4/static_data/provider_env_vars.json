@@ -1,0 +1,23 @@
+{
+    "aws": [
+        {
+            "name": "AWS_ACCESS_KEY_ID"
+        },
+        {
+            "name": "AWS_SECRET_ACCESS_KEY"
+        }
+    ],
+    "do": [
+        {
+            "name": "DO_API_TOKEN"
+        }
+    ],
+    "gcp": [
+        {
+            "name": "GCP_AUTH_KIND"
+        },
+        {
+            "name": "GCP_SERVICE_ACCOUNT_FILE"
+        }
+    ]
+}

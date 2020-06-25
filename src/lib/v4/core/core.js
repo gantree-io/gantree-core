@@ -19,7 +19,7 @@ const run = async args => {
   if (!command) {
     throw GantreeError(
       COMMAND_ERROR,
-      `ConfigV3 - Unsupported command '${args.command}'`
+      `ConfigV4 - Unsupported command '${args.command}'`
     )
   }
 

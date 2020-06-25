@@ -1,0 +1,17 @@
+---
+- import_tasks: 0_select.yml
+  vars:
+    instance_name: "{{ config.instance_name }}"
+    zone: "{{ config.zone }}"
+    region: "{{ config.region }}"
+    machine_type: "{{ config.machine_type }}"
+    size_gb: "{{ config.size_gb }}"
+    source_image: "{{ config.source_image }}"
+    deletion_protection: "{{ config.deletion_protection }}"
+    gcp_project: "{{ config.gcp_project }}"
+    gcp_cred_kind: "{{ config.gcp_cred_kind | default('serviceaccount') }}"
+    gcp_cred_file: "{{ config.gcp_cred_file }}"
+    ssh_user: "{{ config.ssh_user }}"
+    ssh_key: "{{ config.ssh_key }}"
+    provider_groups: "{{ config.provider_groups | default() }}"
+    gantree_tags: "{{ config.gantree_tags | default({}) }}"

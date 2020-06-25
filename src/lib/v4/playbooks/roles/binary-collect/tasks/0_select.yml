@@ -1,0 +1,17 @@
+---
+# tasks file for substrate-builder
+- name: build rust binary {{ binary_name }}
+  include_tasks: 1_rust_build.yml
+  when: 'binary_config.rust_build is defined'
+  vars:
+    config: "{{ binary_config.rust_build }}"
+    binary_name: "{{ binary_config.binary_name }}"
+    rust_build: "{{ binary_config.rust_build }}"
+
+- name: fetch binary {{ binary_config.binary_name }}
+  include_tasks: 1_fetch.yml
+  when: 'binary_config.fetch is defined'
+  vars:
+    config: "{{ binary_config.fetch }}"
+    binary_name: "{{ binary_config.binary_name }}"
+    fetch: "{{ binary_config.fetch }}"

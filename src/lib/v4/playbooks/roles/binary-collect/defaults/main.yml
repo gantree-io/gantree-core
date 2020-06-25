@@ -1,0 +1,30 @@
+---
+# vars file for builder-build-bin
+default_apt_requirements:
+  - cmake
+  - pkg-config
+  - libssl-dev
+  - git
+  - gcc
+  - build-essential
+  - clang
+  - libclang-dev
+default_toolchain: |
+    rustup update nightly
+    rustup update stable
+    rustup target add wasm32-unknown-unknown --toolchain nightly
+default_repository: NOT_SET
+default_repository_version: HEAD
+default_binary_url: NOT_SET
+default_build_path: /tmp/gantree-build
+default_build_arguments: --release
+default_compile_path: target/release
+default_install_cargo: true
+default_binary_name: binary
+default_src_folder: binary_src
+default_src_subfolder: ''
+default_operation: NOT_SET
+default_rust_build__rustup:
+  - "default stable"
+  - "update --no-self-update nightly"
+  - "target add wasm32-unknown-unknown --toolchain nightly"
