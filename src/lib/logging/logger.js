@@ -31,8 +31,11 @@ const create = options => {
 
   const logger = winston.createLogger({
     level,
+    levels: getValidLevels(),
     transports: []
   })
+
+  winston.addColors({ warning: 'yellow' })
 
   if (console_log) {
     logger.add(
