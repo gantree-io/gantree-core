@@ -4,6 +4,20 @@ const program = require('commander')
 const packageMeta = require('../../package/package-meta')
 const { syncWrapper, cleanWrapper } = require('./commands/operations')
 
+const unhandledRejections = new Map()
+process.on('unhandledRejection', (reason, promise) => {
+  unhandledRejections.set(promise, reason)
+  console.log('----UNHANDLED REJECTION----')
+  console.log(
+    `Please open a bug report at '${packageMeta.getRepository()}/issues')\n`
+  )
+  throw reason
+})
+process.on('rejectionHandled', promise => {
+  unhandledRejections.delete(promise)
+  console.log('handled rejection')
+})
+
 function returnVersionString() {
   const name = packageMeta.getName()
   const version = packageMeta.getVersion()
