@@ -17,5 +17,8 @@ module.exports = {
   },
   getName: () => {
     return _getPackageDotJson().name
+  },
+  getRepository: () => {
+    return _getPackageDotJson().repository
   }
 }
