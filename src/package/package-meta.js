@@ -1,31 +1,21 @@
 const path = require('path')
 const StdJson = require('../lib/utils/std-json')
 
-function getVersion() {
+function _getPackageDotJson() {
   const targetPath = path.join(
     path.dirname(module.filename),
     '..',
     '..',
     'package.json'
   )
-  const pkg = StdJson.read(targetPath)
-
-  return pkg.version
-}
-
-function getName() {
-  const targetPath = path.join(
-    path.dirname(module.filename),
-    '..',
-    '..',
-    'package.json'
-  )
-  const pkg = StdJson.read(targetPath)
-
-  return pkg.name
+  return StdJson.read(targetPath)
 }
 
 module.exports = {
-  getVersion,
-  getName
+  getVersion: () => {
+    return _getPackageDotJson().version
+  },
+  getName: () => {
+    return _getPackageDotJson().name
+  }
 }
