@@ -79,10 +79,12 @@ function validateConfig(frame, gco) {
     throw new GantreeError(BAD_CONFIG, 'invalid gantree config')
   }
 
-  logger.info('Gantree configuration validated successfully')
+  logger.info('schema validation successful')
 
-  validateProviderSpecificKeys(frame, gco)
-  checks.config.nodeNameCharLimit(frame, gco)
+  validateProviderSpecificKeys(frame, gco) // TODO(Denver): process these like Ryan does with reconfig
+  checks.config.nodeNameCharLimit(frame, gco) // TODO(Denver): process these like Ryan does with reconfig
+
+  logger.info('Gantree configuration validated successfully')
 
   return gco
 }
