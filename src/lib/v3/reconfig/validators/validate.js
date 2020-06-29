@@ -70,7 +70,7 @@ function validateConfig(frame, gco) {
   const is_valid = validate(gco)
 
   if (!is_valid) {
-    console.error('Invalid Gantree config detected')
+    logger.error('invalid Gantree config detected')
     validate.errors.forEach(e => {
       logger.error(
         `--ISSUE: ${e.dataPath} ${e.message} (SCHEMA:${e.schemaPath})`
