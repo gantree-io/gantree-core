@@ -2,12 +2,12 @@ const { BaseError } = require('make-error-cause')
 
 const _error_meta = require('./error-meta.json')
 
-const generic_error = _error_meta.errors.GENERIC_ERROR
+const GENERIC_ERROR = _error_meta.errors.GENERIC_ERROR
 
 class GantreeError extends BaseError {
   constructor(
-    meta = generic_error,
-    message = generic_error.message,
+    meta = GENERIC_ERROR,
+    message = GENERIC_ERROR.message,
     cause = undefined // instance of Error caught
   ) {
     super(message, cause)
@@ -23,6 +23,10 @@ for (const error_name of Object.keys(_error_meta.errors)) {
 }
 
 const handleErr = (frame, err, throwErr = false) => {
+  if (err.meta === undefined || err.message === undefined) {
+    err = new GantreeError(GENERIC_ERROR, 'vanilla error: see error below', err)
+  }
+
   const err_msg = `FAIL:[${err.meta.code}] ${err.meta.message}: ${err.message}`
 
   if (frame !== undefined) {
