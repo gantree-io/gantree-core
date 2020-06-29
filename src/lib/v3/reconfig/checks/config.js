@@ -6,7 +6,7 @@ const {
 } = require('../../../error/gantree-error')
 const { hasOwnProp } = require('../../../utils/has-own-prop')
 
-async function nodeNameCharLimit(frame, gco, _options = {}) {
+function nodeNameCharLimit(frame, gco, _options = {}) {
   const logger = frame.logAt('nodeNameCharLimit')
 
   const charLimit = _options.charLimit || 18
