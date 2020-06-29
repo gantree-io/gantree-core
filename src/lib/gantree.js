@@ -62,20 +62,20 @@ const run = async (args = {}) => {
     args.logger.notice(
       "Config point versions deprecated, use '2' rather than '2.0'"
     )
-    args.logger.info('Matched config version: 2')
+    args.logger.info('matched config version: 2')
     gLib = libV2
     break
   case '2':
-    args.logger.info('Matched config version: 2')
+    args.logger.info('matched config version: 2')
     gLib = libV2
     break
   case '3':
-    args.logger.info('Matched config version: 3')
+    args.logger.info('matched config version: 3')
     gLib = libV3
     break
   default:
     args.logger.warning(
-      `Unsupported config version '${config_version}', using '3'` // NOTE(Denver): this default differs from get_config_version default
+      `unsupported config version '${config_version}', using '3'` // NOTE(Denver): this default differs from get_config_version default
     )
     gLib = libV3
     break

@@ -42,7 +42,7 @@ function validateProviderSpecificKeys(frame, gco) {
       logger.error(message)
       missing_messages.push(message)
     } else {
-      logger.info(`All required ${provider} specific keys satisfied`)
+      logger.info(`all required ${provider} specific keys satisfied`)
     }
   }
 
