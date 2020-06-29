@@ -34,14 +34,16 @@ const checkHash = (frame, gco) => {
       )
     }
 
-    logger.warn(`Config hash changed, old '${expectedHash}', new: '${gcoHash}'`)
+    logger.warning(
+      `Config hash changed, old '${expectedHash}', new: '${gcoHash}'`
+    )
   }
 
   // logger.info('No Gantree config hash found')
   const gantreeConfigObjHash = hash.getChecksum(gcoString)
 
   fs.writeFileSync(hash_path, `${gantreeConfigObjHash} `, 'utf8')
-  logger.info(`Gantree config hash written(${gantreeConfigObjHash})`)
+  logger.info(`Gantree config hash written (${gantreeConfigObjHash})`)
 }
 
 module.exports = {
