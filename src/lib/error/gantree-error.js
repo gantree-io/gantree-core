@@ -23,11 +23,15 @@ for (const error_name of Object.keys(_error_meta.errors)) {
 }
 
 const handleErr = (frame, err, throwErr = false) => {
-  const logger = frame.logAt('handleErr')
-  if (typeof err !== GantreeError) {
-    err = new GantreeError(generic_error, err)
+  const err_msg = `FAIL:[${err.meta.code}] ${err.meta.message}: ${err.message}`
+
+  if (frame !== undefined) {
+    const logger = frame.logAt('handleErr')
+    logger.error(err_msg)
+  } else {
+    console.log(err_msg)
   }
-  logger.error(`FAIL:[${err.meta.code}] ${err.meta.message}: ${err.message}`)
+
   if (throwErr == true) {
     throw err
   } else {
