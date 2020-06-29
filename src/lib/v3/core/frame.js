@@ -37,7 +37,7 @@ const getProjectPath = (args, project_name) => {
 
 const getControlPath = (args, project_name) => {
   if (!args.control_root) {
-    throw new Error(MISSING_ARGUMENTS, `Must supply 'control_root`)
+    throw new GantreeError(MISSING_ARGUMENTS, `Must supply 'control_root'`)
   }
 
   return path.join(args.control_root, project_name)
