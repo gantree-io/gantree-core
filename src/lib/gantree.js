@@ -81,10 +81,12 @@ const run = async (args = {}) => {
     break
   }
 
-  gLib.run({ ...args, gco }).catch(e => {
+  try {
+    gLib.run({ ...args, gco })
+  } catch (e) {
     args.logger.error('An uncaught error occured during library execution.')
     handleErr(undefined, e)
-  })
+  }
 }
 
 module.exports = {
