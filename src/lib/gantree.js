@@ -30,7 +30,11 @@ const get_gco = args => {
   try {
     return StdJson.read(config_path)
   } catch (e) {
-    throw new GantreeError(BAD_CONFIG, `Failed to parse config`, e)
+    throw new GantreeError(
+      BAD_CONFIG,
+      `Failed to parse config at '${config_path}'`,
+      e
+    )
   }
 }
 
