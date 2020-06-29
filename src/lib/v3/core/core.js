@@ -31,13 +31,13 @@ const run = async args => {
   }
 
   let gco = args.gco
-  gco = Config.validate(frame, gco)
-  gco = Config.preprocess(frame, gco)
-
-  // command(frame, gco)
-  command(frame, gco).catch(e => {
+  try {
+    gco = Config.validate(frame, gco)
+    gco = Config.preprocess(frame, gco)
+    command(frame, gco)
+  } catch (e) {
     handleErr(frame, e)
-  })
+  }
 }
 
 module.exports = {
