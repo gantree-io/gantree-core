@@ -34,7 +34,7 @@ const run = async args => {
   try {
     gco = Config.validate(frame, gco)
     gco = Config.preprocess(frame, gco)
-    command(frame, gco)
+    await command(frame, gco)
   } catch (e) {
     handleErr(frame, e)
   }
