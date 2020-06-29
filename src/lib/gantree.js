@@ -45,6 +45,12 @@ const run = async (args = {}) => {
   const gco = get_gco(args)
   const config_version = get_config_version(gco)
 
+  if (!args.logger) {
+    throw new GantreeError(
+      MISSING_ARGUMENTS,
+      "Must supply 'Logger'" // TODO(Denver): there should be a default logger if none specified (lib)
+    )
+  }
   let gLib = null
   switch (config_version) {
   case '2.0':
