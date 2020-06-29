@@ -17,10 +17,10 @@ async function nodeNameCharLimit(frame, gco, _options = {}) {
   const suffixString = extraAutoChars + nodeCount.toString()
   const suffixChars = suffixString.length
 
-  logger.verbose(`project name: ${projectName}`)
-  logger.verbose(`node count: ${nodeCount}`)
-  logger.verbose(`suffix string: '${suffixString}'`)
-  logger.verbose(`suffix string chars: ${suffixChars}`)
+  logger.debug(`project name: ${projectName}`)
+  logger.debug(`node count: ${nodeCount}`)
+  logger.debug(`suffix string: '${suffixString}'`)
+  logger.debug(`suffix string chars: ${suffixChars}`)
 
   gco.nodes.forEach(node_n => {
     // if node has name

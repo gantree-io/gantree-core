@@ -6,6 +6,7 @@ const {
   GantreeError,
   ErrorTypes: { BAD_CONFIG, MISSING_ARGUMENTS }
 } = require('../../error/gantree-error')
+const { getValidLevels } = require('../../logging/logger')
 
 const getProjectName = args => {
   const { gco } = args
@@ -85,7 +86,7 @@ const createFrame = args => {
 
     return {
       log,
-      ...buildAll('error', 'warn', 'info', 'http', 'verbose', 'debug', 'silly')
+      ...buildAll(...Object.keys(getValidLevels()))
     }
   }
 
