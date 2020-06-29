@@ -3,9 +3,16 @@ const NullTransport = require('./null-transport')
 const { format } = winston
 const { combine, timestamp, label, printf, colorize } = format
 
+const getValidLevels = () => {
+  return winston.config.syslog.levels
+}
+const getDefaultLevel = () => {
+  return 'info'
+}
+
 const consoleFormat = printf(
-  ({ level, message, label, timestamp, service }) => {
-    //return `${timestamp} [${label}] (${service}) ${level}: ${message}`
+  // ({ level, message, label, timestamp, service }) => { return `${timestamp} [${label}] (${service}) ${level}: ${message}` },
+  ({ level, message }) => {
     return `${level} ${message}`
   }
 )
@@ -16,7 +23,7 @@ const meta_filter = name =>
 const create = options => {
   // TODO(ryan): add logging to socket
   const service = options.service || 'Gantree'
-  const level = options.level || 'info'
+  const level = options.level || getDefaultLevel()
   const console_log = options.console_log === true
   const log_file = options.log_file || false
   const error_log_file = options.error_log_file || false
@@ -24,8 +31,11 @@ const create = options => {
 
   const logger = winston.createLogger({
     level,
+    levels: getValidLevels(),
     transports: []
   })
+
+  winston.addColors({ warning: 'yellow' })
 
   if (console_log) {
     logger.add(
@@ -69,5 +79,7 @@ const create = options => {
 }
 
 module.exports = {
-  create
+  create,
+  getValidLevels,
+  getDefaultLevel
 }

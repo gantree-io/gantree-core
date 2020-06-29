@@ -24,6 +24,7 @@ const standardCommand = (name, desc, func) => {
       '-i, --inventory [inventory]',
       'Force inventory path (advanced usage)'
     )
+    .option('-v, --verbosity [verbosity]', 'Logging verbosity level')
     .action(func)
 }
 
