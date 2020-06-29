@@ -41,7 +41,7 @@ const checkHash = (frame, gco) => {
   const gantreeConfigObjHash = hash.getChecksum(gcoString)
 
   fs.writeFileSync(hash_path, `${gantreeConfigObjHash} `, 'utf8')
-  logger.info(`Gantree config hash written(${gantreeConfigObjHash})`)
+  logger.info(`Gantree config hash written (${gantreeConfigObjHash})`)
 }
 
 module.exports = {
