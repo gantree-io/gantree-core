@@ -1,7 +1,8 @@
 const StdJson = require('./utils/std-json')
 const {
   GantreeError,
-  ErrorTypes: { MISSING_ARGUMENTS, BAD_CONFIG }
+  ErrorTypes: { MISSING_ARGUMENTS, BAD_CONFIG },
+  handleErr
 } = require('./error/gantree-error')
 
 const libV2 = require('./v2/core/core')
@@ -80,7 +81,10 @@ const run = async (args = {}) => {
     break
   }
 
-  gLib.run({ ...args, gco })
+  gLib.run({ ...args, gco }).catch(e => {
+    args.logger.error('An uncaught error occured during library execution.')
+    handleErr(undefined, e)
+  })
 }
 
 module.exports = {
