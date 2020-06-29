@@ -13,7 +13,7 @@ const clean = async (frame, gco) => {
   const gantreeInventoryExists = await Inventory.gantreeInventoryExists(frame)
 
   if (gantreeInventoryExists === false) {
-    // NOTE(ryan): why can't we create the inventory and then clean it?
+    // NOTE(Denver): only create a missing inventory if not strict
     if (frame.strict === true) {
       throw new GantreeError(
         MISSING_NAMESPACE_ITEM,
