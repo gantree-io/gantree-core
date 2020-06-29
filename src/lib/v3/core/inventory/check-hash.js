@@ -34,7 +34,9 @@ const checkHash = (frame, gco) => {
       )
     }
 
-    logger.warn(`Config hash changed, old '${expectedHash}', new: '${gcoHash}'`)
+    logger.warning(
+      `Config hash changed, old '${expectedHash}', new: '${gcoHash}'`
+    )
   }
 
   // logger.info('No Gantree config hash found')
