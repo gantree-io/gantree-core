@@ -150,6 +150,10 @@
                 "validator"
             ],
             "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "user specified node name"
+                },
                 "palletOptions": {
                     "$ref": "#/definitions/palletOptions"
                 },
