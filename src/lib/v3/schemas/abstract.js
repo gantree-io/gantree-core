@@ -22,6 +22,17 @@ const gcoAL = gco => {
     },
     get_nodes: function() {
       return this.gco.nodes
+    },
+    get_binary_method: function() {
+      return (
+        (this.gco.binary.repository && 'repository') ||
+        (this.gco.binary.fetch && 'fetch') ||
+        (this.gco.binary.local && 'local') ||
+        null
+      )
+    },
+    get_binary_filename: function() {
+      return this.gco.binary.filename
     }
   }
 }
