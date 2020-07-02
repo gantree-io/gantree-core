@@ -85,6 +85,10 @@
                 },
                 "local": {
                     "$ref": "#/definitions/localBinary"
+                },
+                "chain": {
+                    "type": "string",
+                    "description": "TODO: this"
                 }
             }
         },
@@ -159,10 +163,6 @@
                 },
                 "binaryOptions": {
                     "$ref": "#/definitions/binaryOptions"
-                },
-                "chain": {
-                    "type": "string",
-                    "description": "TODO: this"
                 },
                 "useBinChainSpec": {
                     "type": "boolean",
