@@ -14,7 +14,6 @@ module.exports = {
         networks {
             _id
             project_id
-            chainspec
             nodes{
                 _id
                 name
@@ -36,7 +35,6 @@ module.exports = {
         networkByProjectId(project_id: $project_id) {
             _id
             project_id
-            chainspec
             nodes{
                 _id
                 name
