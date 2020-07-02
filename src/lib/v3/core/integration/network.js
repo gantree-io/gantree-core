@@ -30,9 +30,12 @@ const sync_network = async (frame, gco) => {
         project_id: gcoAL(gco).get_project_id(),
         platform: 'EXTERNAL-CORE',
         network_args: JSON.stringify({
+          config_version: gcoAL(gco).get_config_version(),
           binary_args: {
             method: gcoAL(gco).get_binary_method(),
-            filename: gcoAL(gco).get_binary_filename()
+            filename: gcoAL(gco).get_binary_filename(),
+            fetch_method: { url: gcoAL(gco).get_fetch_method_url() },
+            chain: gcoAL(gco).get_binary_chain()
             // repository_method: repository_method,
             // fetch_method: fetch_method,
             // local_method: local_method,
