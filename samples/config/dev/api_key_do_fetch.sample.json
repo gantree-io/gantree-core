@@ -9,7 +9,7 @@
             "sha256": "1526168270c33b9fd2d650887e85599a6b111c6fde9d90cc10c9f1077bb415ff"
         },
         "filename": "polkadot",
-        "useBinChainSpec": "true"
+        "useBinChainSpec": true
     },
     "nodes": [
         {
