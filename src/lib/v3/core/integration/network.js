@@ -22,15 +22,10 @@ const handle_remote_error = (frame, e) => {
 const sync_network = async (frame, gco) => {
   const client = get_gql_client(gco)
 
-  // config containing config version and info for nodes (which is stringified?)
-  // IPs of nodes paired with (indexes?)
-  // api key from (processed config?)
-
   // build and send query
-  console.log('--SYNC REQUEST')
   const response = await client
     .request(
-      queries.syncNetwork, // <----- THIS IS THE RIGHT ONE
+      queries.syncNetwork, // query
       {
         project_id: gcoAL(gco).get_project_id(),
         platform: 'EXTERNAL-CORE',
@@ -46,13 +41,6 @@ const sync_network = async (frame, gco) => {
           }
         })
       }
-      // queries.addCliNetwork, // <---- FOR DEBUGGING
-      // {
-      //   cli_nodes: JSON.stringify([
-      //     { cfgIndex: 0, name: "my-node-name", ip: "186.100.33.41" }
-      //   ]),
-      //   config: JSON.stringify(gco)
-      // }
     )
     .catch(e => {
       throw new GantreeError(
