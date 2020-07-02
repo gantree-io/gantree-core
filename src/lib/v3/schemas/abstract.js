@@ -42,6 +42,21 @@ const gcoAL = gco => {
     },
     get_binary_chain: function() {
       return this.gco.binary.chain
+    },
+    get_node_name: function(index) {
+      return this.gco.nodes[index].name
+    },
+    get_node_instance: function(index) {
+      return this.gco.nodes[index].instance
+    },
+    get_node_type: function(index) {
+      return this.gco.nodes[index].validator ? 'VALIDATOR' : 'FULL'
+    },
+    get_node_pallet_options: function(index) {
+      return this.gco.nodes[index].palletOptions
+    },
+    get_node_binary_options: function(index) {
+      return this.gco.nodes[index].binaryOptions
     }
   }
 }
