@@ -89,6 +89,10 @@
                 "chain": {
                     "type": "string",
                     "description": "TODO: this"
+                },
+                "useBinChainSpec": {
+                    "type": "boolean",
+                    "description": "specify if binaries internal chainspec should be used or an external one"
                 }
             }
         },
@@ -163,10 +167,6 @@
                 },
                 "binaryOptions": {
                     "$ref": "#/definitions/binaryOptions"
-                },
-                "useBinChainSpec": {
-                    "type": "boolean",
-                    "description": "specify if binaries internal chainspec should be used or an external one"
                 },
                 "validator": {
                     "type": "boolean",
