@@ -75,6 +75,10 @@
             "code": 21,
             "message": "unsupported operation"
         },
+        "REMOTE_SERVICE_ERROR": {
+            "code": 22,
+            "message": "remote service returned an error"
+        },
         "COMMAND_NOT_FOUND": {
             "code": 127,
             "message": "command not found"

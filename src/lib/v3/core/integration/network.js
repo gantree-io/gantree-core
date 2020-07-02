@@ -1,27 +1,41 @@
 const { get_gql_client } = require('./client')
 const queries = require('./queries')
 const { gcoAL } = require('../../schemas/abstract')
+const {
+  GantreeError,
+  ErrorTypes: { REMOTE_SERVICE_ERROR }
+} = require('../../../error/gantree-error')
 
-const sync_network = async gco => {
-  console.log('--SYNC NETWORK')
+const handle_remote_error = (frame, e) => {
+  if (Object.prototype.hasOwnProperty.call(e, 'response')) {
+    return e.response.errors
+      .map(error => {
+        return error.extensions.exception.stacktrace.join('\n')
+      })
+      .join('\n\n')
+  } else if (Object.prototype.hasOwnProperty.call(e, 'message')) {
+    return e.message
+  }
+  return e
+}
+
+const sync_network = async (frame, gco) => {
   const client = get_gql_client(gco)
 
-  // config containing config version and info for nodes (which is stringified?)
-  // IPs of nodes paired with (indexes?)
-  // api key from (processed config?)
-
   // build and send query
-  console.log('--SYNC REQUEST')
   const response = await client
     .request(
-      queries.syncNetwork, // <----- THIS IS THE RIGHT ONE
+      queries.syncNetwork, // query
       {
         project_id: gcoAL(gco).get_project_id(),
         platform: 'EXTERNAL-CORE',
         network_args: JSON.stringify({
+          config_version: gcoAL(gco).get_config_version(),
           binary_args: {
             method: gcoAL(gco).get_binary_method(),
-            filename: gcoAL(gco).get_binary_filename()
+            filename: gcoAL(gco).get_binary_filename(),
+            fetch_method: { url: gcoAL(gco).get_fetch_method_url() },
+            chain: gcoAL(gco).get_binary_chain()
             // repository_method: repository_method,
             // fetch_method: fetch_method,
             // local_method: local_method,
@@ -30,17 +44,13 @@ const sync_network = async gco => {
           }
         })
       }
-      // queries.addCliNetwork, // <---- FOR DEBUGGING
-      // {
-      //   cli_nodes: JSON.stringify([
-      //     { cfgIndex: 0, name: "my-node-name", ip: "186.100.33.41" }
-      //   ]),
-      //   config: JSON.stringify(gco)
-      // }
     )
     .catch(e => {
-      console.log('----API ERROR!!!----')
-      console.log(e.message)
+      throw new GantreeError(
+        REMOTE_SERVICE_ERROR,
+        'error from remote server while syncing network',
+        new Error(handle_remote_error(frame, e))
+      )
     })
   return response
 }
