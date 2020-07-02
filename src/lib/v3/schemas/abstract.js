@@ -33,6 +33,15 @@ const gcoAL = gco => {
     },
     get_binary_filename: function() {
       return this.gco.binary.filename
+    },
+    get_config_version: function() {
+      return this.gco.metadata.version
+    },
+    get_fetch_method_url: function() {
+      return this.gco.binary.fetch.url
+    },
+    get_binary_chain: function() {
+      return this.gco.binary.chain
     }
   }
 }
