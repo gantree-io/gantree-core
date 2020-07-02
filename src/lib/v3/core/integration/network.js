@@ -8,11 +8,15 @@ const {
 
 const handle_remote_error = (frame, e) => {
   if (Object.prototype.hasOwnProperty.call(e, 'response')) {
-    return e.response.errors
-      .map(error => {
-        return error.extensions.exception.stacktrace.join('\n')
-      })
-      .join('\n\n')
+    if (Object.prototype.hasOwnProperty.call(e.response, 'errors')) {
+      return e.response.errors
+        .map(error => {
+          return error.extensions.exception.stacktrace.join('\n')
+        })
+        .join('\n\n')
+    } else {
+      return JSON.stringify(e.response, ' ', 2)
+    }
   } else if (Object.prototype.hasOwnProperty.call(e, 'message')) {
     return e.message
   }
