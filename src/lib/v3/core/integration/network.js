@@ -1,9 +1,25 @@
 const { get_gql_client } = require('./client')
 const queries = require('./queries')
 const { gcoAL } = require('../../schemas/abstract')
+const {
+  GantreeError,
+  ErrorTypes: { REMOTE_SERVICE_ERROR }
+} = require('../../../error/gantree-error')
 
-const sync_network = async gco => {
-  console.log('--SYNC NETWORK')
+const handle_remote_error = (frame, e) => {
+  if (Object.prototype.hasOwnProperty.call(e, 'response')) {
+    return e.response.errors
+      .map(error => {
+        return error.extensions.exception.stacktrace.join('\n')
+      })
+      .join('\n\n')
+  } else if (Object.prototype.hasOwnProperty.call(e, 'message')) {
+    return e.message
+  }
+  return e
+}
+
+const sync_network = async (frame, gco) => {
   const client = get_gql_client(gco)
 
   // config containing config version and info for nodes (which is stringified?)
@@ -39,8 +55,11 @@ const sync_network = async gco => {
       // }
     )
     .catch(e => {
-      console.log('----API ERROR!!!----')
-      console.log(e.message)
+      throw new GantreeError(
+        REMOTE_SERVICE_ERROR,
+        'error from remote server while syncing network',
+        new Error(handle_remote_error(frame, e))
+      )
     })
   return response
 }
