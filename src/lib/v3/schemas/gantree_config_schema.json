@@ -237,6 +237,10 @@
                     "type": "string",
                     "description": "path to the ssh private key (PEM) used to access this node"
                 },
+                "sshPrivateKeyAlias": {
+                    "type": "string",
+                    "description": "name to distinguish this private key from others"
+                },
                 "sshUser": {
                     "type": "string",
                     "description": "username to connect to instance via SSH"
