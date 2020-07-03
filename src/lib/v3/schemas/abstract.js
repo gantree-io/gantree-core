@@ -43,6 +43,9 @@ const gcoAL = gco => {
     get_binary_chain: function() {
       return this.gco.binary.chain
     },
+    get_is_using_bin_chainspec: function() {
+      return this.gco.binary.useBinChainSpec
+    },
     get_node_name: function(index) {
       return this.gco.nodes[index].name
     },
