@@ -60,6 +60,15 @@ const gcoAL = gco => {
     },
     get_node_binary_options: function(index) {
       return this.gco.nodes[index].binaryOptions
+    },
+    get_instance_private_key_alias: function(index) {
+      return this.gco.nodes[index].instance.sshPrivateKeyAlias
+    },
+    get_instance_ssh_user: function(index) {
+      return this.gco.nodes[index].instance.sshUser // TODO(Denver): we need a way to see how reconfig handles this default
+    },
+    get_instance_provider: function(index) {
+      return this.gco.nodes[index].instance.provider
     }
   }
 }
