@@ -1,7 +1,3 @@
-const {
-  GantreeError,
-  ErrorTypes: { BAD_CONFIG }
-} = require('../../../../error/gantree-error')
 const { createExtractor } = require('../../creators/create-extractor')
 
 const { extract: InstanceName } = require('../instance-name')
@@ -9,8 +5,7 @@ const { extract: Telemetry } = require('../telemetry')
 const { extract: BinaryChain } = require('./binary-chain')
 const { extract: BinaryNodeKeyFile } = require('./binary-node-key-file')
 
-
-const addLine = (s, text) => s + " \\\n" + text
+const addLine = (s, text) => s + ' \\\n' + text
 const addLineEach = (s, li, fn) => li.reduce((p, c) => addLine(p, fn(c)), s)
 
 //TODO(ryan): logging filter support?
@@ -22,7 +17,7 @@ const extract = createExtractor('binary-arguments', props => {
   const bo = nco.binary_options || nco.binaryOptions || {}
   const binary = gco.binary || {}
 
-  let barg = ""
+  let barg = ''
 
   // name
   const bo_node_name = bo.name || InstanceName.node(props).name
@@ -51,7 +46,11 @@ const extract = createExtractor('binary-arguments', props => {
 
   // telemetry
   const { telemetry_urls } = Telemetry.node(props)
-  barg = addLineEach(barg, telemetry_urls, turl => `--telemetry-url="${turl} 0"`)
+  barg = addLineEach(
+    barg,
+    telemetry_urls,
+    turl => `--telemetry-url="${turl} 0"`
+  )
   if (telemetry_urls.length === 0) {
     barg = addLine('--no-telemetry')
   }
@@ -64,7 +63,6 @@ const extract = createExtractor('binary-arguments', props => {
     sb_binary_arguments: barg
   }
 })
-
 
 module.exports = {
   extract
