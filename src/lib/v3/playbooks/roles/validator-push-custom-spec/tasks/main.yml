@@ -5,7 +5,7 @@
     path: '{{ gantree_working }}/spec'
     state: directory
 
-- name: copy raw-chainspec to validator
+- name: copy custom chainspec to validator
   become: yes
   copy:
     src: '{{ substrate_chain_argument }}'
