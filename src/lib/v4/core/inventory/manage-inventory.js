@@ -43,10 +43,10 @@ const writeOvertoryScript = (frame, gco) => {
 
   const entry_file_path = path.join(__dirname, 'overtory-entry.js')
 
-  const sh_file_content = `#!/bin/bash\n\nnode ${entry_file_path} ${context_file_path}; echo "tok:$DO_API_TOKEN";`
-  const sh_file_path = path.join(frame.project_path, 'overtory.sh')
-  fs.writeFileSync(sh_file_path, sh_file_content, 'utf8')
-  fs.chmodSync(sh_file_path, '775')
+  //const sh_file_content = `#!/bin/bash\n\nnode ${entry_file_path} ${context_file_path}; echo "tok:$DO_API_TOKEN";`
+  //const sh_file_path = path.join(frame.project_path, 'overtory.sh')
+  //fs.writeFileSync(sh_file_path, sh_file_content, 'utf8')
+  //fs.chmodSync(sh_file_path, '775')
 
   const js_file_content = `#!/usr/bin/env node
 
@@ -70,7 +70,7 @@ const writeOvertoryScript = (frame, gco) => {
   fs.chmodSync(js_file_path, '775')
 }
 
-const writeGantreeInventory = (frame, inv) => {
+/*const writeGantreeInventory = (frame, inv) => {
   const logger = frame.logAt('lib/ansible/writeGantreeInventory')
   logger.info('write gantree inventory')
 
@@ -86,7 +86,7 @@ const writeGantreeInventory = (frame, inv) => {
 
   fs.writeFileSync(sh_file_path, sh_file_content, 'utf8')
   fs.chmodSync(sh_file_path, '775')
-}
+}*/
 
 async function deleteGantreeInventory(frame) {
   const logger = frame.logAt('lib/ansible/inventory/deleteGantreeInventory')

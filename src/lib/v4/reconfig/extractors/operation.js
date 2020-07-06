@@ -1,6 +1,7 @@
 const { createExtractor } = require('../creators/create-extractor')
 
 const { extract: Ansible } = require('./ansible')
+const { extract: Base } = require('./base')
 const { extract: Binary } = require('./binary')
 const { extract: Edgeware } = require('./edgeware')
 const { extract: Gantree } = require('./gantree')
@@ -24,7 +25,8 @@ const extract = createExtractor('operation', props => {
     ...Telemetry.node(props),
     ...SystemAccount.node(props),
     ...InventoryGroup.node(props),
-    ...Sode.node(props)
+    ...Sode.node(props),
+    ...Base.node(props)
   }
 })
 

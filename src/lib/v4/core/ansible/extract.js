@@ -6,19 +6,19 @@ async function IPs(frame, combined_inventory) {
   // TODO: ansible code must be changed from "validator" to "node" group
   const nodeHostNames = combined_inventory.validator.children
 
-  logger.info(nodeHostNames)
+  logger.debug(`hostnames: '${nodeHostNames}'`)
 
   let allNodeIps = []
 
   for (const hostName of nodeHostNames) {
-    // use names to pull out hostname objects
-    const hostNamesProperties = combined_inventory[hostName]
-    const hostNameIps = hostNamesProperties.hosts
+    logger.debug(`----properties of hostname '${hostName}':----`)
 
-    logger.info(`----properties of hostname '${hostName}':----`)
-    logger.info(hostNamesProperties)
-    logger.info('--IPs--')
-    logger.info(hostNameIps)
+    const hostNamesProperties = combined_inventory[hostName]
+    logger.debug(hostNamesProperties)
+
+    const hostNameIps = hostNamesProperties.hosts
+    logger.debug('--IPs--')
+    logger.debug(hostNameIps)
 
     hostNameIps.forEach(ip_n => {
       allNodeIps.push({
@@ -27,8 +27,9 @@ async function IPs(frame, combined_inventory) {
       })
     })
   }
-  logger.info('ALL IPs:')
-  logger.info(allNodeIps)
+
+  logger.debug('ALL IPs:')
+  logger.debug(allNodeIps)
 
   //convert inventoryOutput into NodeIpAddresses
 

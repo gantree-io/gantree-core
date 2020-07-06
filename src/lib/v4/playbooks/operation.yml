@@ -12,6 +12,7 @@
 - hosts: validator:builder_bin:builder_spec
   roles:
     - gantree-debug
+    - sode-prepare
 
 - hosts: localhost
   roles:

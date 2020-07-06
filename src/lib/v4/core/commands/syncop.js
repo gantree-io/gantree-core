@@ -22,6 +22,8 @@ const sync = async (frame, gco) => {
     frame
   )
 
+  logger.info(combined_inventory)
+
   const node_ip_addresses = await Ansible.extract.IPs(frame, combined_inventory)
 
   await stdout.writeForParsing(

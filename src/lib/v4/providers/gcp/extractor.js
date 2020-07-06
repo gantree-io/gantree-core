@@ -5,7 +5,7 @@ const gcpSourceImageDefault =
 
 const extractInfra = (extProps, infraProps) => {
   const { nco } = extProps
-  const { name } = infraProps
+  const { name, snake_name } = infraProps
   const { instance } = nco
 
   const zone = instance.zone || 'us-central1-a'
@@ -18,6 +18,7 @@ const extractInfra = (extProps, infraProps) => {
     instance_name: name,
     infra_name: 'gantree-infra-' + name,
     group_name: name.replace(/-/g, '_'),
+    snake_name,
     machine_type: instance.type || 'n1-standard-4',
     source_image: instance.image || gcpSourceImageDefault,
     size_gb: instance.sizeGb || 50,

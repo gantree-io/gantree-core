@@ -1,7 +1,7 @@
 const winston = require('winston')
 const NullTransport = require('./null-transport')
 const { format } = winston
-const { combine, timestamp, label, printf, colorize } = format
+const { combine, timestamp, label, printf, json, colorize, prettyPrint } = format
 
 const consoleFormat = printf(
   ({ level, message, label, timestamp, service }) => {
@@ -9,6 +9,14 @@ const consoleFormat = printf(
     return `${level} ${message}`
   }
 )
+
+const isObject = o => typeof o === 'object' && o !== null
+
+const jsonOrFormat = otherFormat => {
+  const reeeFormat = combine(json(), prettyPrint())
+  const jsonFormat = json({ space: 2 })
+  return format(info => isObject(info.message) ? reeeFormat.transform(info) : otherFormat.transform(info))
+}
 
 const meta_filter = name =>
   format(info => (info[name] === false ? false : info))()
@@ -27,15 +35,18 @@ const create = options => {
     transports: []
   })
 
+
   if (console_log) {
     logger.add(
       new winston.transports.Console({
+        prettyPrint: true,
         format: combine(
           meta_filter('log_to_console'),
           colorize(),
           label({ label: service }),
           timestamp(),
-          consoleFormat
+          jsonOrFormat(consoleFormat)(),
+          //consoleFormat
         )
       })
     )
@@ -46,7 +57,10 @@ const create = options => {
       new winston.transports.File({
         filename: log_file,
         level,
-        format: combine(meta_filter('log_to_file'))
+        format: combine(
+          meta_filter('log_to_file'),
+          json({ space: 2 })
+        )
       })
     )
   }
@@ -56,7 +70,10 @@ const create = options => {
       new winston.transports.File({
         filename: error_log_file,
         level: 'error',
-        format: combine(meta_filter('log_to_error_file'))
+        format: combine(
+          meta_filter('log_to_error_file'),
+          json({ space: 2 })
+        )
       })
     )
   }

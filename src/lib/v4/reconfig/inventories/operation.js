@@ -2,13 +2,15 @@ const { extract: OperationExtractor } = require('../extractors/operation')
 const { inventory: skeleton_inventory } = require('./skeleton')
 
 const inventory = invProps => {
-  const { frame, gco } = invProps
+  const { frame, gco, base } = invProps
+  const logger = frame.logAt('inventories|operation|inventory')
 
   let inventory = skeleton_inventory(invProps)
 
   const sode_data = gco.nodes.map((_nco, index) =>
-    OperationExtractor.node({ frame, gco, index })
+    OperationExtractor.node({ ...invProps, index })
   )
+
   const sode_definitions = getSodeDefinitions(sode_data)
   const group_definitions = getGroupDefinitions(sode_data)
 

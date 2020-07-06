@@ -50,6 +50,17 @@
     dest: /home/{{ substrate_user }}/session.{{ substrate_network_id }}.yaml
     mode: 0666
 
+- name: get session variable
+  set_fact:
+    templated_session_yaml_fact: "{{ lookup('template', 'session.yaml.j2') }}"
+
+- name: write session custom fact on node
+  become: yes
+  copy:
+    content: "{{ templated_session_yaml_fact | from_yaml | to_nice_json }}"
+    dest: /etc/ansible/facts.d/session.fact
+    mode: 0664
+
 - name: ensure host session directory
   delegate_to: localhost
   file:

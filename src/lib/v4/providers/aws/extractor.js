@@ -2,7 +2,7 @@ const ssh = require('../../../utils/ssh')
 
 const extractInfra = (extProps, infraProps) => {
   const { nco } = extProps
-  const { name, project } = infraProps
+  const { name, project, snake_name } = infraProps
   const { instance: i } = nco
 
   const ssh_private_key_path = i.ssh_private_key_path || i.sshPrivateKeyPath
@@ -13,6 +13,7 @@ const extractInfra = (extProps, infraProps) => {
     instance_name: name,
     infra_name: 'gantree-infra-' + name,
     group_name: name.replace(/-/g, '_'),
+    snake_name,
     provider: i.provider,
     instance_type: i.type || 'm4.large',
     volume_size: i.volume_size || i.volumeSize || 50,

@@ -6,9 +6,10 @@ const inventory = invProps => {
 
   const inv = skeleton_inventory(invProps)
 
+  const logger = frame.logAt('infra-inventory')
+
   const infraData = InfraExtractor.all({ gco, frame }).map(x => x.infra)
-  //(nco, index) => InfraExtractor..infra
-  //)
+  //logger.info(infraData)
 
   inv._meta.hostvars.localhost = {
     infra: infraData

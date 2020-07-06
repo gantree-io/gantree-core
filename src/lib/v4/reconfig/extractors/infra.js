@@ -32,10 +32,10 @@ const getProviderExtractor = ({ nco, index }) => {
 const extract = createExtractor('infra', props => {
   const ProviderExtractor = getProviderExtractor(props)
 
-  const { name } = InstanceName.node(props)
+  const { name, snake_name } = InstanceName.node(props)
   const { project_name } = Metadata.node(props)
 
-  const infraProps = { name, project_name }
+  const infraProps = { name, snake_name, project_name }
 
   return ProviderExtractor.extractInfra(props, infraProps)
 })

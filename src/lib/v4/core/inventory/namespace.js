@@ -1,16 +1,12 @@
 const fs = require('fs')
 
 async function create(frame) {
-  const logger = frame.logAt('lib/ansible/inventory/namespace')
+  const logger = frame.logAt('ansible/inventory/namespace')
 
-  logger.info('creating namespace')
+  logger.info(`creating namespace at ${frame.active_path}`)
 
-  // create paths recursively
   fs.mkdirSync(frame.active_path, { recursive: true })
 
-  // do stuff
-  // create gantree folder
-  // create active folder
   logger.info('namespace created')
 }
 
