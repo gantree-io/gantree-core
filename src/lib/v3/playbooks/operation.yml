@@ -72,15 +72,21 @@
 - hosts: builder_spec
   roles:
     - role: builder-build-spec
-      when: ' sode.sb_build_spec|default(false)|bool == true'
+      when: 'sode.sb_build_spec|default(false)|bool == true'
       # when: 'substrate_use_default_spec|default(false)|bool == false and substrate_chain_argument|default(false)|bool == false'
 
 - hosts: validator
   gather_facts: no
   roles:
     - role: validator-push-spec
-      when: ' sode.sb_build_spec|default(false)|bool == true'
+      when: 'sode.sb_build_spec|default(false)|bool == true'
       #when: 'substrate_use_default_spec|default(false)|bool == false and substrate_chain_argument|default(false)|bool == false'
+
+- hosts: validator
+  gather_facts: no
+  roles:
+    - role: validator-push-custom-spec
+      when: 'sode.sb_upload_spec|default(false)|bool == true'
 
 - hosts: validator
   gather_facts: no
