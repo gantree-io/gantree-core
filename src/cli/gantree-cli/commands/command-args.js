@@ -24,7 +24,6 @@ const processCommandArgs = async args => {
     console.log(`[!] Verbosity set manually - '${verbosity}'\n`)
   }
 
-  console.log(args.update)
   /** @type {Boolean} */
   const update =
     Boolean(args.update || process.env.GANTREE_ALWAYS_OVERWRITE_NETWORKS) ||
