@@ -48,7 +48,8 @@ standardCommand(
   'sync',
   'Create/update infrastructure based on Gantree configuration.',
   syncWrapper
-)
+).option('-u, --update', 'Should existing infrastructure be overwritten')
+
 standardCommand(
   'clean',
   'Destroy existing infrastructure based on Gantree configuration.',

@@ -74,6 +74,7 @@ const createFrame = args => {
     ),
     ...oPick(args, 'strict', notNull),
     ...oPick(args, 'logger', notNull),
+    ...oPick(args, 'update', notNull),
     ...oPick(
       args,
       'python_interpreter',

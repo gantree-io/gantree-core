@@ -24,7 +24,14 @@ const processCommandArgs = async args => {
     console.log(`[!] Verbosity set manually - '${verbosity}'\n`)
   }
 
-  const enable_process_stdout = true
+  console.log(args.update)
+  /** @type {Boolean} */
+  const update =
+    Boolean(args.update || process.env.GANTREE_ALWAYS_OVERWRITE_NETWORKS) ||
+    false
+
+  /** @type {Boolean} */
+  const enable_process_stdout = true // TODO: Should this be a flag or static?
 
   /** @type {String} */
   const config_path = args.config || process.env.GANTREE_CONFIG_PATH
@@ -78,6 +85,7 @@ const processCommandArgs = async args => {
     // TODO(ryan): remove if verbosity encapsulated by logger and nothing breaks
     // verbose,
     verbosity,
+    update,
     project_root,
     project_path,
     control_root,
