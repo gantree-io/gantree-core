@@ -22,8 +22,8 @@ function validateChecksum(
   // const hashA = getChecksum(dataStr, algorithm, encoding)
   const hashB = expectedChecksum
 
-  logger.debug(`A: ${hashA}`)
-  logger.debug(`B: ${hashB}`)
+  logger.debug(`A: [${hashA}]`)
+  logger.debug(`B: [${hashB}]`)
 
   if (hashA === hashB) {
     logger.debug('checksum match.')
