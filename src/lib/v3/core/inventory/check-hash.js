@@ -42,7 +42,7 @@ const checkHash = (frame, gco) => {
   // logger.info('No Gantree config hash found')
   const gantreeConfigObjHash = hash.getChecksum(gcoString)
 
-  fs.writeFileSync(hash_path, `${gantreeConfigObjHash} `, 'utf8')
+  fs.writeFileSync(hash_path, `${gantreeConfigObjHash}`, 'utf8')
   logger.info(`Gantree config hash written (${gantreeConfigObjHash})`)
 }
 
