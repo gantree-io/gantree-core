@@ -54,8 +54,8 @@ async function runPlaybookForJson(frame, playbook_filename, inventory_sources = 
   const playbook_command = `${ARG_JSON_STDOUT} ${ARG_HARD_FAIL} ansible-playbook ${inventory_substring} ${playbook_filepath}`
 
   const exec_result = await cmd.exec(frame, playbook_command, {
-    log_to_file: true,
-    log_to_error_file: true
+    //log_to_file: true,
+    //log_to_error_file: true
   })
 
   const result = StdJson.parse(exec_result.out)

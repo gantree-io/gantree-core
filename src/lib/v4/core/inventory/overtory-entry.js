@@ -31,7 +31,7 @@ const build_echo_inventory_dynamic_inventory = inventory => {
   return `#!/usr/bin/env node
 
   const content=\`${inventory}\`
-  
+
   console.log(content)
   `
 }
@@ -71,10 +71,19 @@ async function main(context_path) {
 
     //const hosts = getHosts(frame, active)
 
-    const node_facts = await Ansible.runPlaybookForJson(frame, 'sode_facts.yml', [setup_inventory_path], true)
+    const sf_res = await Ansible.runPlaybookForJson(frame, 'sode_facts.yml', [setup_inventory_path], true)
 
-    logger.debug('node_facts')
-    logger.debug(node_facts)
+    const sf_play = sf_res && sf_res.plays && sf_res.plays[0]
+    const sf_task = sf_play && sf_play.tasks && sf_play.tasks[0]
+    const sf_hosts = sf_task && sf_task.hosts
+
+    logger.debug('sf_task')
+    logger.debug(sf_task)
+
+    const sode_local = Object.entries(sf_hosts).reduce((acc, [host, data]) => Object.assign(acc, { [host]: data.ansible_facts.ansible_local }), {})
+
+    logger.debug('sode_local')
+    logger.debug(sode_local)
 
     const inv = selected_inventory({ frame, gco, base: active })
 
