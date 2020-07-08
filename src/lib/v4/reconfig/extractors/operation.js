@@ -1,11 +1,11 @@
 const { createExtractor } = require('../creators/create-extractor')
 
 const { extract: Ansible } = require('./ansible')
-const { extract: Base } = require('./base')
-const { extract: Binary } = require('./binary')
 const { extract: Edgeware } = require('./edgeware')
 const { extract: Gantree } = require('./gantree')
 const { extract: InventoryGroup } = require('./inventory-group')
+const { extract: IpAddress } = require('./ip-address')
+const { extract: Binary } = require('./binary')
 const { extract: Metadata } = require('./metadata')
 const { extract: Misc } = require('./misc')
 const { extract: InstanceName } = require('./instance-name')
@@ -26,7 +26,7 @@ const extract = createExtractor('operation', props => {
     ...SystemAccount.node(props),
     ...InventoryGroup.node(props),
     ...Sode.node(props),
-    ...Base.node(props)
+    ...IpAddress.node(props)
   }
 })
 

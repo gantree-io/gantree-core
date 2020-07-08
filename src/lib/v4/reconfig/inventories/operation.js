@@ -1,4 +1,5 @@
 const { extract: OperationExtractor } = require('../extractors/operation')
+const { extract: HostnameIpPairExtractor } = require('../extractors/hostname-ip-pair')
 const { inventory: skeleton_inventory } = require('./skeleton')
 
 const inventory = invProps => {
@@ -7,14 +8,28 @@ const inventory = invProps => {
 
   let inventory = skeleton_inventory(invProps)
 
+  /*
   const sode_data = gco.nodes.map((_nco, index) =>
     OperationExtractor.node({ ...invProps, index })
   )
+  */
+
+  const sode_data = OperationExtractor.all(invProps)
+
+  const hostname_ip_pairs = HostnameIpPairExtractor.all(invProps).map(o => o.hostname_ip_pair)
+
+  const shared_definitions = {
+    gantree_shared: {
+      vars: {
+        hostname_ip_pairs
+      }
+    }
+  }
 
   const sode_definitions = getSodeDefinitions(sode_data)
   const group_definitions = getGroupDefinitions(sode_data)
 
-  inventory = { ...inventory, ...group_definitions, ...sode_definitions }
+  inventory = { ...inventory, ...group_definitions, ...sode_definitions, ...shared_definitions }
   return inventory
 }
 

@@ -2,14 +2,11 @@ const cmd = require('../../services/cmd')
 const path = require('path')
 const pathHelpers = require('../../../utils/path-helpers')
 const StdJson = require('../../../utils/std-json')
+const Ansible = require('../ansible')
 
 const ensureArray = item => (Array.isArray(item) ? item : [item])
 const ARG_HARD_FAIL = 'ANSIBLE_INVENTORY_UNPARSED_FAILED=1'
 
-const getInventorySubstring = inv_paths =>
-  ensureArray(inv_paths)
-    .map(p => `-i ${p}`)
-    .join(' ')
 
 const getPlaybookFilepath = filename =>
   pathHelpers.getGantreePath('src', 'lib', 'v4', 'playbooks', filename)
@@ -20,15 +17,18 @@ async function runPlaybook(frame, playbook_filename) {
 
   const playbook_filepath = getPlaybookFilepath(playbook_filename)
 
-  const inventory_substring = getInventorySubstring([path.join(frame.project_path, 'overtory.js')])
+  const inventory_sources = [path.join(frame.project_path, 'overtory.js')]
 
-  const playbook_command = `${ARG_HARD_FAIL} ansible-playbook ${inventory_substring} ${playbook_filepath}`
-  //const playbook_command = `${path.join(frame.project_path, 'overtory.sh')}`
-
-  const result = await cmd.exec(frame, playbook_command, {
+  const exec_options = {
     log_to_console: true,
     log_to_file: true,
     log_to_error_file: true
+  }
+
+  const result = await Ansible.playbook(frame, {
+    playbook_filepath,
+    inventory_sources,
+    exec_options
   })
 
   logger.info(`playbook finished: ${playbook_filepath}`)

@@ -3,6 +3,7 @@ const merge = require('lodash.merge')
 const Ansible = require('../ansible')
 const StdJson = require('../../../utils/std-json')
 const Logger = require('../../../logging/logger')
+const IpAddresses = require('./ip-addresses')
 const Frame = require('../../core/frame')
 const {
   inventory: gantreeInventory
@@ -11,7 +12,8 @@ const {
 const rootLogger = Logger.create({
   log_file: "/home/rozifus/Desktop/logggyyy.1",
   console_log: false,
-  null_transport: true
+  null_transport: true,
+  level: 'debug'
 })
 
 async function main(context_path) {
@@ -23,20 +25,29 @@ async function main(context_path) {
     gco = context.gco
 
     // TODO(ryan): why is strict not being serialized
-    frame = Frame.createFrame({ ...context.frame, logger: rootLogger, gco, strict: false })
+    frame = Frame.createFrame({ ...context.frame, logger: rootLogger, gco, strict: false, enable_process_stdout: false })
     logger = frame.logAt('overtory-entry')
 
-    const base = await Ansible.commands.returnActiveInventory(frame)
+    const base = await Ansible.returnActiveInventory(frame)
 
-    //logger.info('base')
-    //logger.info(base)
+    logger.debug('<<base>>')
+    logger.debug(base)
 
     const inv = gantreeInventory({ frame, gco, base })
 
+    const hosts = inv.gantree_shared.vars.hostname_ip_pairs
+
+    //const setup = await Ansible.runSetup(frame)
+
     //logger.info('base')
     //logger.info(base)
 
-    //const ips = Ansible.extract.IPs(frame, base)
+    //const inv = gantreeInventory({ frame, gco, base })
+
+    //logger.info('base')
+    //logger.info(base)
+
+    //const ips = IpAddresses.extract(frame, base)
 
     //logger.info(ips)
 
@@ -51,8 +62,9 @@ async function main(context_path) {
 
     console.log(StdJson.stringify(combined))
   } catch (e) {
-    logger.info(`error: '${e}', ${e.message}, ${e.stack}`)
-    console.log(StdJson.stringify({}))
+    const errorOut = `error: '${e}', ${e.message}, ${e.stack}`
+    logger.info(e)
+    console.log(errorOut)
   }
 }
 

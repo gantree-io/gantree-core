@@ -19,7 +19,7 @@ const extractInfra = (extProps, infraProps) => {
     provider: i.provider,
     instance_name: name,
     infra_name: 'gantree-infra-' + name,
-    group_name: snake_name,
+    group_name: name,
     snake_name,
     droplet_size: i.droplet_size || i.dropletSize || 's-1vcpu-1gb',
     droplet_image: i.image || 53893572, //ubuntu-18-04-x64

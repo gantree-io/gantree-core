@@ -7,7 +7,7 @@ const extract = createExtractor('name', ({ gco, nco, index }) => {
 
   return {
     name,
-    snake_name
+    snake_name,
   }
 })
 

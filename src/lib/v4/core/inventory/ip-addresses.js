@@ -1,4 +1,5 @@
-async function IPs(frame, combined_inventory) {
+
+async function extract(frame, combined_inventory) {
   const logger = frame.logAt('ansible/extract/IPs')
 
   logger.info('...extracting IPs')
@@ -39,5 +40,5 @@ async function IPs(frame, combined_inventory) {
 }
 
 module.exports = {
-  IPs
+  extract
 }
