@@ -1,13 +1,16 @@
 
+const fs = require('fs')
+const path = require('path')
 const merge = require('lodash.merge')
 const Ansible = require('../ansible')
 const StdJson = require('../../../utils/std-json')
 const Logger = require('../../../logging/logger')
 const IpAddresses = require('./ip-addresses')
+const { getHosts } = require('./gantree-node-inventory')
 const Frame = require('../../core/frame')
-const {
-  inventory: gantreeInventory
-} = require('../../reconfig/inventories/full')
+const { ensurePath } = require('../../../utils/path-helpers')
+const { inventory: FullInventory } = require('../../reconfig/inventories/full')
+const { inventory: SetupInventory } = require('../../reconfig/inventories/setup')
 
 const rootLogger = Logger.create({
   log_file: "/home/rozifus/Desktop/logggyyy.1",
@@ -16,26 +19,67 @@ const rootLogger = Logger.create({
   level: 'debug'
 })
 
-async function main(context_path) {
-  let gco, frame, logger
+const INVENTORIES = {
+  'full': FullInventory
+}
 
+const build_echo_inventory_dynamic_inventory = inventory => {
+  if (typeof inventory !== 'string') {
+    inventory = StdJson.stringify(inventory)
+  }
+
+  return `#!/usr/bin/env node
+
+  const content=\`${inventory}\`
+  
+  console.log(content)
+  `
+}
+
+async function main(context_path) {
+  let gco, frame, logger, inventory_name
 
   try {
     const context = StdJson.read(context_path)
+
     gco = context.gco
+
+    inventory_name = context.inventory_name
+    if (!inventory_name) {
+      throw new Error(' no inventory name')
+    }
+
+    const selected_inventory = INVENTORIES[context.inventory_name]
 
     // TODO(ryan): why is strict not being serialized
     frame = Frame.createFrame({ ...context.frame, logger: rootLogger, gco, strict: false, enable_process_stdout: false })
     logger = frame.logAt('overtory-entry')
 
-    const base = await Ansible.returnActiveInventory(frame)
+    const active = await Ansible.returnActiveInventory(frame)
 
-    logger.debug('<<base>>')
-    logger.debug(base)
+    const setup_inventory = SetupInventory({ gco, frame, base: active })
+    logger.debug(setup_inventory)
 
-    const inv = gantreeInventory({ frame, gco, base })
+    const overtory_path = ensurePath(frame.project_path, 'overtory')
 
-    const hosts = inv.gantree_shared.vars.hostname_ip_pairs
+    const setup_inventory_path = path.join(overtory_path, 'setup.js')
+
+    const setup_inventory_content = build_echo_inventory_dynamic_inventory(setup_inventory)
+
+    fs.writeFileSync(setup_inventory_path, setup_inventory_content, 'utf8')
+    fs.chmodSync(setup_inventory_path, '775')
+
+    //const hosts = getHosts(frame, active)
+
+    const node_facts = await Ansible.runPlaybookForJson(frame, 'sode_facts.yml', [setup_inventory_path], true)
+
+    logger.debug('node_facts')
+    logger.debug(node_facts)
+
+    const inv = selected_inventory({ frame, gco, base: active })
+
+
+    //const hosts = inv.hostname_ip_pairs
 
     //const setup = await Ansible.runSetup(frame)
 
@@ -56,15 +100,14 @@ async function main(context_path) {
     //logger.info(setup)
 
     // TODO(ryan): maybe integrate base through inv
-    const combined = merge(base, inv)
+    const combined = merge(active, inv)
     logger.info(")))combo(((")
     logger.info(combined)
 
     console.log(StdJson.stringify(combined))
   } catch (e) {
-    const errorOut = `error: '${e}', ${e.message}, ${e.stack}`
-    logger.info(e)
-    console.log(errorOut)
+    const errorOut = `error: '${e}', ${e.message}, ${e.stack} `
+    console.error(errorOut)
   }
 }
 

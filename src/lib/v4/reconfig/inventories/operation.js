@@ -6,7 +6,7 @@ const inventory = invProps => {
   const { frame, gco, base } = invProps
   const logger = frame.logAt('inventories|operation|inventory')
 
-  let inventory = skeleton_inventory(invProps)
+  let inv = skeleton_inventory(invProps)
 
   /*
   const sode_data = gco.nodes.map((_nco, index) =>
@@ -19,18 +19,14 @@ const inventory = invProps => {
   const hostname_ip_pairs = HostnameIpPairExtractor.all(invProps).map(o => o.hostname_ip_pair)
 
   const shared_definitions = {
-    gantree_shared: {
-      vars: {
-        hostname_ip_pairs
-      }
-    }
+    hostname_ip_pairs
   }
 
   const sode_definitions = getSodeDefinitions(sode_data)
   const group_definitions = getGroupDefinitions(sode_data)
 
-  inventory = { ...inventory, ...group_definitions, ...sode_definitions, ...shared_definitions }
-  return inventory
+  inv = { ...inv, ...group_definitions, ...sode_definitions, ...shared_definitions }
+  return inv
 }
 
 const getSodeDefinitions = sodes => {

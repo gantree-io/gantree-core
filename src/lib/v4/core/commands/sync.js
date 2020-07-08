@@ -10,7 +10,7 @@ const sync = async (frame, gco) => {
 
   Inventory.activateProviders(frame, gco)
 
-  await Inventory.createInventory(frame, gco)
+  await Inventory.createInventory(frame, gco, 'full')
 
   // TODO: TEMPorary, should be output of this.ansible.inventory.createActiveInventory
 
@@ -23,7 +23,7 @@ const sync = async (frame, gco) => {
   )
 
   logger.info(overtory_data)
-  const node_ip_addresses = overtory_data.gantree_shared.vars.hostname_ip_pairs
+  const node_ip_addresses = overtory_data.hostname_ip_pairs
 
   await stdout.writeForParsing(
     'NODE_IP_ADDRESSES',

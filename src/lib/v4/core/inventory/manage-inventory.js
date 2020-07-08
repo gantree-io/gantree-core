@@ -11,13 +11,13 @@ const { checkHash } = require('./check-hash')
 const StdJson = require('../../../utils/std-json')
 
 
-async function createInventory(frame, gco) {
+async function createInventory(frame, gco, inventory_name) {
   const logger = frame.logAt('lib/ansible/inventory')
   logger.info('creating Gantree inventory')
 
   activateProviders(frame, gco)
 
-  writeOvertoryScript(frame, gco)
+  writeOvertoryScript(frame, gco, inventory_name)
   // const inv = gantreeInventory({ frame, gco })
 
   // writeGantreeInventory(frame, inv)
@@ -27,7 +27,7 @@ async function createInventory(frame, gco) {
   logger.info('Gantree inventory created')
 }
 
-const writeOvertoryScript = (frame, gco) => {
+const writeOvertoryScript = (frame, gco, inventory_name) => {
   const logger = frame.logAt('lib/ansible/writeOvertoryScript')
   logger.info('write overtory script')
 
@@ -35,18 +35,14 @@ const writeOvertoryScript = (frame, gco) => {
 
   const context = {
     frame: frame.serializable(),
-    gco
+    gco,
+    inventory_name
   }
 
   const context_file_path = path.join(overtory_path, 'context.json')
   fs.writeFileSync(context_file_path, StdJson.stringify(context), 'utf8')
 
   const entry_file_path = path.join(__dirname, 'overtory-entry.js')
-
-  //const sh_file_content = `#!/bin/bash\n\nnode ${entry_file_path} ${context_file_path}; echo "tok:$DO_API_TOKEN";`
-  //const sh_file_path = path.join(frame.project_path, 'overtory.sh')
-  //fs.writeFileSync(sh_file_path, sh_file_content, 'utf8')
-  //fs.chmodSync(sh_file_path, '775')
 
   const js_file_content = `#!/usr/bin/env node
 
@@ -69,24 +65,6 @@ const writeOvertoryScript = (frame, gco) => {
   fs.writeFileSync(js_file_path, js_file_content, 'utf8')
   fs.chmodSync(js_file_path, '775')
 }
-
-/*const writeGantreeInventory = (frame, inv) => {
-  const logger = frame.logAt('lib/ansible/writeGantreeInventory')
-  logger.info('write gantree inventory')
-
-  const inventory_filepath = path.join(
-    frame.project_path,
-    'gantree_inventory.json'
-  )
-
-  fs.writeFileSync(inventory_filepath, StdJson.stringify(inv), 'utf8')
-
-  const sh_file_content = `#!/bin/bash\n\ncat ${inventory_filepath} `
-  const sh_file_path = path.join(frame.active_path, 'gantree.sh')
-
-  fs.writeFileSync(sh_file_path, sh_file_content, 'utf8')
-  fs.chmodSync(sh_file_path, '775')
-}*/
 
 async function deleteGantreeInventory(frame) {
   const logger = frame.logAt('lib/ansible/inventory/deleteGantreeInventory')

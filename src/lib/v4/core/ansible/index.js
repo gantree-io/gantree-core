@@ -14,7 +14,58 @@ const getInventorySubstring = inv_paths =>
 const getPlaybookFilepath = filename =>
   pathHelpers.getGantreePath('src', 'lib', 'v4', 'playbooks', filename)
 
-async function runPlaybook(frame, playbook_filename) {
+async function runPlaybook(frame, playbook_filename, inventory_sources = null) {
+  const logger = frame.logAt('ansible/commands/runPlaybook')
+  logger.info(`running playbook: ${playbook_filename}`)
+
+  if (inventory_sources === null) {
+    inventory_sources = [path.join(frame.project_path, 'overtory.js')]
+  }
+
+  const playbook_filepath = getPlaybookFilepath(playbook_filename)
+
+  const inventory_substring = getInventorySubstring(inventory_sources)
+
+  const playbook_command = `${ARG_AS_JSON} ${ARG_HARD_FAIL} ansible-playbook ${inventory_substring} ${playbook_filepath}`
+
+  const result = await cmd.exec(frame, playbook_command, {
+    log_to_console: true,
+    log_to_file: true,
+    log_to_error_file: true
+  })
+
+  logger.info(`playbook finished: ${playbook_filepath}`)
+
+  return result
+}
+
+async function runPlaybookForJson(frame, playbook_filename, inventory_sources = null) {
+  const logger = frame.logAt('ansible/commands/runPlaybookForJson')
+  logger.info(`running playbook for json: ${playbook_filename}`)
+
+  if (inventory_sources === null) {
+    inventory_sources = [path.join(frame.project_path, 'overtory.js')]
+  }
+
+  const playbook_filepath = getPlaybookFilepath(playbook_filename)
+
+  const inventory_substring = getInventorySubstring(inventory_sources)
+
+  const playbook_command = `${ARG_JSON_STDOUT} ${ARG_HARD_FAIL} ansible-playbook ${inventory_substring} ${playbook_filepath}`
+
+  const exec_result = await cmd.exec(frame, playbook_command, {
+    log_to_file: true,
+    log_to_error_file: true
+  })
+
+  const result = StdJson.parse(exec_result.out)
+
+  logger.info(`playbook finished: ${playbook_filepath}`)
+
+  return result
+}
+
+async function runInnerPlaybook(frame, playbook_filename, inventory_sources) {
   const logger = frame.logAt('ansible/commands/runPlaybook')
   logger.info(`running playbook: ${playbook_filename}`)
 
@@ -82,7 +133,7 @@ async function returnOvertoryDirect(frame) {
 
 const getInventorySubstringFromHosts = (hosts = []) => {
   const s = ensureArray(hosts)
-    .map(p => `${p}, `)
+    .map(p => `${p},`)
     .join('')
 
   if (s == '') {
@@ -93,17 +144,18 @@ const getInventorySubstringFromHosts = (hosts = []) => {
 }
 
 const ARG_JSON_STDOUT = 'ANSIBLE_STDOUT_CALLBACK=json'
+const NO_HOST_KEY_CHECKING = 'ANSIBLE_HOST_KEY_CHECKING=False'
 
 /* The setup command collects facts about a host, including custom facts */
 async function runSetup(frame, hosts = []) {
   const logger = frame.logAt('ansible/commands/runSetup')
   logger.info(`...getting ansible output as json`)
 
-  const playbook_filepath = getPlaybookFilepath('setup.yaml')
+  const playbook_filepath = getPlaybookFilepath('setup.yml')
 
   const inventory_substring = getInventorySubstringFromHosts(hosts)
 
-  const playbook_command = `${ARG_HARD_FAIL} ${ARG_JSON_STDOUT} ansible-playbook ${inventory_substring} ${playbook_filepath}`
+  const playbook_command = `${NO_HOST_KEY_CHECKING} ${ARG_HARD_FAIL} ${ARG_JSON_STDOUT} ansible-playbook ${inventory_substring} ${playbook_filepath}`
 
   logger.debug(`running playbook command: '${playbook_command}'`)
 
@@ -120,6 +172,7 @@ async function runSetup(frame, hosts = []) {
 
 module.exports = {
   runPlaybook,
+  runPlaybookForJson,
   runInventory,
   runSetup,
   returnActiveInventory,

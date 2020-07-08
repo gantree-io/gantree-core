@@ -3,6 +3,6 @@
 #  tasks:
 #    - setup:
 
-- hosts: all
+- hosts: sode
   tasks:
     - setup:
