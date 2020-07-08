@@ -70,6 +70,10 @@
   roles:
     - validator-gen-keys-retreive
 
+- hosts: all
+  tasks:
+    - meta: refresh_inventory
+
 - hosts: builder_spec
   roles:
     - role: builder-build-spec

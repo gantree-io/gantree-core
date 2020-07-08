@@ -23,7 +23,7 @@ const sync = async (frame, gco) => {
   )
 
   logger.info(overtory_data)
-  const node_ip_addresses = overtory_data.hostname_ip_pairs
+  const node_ip_addresses = overtory_data.gantree_special.hostname_ip_pairs
 
   await stdout.writeForParsing(
     'NODE_IP_ADDRESSES',

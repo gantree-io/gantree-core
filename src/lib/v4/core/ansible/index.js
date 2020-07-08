@@ -26,7 +26,9 @@ async function runPlaybook(frame, playbook_filename, inventory_sources = null) {
 
   const inventory_substring = getInventorySubstring(inventory_sources)
 
-  const playbook_command = `${ARG_AS_JSON} ${ARG_HARD_FAIL} ansible-playbook ${inventory_substring} ${playbook_filepath}`
+  const playbook_command = `${ARG_HARD_FAIL} ansible-playbook ${inventory_substring} ${playbook_filepath}`
+
+  logger.info(`playbook command: ${playbook_command}`)
 
   const result = await cmd.exec(frame, playbook_command, {
     log_to_console: true,
@@ -53,10 +55,14 @@ async function runPlaybookForJson(frame, playbook_filename, inventory_sources = 
 
   const playbook_command = `${ARG_JSON_STDOUT} ${ARG_HARD_FAIL} ansible-playbook ${inventory_substring} ${playbook_filepath}`
 
+  logger.info(`playbook for json command: ${playbook_command}`)
+
   const exec_result = await cmd.exec(frame, playbook_command, {
     //log_to_file: true,
     //log_to_error_file: true
   })
+
+  //logger.debug(exec_result)
 
   const result = StdJson.parse(exec_result.out)
 
@@ -65,27 +71,6 @@ async function runPlaybookForJson(frame, playbook_filename, inventory_sources = 
   return result
 }
 
-async function runInnerPlaybook(frame, playbook_filename, inventory_sources) {
-  const logger = frame.logAt('ansible/commands/runPlaybook')
-  logger.info(`running playbook: ${playbook_filename}`)
-
-  const playbook_filepath = getPlaybookFilepath(playbook_filename)
-
-  const inventory_substring = getInventorySubstring([path.join(frame.project_path, 'overtory.js')])
-
-  const playbook_command = `${ARG_HARD_FAIL} ansible-playbook ${inventory_substring} ${playbook_filepath}`
-  //const playbook_command = `${path.join(frame.project_path, 'overtory.sh')}`
-
-  const result = await cmd.exec(frame, playbook_command, {
-    log_to_console: true,
-    log_to_file: true,
-    log_to_error_file: true
-  })
-
-  logger.info(`playbook finished: ${playbook_filepath}`)
-
-  return result
-}
 
 async function runInventory(frame, sources = []) {
   const logger = frame.logAt('ansible/commands/ansibleInventory')
@@ -102,7 +87,7 @@ async function runInventory(frame, sources = []) {
   const inventory = StdJson.parse(exec_result.out)
 
   logger.debug(`...got generated ansible inventory!`)
-  logger.debug(inventory)
+  //logger.debug(inventory)
 
   return inventory
 }

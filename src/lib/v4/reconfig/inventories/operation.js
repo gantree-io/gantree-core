@@ -3,7 +3,7 @@ const { extract: HostnameIpPairExtractor } = require('../extractors/hostname-ip-
 const { inventory: skeleton_inventory } = require('./skeleton')
 
 const inventory = invProps => {
-  const { frame, gco, base } = invProps
+  const { frame } = invProps
   const logger = frame.logAt('inventories|operation|inventory')
 
   let inv = skeleton_inventory(invProps)
@@ -18,14 +18,16 @@ const inventory = invProps => {
 
   const hostname_ip_pairs = HostnameIpPairExtractor.all(invProps).map(o => o.hostname_ip_pair)
 
-  const shared_definitions = {
-    hostname_ip_pairs
+  const special = {
+    gantree_special: {
+      hostname_ip_pairs
+    }
   }
 
   const sode_definitions = getSodeDefinitions(sode_data)
   const group_definitions = getGroupDefinitions(sode_data)
 
-  inv = { ...inv, ...group_definitions, ...sode_definitions, ...shared_definitions }
+  inv = { ...inv, ...group_definitions, ...sode_definitions, ...special }
   return inv
 }
 

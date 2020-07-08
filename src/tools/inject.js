@@ -3,7 +3,7 @@ const JSONbig = require('json-bigint')
 const BigNumber = require('bignumber.js')
 const opt = require('../lib/utils/options')
 
-function inject(chainSpecPath, validatorSpecPath, _allowRaw) {
+function inject(chainSpecPath, validatorSpecPath, palletRuntime, _allowRaw) {
   const allowRaw = opt.default(_allowRaw, false)
 
   if (!fs.existsSync(chainSpecPath)) {

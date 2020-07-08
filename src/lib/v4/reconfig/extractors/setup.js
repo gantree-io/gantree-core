@@ -5,8 +5,6 @@ const { extract: IpAddress } = require('./ip-address')
 const { extract: InventoryGroup } = require('./inventory-group')
 
 const extract = createExtractor('setup', (props) => {
-  const { base, frame, logger } = props
-
   return {
     ...Ansible.node(props),
     ...IpAddress.node(props),

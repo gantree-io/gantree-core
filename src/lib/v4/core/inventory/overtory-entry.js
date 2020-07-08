@@ -57,8 +57,8 @@ async function main(context_path) {
 
     const active = await Ansible.returnActiveInventory(frame)
 
-    const setup_inventory = SetupInventory({ gco, frame, base: active })
-    logger.debug(setup_inventory)
+    const setup_inventory = SetupInventory({ gco, frame, base: active, active })
+    //logger.debug(setup_inventory)
 
     const overtory_path = ensurePath(frame.project_path, 'overtory')
 
@@ -77,15 +77,15 @@ async function main(context_path) {
     const sf_task = sf_play && sf_play.tasks && sf_play.tasks[0]
     const sf_hosts = sf_task && sf_task.hosts
 
-    logger.debug('sf_task')
-    logger.debug(sf_task)
+    //logger.debug('sf_task')
+    //logger.debug(sf_task)
 
-    const sode_local = Object.entries(sf_hosts).reduce((acc, [host, data]) => Object.assign(acc, { [host]: data.ansible_facts.ansible_local }), {})
+    const sode_facts = Object.entries(sf_hosts).reduce((acc, [host, data]) => Object.assign(acc, { [host]: data.ansible_facts.ansible_local }), {})
 
-    logger.debug('sode_local')
-    logger.debug(sode_local)
+    //logger.debug('sode_facts')
+    //logger.debug(sode_facts)
 
-    const inv = selected_inventory({ frame, gco, base: active })
+    const inv = selected_inventory({ frame, gco, active, base: active, sode_facts })
 
 
     //const hosts = inv.hostname_ip_pairs
@@ -110,8 +110,8 @@ async function main(context_path) {
 
     // TODO(ryan): maybe integrate base through inv
     const combined = merge(active, inv)
-    logger.info(")))combo(((")
-    logger.info(combined)
+    //logger.info(")))combo(((")
+    //logger.info(combined)
 
     console.log(StdJson.stringify(combined))
   } catch (e) {

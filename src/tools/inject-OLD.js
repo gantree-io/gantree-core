@@ -1,14 +1,9 @@
-
 const fs = require('fs')
 const JSONbig = require('json-bigint')
 const BigNumber = require('bignumber.js')
-const merge = require('lodash.merge')
 const opt = require('../lib/utils/options')
-const { processor: tokenReplacer } = require('./replace-tokens')
 
-const RUNTIME_PROTECTED = ['system'];
-
-function inject(chainSpecPath, validatorSpecPath, palletRuntimePath, _allowRaw) {
+function inject(chainSpecPath, validatorSpecPath, _allowRaw) {
   const allowRaw = opt.default(_allowRaw, false)
 
   if (!fs.existsSync(chainSpecPath)) {
@@ -19,23 +14,16 @@ function inject(chainSpecPath, validatorSpecPath, palletRuntimePath, _allowRaw) 
     console.error(`No validatorSpec file found at path: ${validatorSpecPath}`)
     throw new Error("couldn't find validatorSpec file for inject")
   }
-  if (!fs.existsSync(palletRuntimePath)) {
-    console.error(`No validatorSpec file found at path: ${palletRuntimePath}`)
-    throw new Error("couldn't find validatorSpec file for inject")
-  }
 
   const chainSpec = JSONbig.parse(fs.readFileSync(chainSpecPath, 'utf-8'))
   const validatorSpec = JSONbig.parse(
-    fs.readFileSync(validatorSpecPath, 'utf-8')
-  )
-  const palletRuntime = JSONbig.parse(
     fs.readFileSync(validatorSpecPath, 'utf-8')
   )
 
   const chainspec_injectable = checkChainspecValid(chainSpec, allowRaw)
 
   if (chainspec_injectable === true) {
-    const injectedChainSpec = _realInject(chainSpec, validatorSpec, palletRuntime)
+    const injectedChainSpec = _realInject(chainSpec, validatorSpec)
     const injectedChainSpecStr = JSONbig.stringify(
       injectedChainSpec,
       null,
@@ -45,24 +33,82 @@ function inject(chainSpecPath, validatorSpecPath, palletRuntimePath, _allowRaw) 
   }
 }
 
-function _realInject(chainSpec, validatorSpec, palletRuntime) {
-  let runtimeObj = _insertRuntime(chainSpec.genesis.runtime, validatorSpec, palletRuntime)
-  let bootnodes = _insertBootnodes(chainSpec.bootnodes, validatorSpec)
+function _realInject(chainSpec, validatorSpec) {
+  let runtimeObj = chainSpec.genesis.runtime
+  let bootnodes = chainSpec.bootNodes
+  runtimeObj = _clearSupportedRuntimeFields(runtimeObj)
+  runtimeObj = _insertKeys(runtimeObj, validatorSpec)
+  bootnodes = _insertBootnodes(bootnodes, validatorSpec)
   chainSpec.genesis.runtime = runtimeObj
   chainSpec.bootNodes = bootnodes
   return chainSpec
 }
 
-
-
-function _insertRuntime(baseRuntime, validatorSpec, palletRuntime) {
-  const tokenizedPalletSpec = tokenReplacer({ palletRuntime, tokens: validatorSpec.validators })
-
-  for (let i = 0; i < validatorSpec.validators.length; i++) {
-    let validator_n = validatorSpec.validators[i]
+function _clearSupportedRuntimeFields(runtimeObj) {
+  // addresses related to block production
+  if (runtimeObj.aura !== undefined) {
+    runtimeObj.aura.authorities = []
+  }
+  // addresses of all validators and normal nodes
+  if (runtimeObj.indices !== undefined) {
+    runtimeObj.indices.ids = []
+  }
+  // addresses of all validators and normal nodes + their balances
+  if (runtimeObj.balances !== undefined) {
+    runtimeObj.balances.balances = []
+  }
+  // 'master node' of sorts, only a single address string
+  if (runtimeObj.sudo !== undefined) {
+    runtimeObj.sudo.key = undefined
+  }
+  // addresses related to block finalisation + vote weights
+  if (runtimeObj.grandpa !== undefined) {
+    runtimeObj.grandpa.authorities = []
   }
 
-  return baseRuntime
+  return runtimeObj
+}
+
+function _insertKeys(runtimeObj, validatorSpec) {
+  for (let i = 0; i < validatorSpec.validators.length; i++) {
+    let validator_n = validatorSpec.validators[i]
+
+    if (runtimeObj.aura !== undefined) {
+      runtimeObj.aura.authorities.push(validator_n.sr25519.address)
+    }
+
+    // for compatibility with older versions of node-template
+    if (runtimeObj.indices !== undefined) {
+      runtimeObj.indices.ids.push(validator_n.sr25519.address)
+    }
+
+    if (runtimeObj.balances !== undefined) {
+      const balance =
+        (validator_n.pallet_options &&
+          validator_n.pallet_options.balances &&
+          validator_n.pallet_options.balances.balance) ||
+        BigNumber('1152921504606846976') // todo: this must not be static
+      runtimeObj.balances.balances.push([validator_n.sr25519.address, balance])
+    }
+
+    if (runtimeObj.grandpa !== undefined) {
+      const weight =
+        (validator_n.pallet_options &&
+          validator_n.pallet_options.grandpa &&
+          validator_n.pallet_options.grandpa) ||
+        1
+      runtimeObj.grandpa.authorities.push([validator_n.ed25519.address, weight])
+    }
+
+    if (runtimeObj.sudo !== undefined) {
+      // todo: this should not always be the first node in validator list (probably)
+      if (i == 0) {
+        runtimeObj.sudo.key = validator_n.sr25519.address
+      }
+    }
+  }
+
+  return runtimeObj
 }
 
 function _insertBootnodes(bootnodes, validatorSpec) {

@@ -8,6 +8,7 @@ const { createExtractor } = require('../../creators/create-extractor')
 
 const { extract: SystemAccount } = require('../system-account')
 const { extract: SodeNames } = require('../sode/sode-names')
+const { extract: Pallet } = require('./binary-chain-pallet')
 
 
 const extract = createExtractor('binary-chain', props => {
@@ -37,7 +38,9 @@ const extract = createExtractor('binary-chain', props => {
     }
   }
 
+  const { pallet_runtime } = Pallet.node(props)
   return {
+    pallet_runtime,
     chain_dir,
     chain: chain_build_spec_path,
     sb_build_spec: true,

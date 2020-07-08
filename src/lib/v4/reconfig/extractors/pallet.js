@@ -1,12 +1,16 @@
 const { createExtractor } = require('../creators/create-extractor')
 
-const { extract: Infra } = require('./infra')
+const { extract: CustomFacts } = require('./custom-facts')
 
 const extract = createExtractor('pallet', props => {
-  const { infra } = Infra.node(props)
+  const { gco } = props
+  const { chain: { pallets = {} } = {} } = gco
+
+  const pallet_runtime = pallets
+  logger.info(pallet_runtime)
 
   return {
-    inventory_group: infra.group_name
+    pallet_runtime
   }
 })
 
