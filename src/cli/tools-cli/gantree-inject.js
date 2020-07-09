@@ -2,11 +2,13 @@
 
 const program = require('commander')
 const { inject } = require('../../tools/inject')
+const { dynamicInject } = require('../../tools/dynamic-inject')
 
 program
   .description('Injects keys into chainspec (non-raw).')
   .option('-c, --chainSpecPath [path]', 'Path to chainSpec file.')
   .option('-v, --validatorSpecPath [path]', 'Path to validatorSpec file.')
+  .option('-p, --palletSpecPath [path]', 'Path to palletSpec file.')
   .option(
     '-R, --allow-raw',
     'Allow usage of raw chainSpec (returns raw chainSpec in stdout)',
@@ -31,5 +33,9 @@ function inject_CLI(cmd) {
     allowRaw = cmd.allowRaw
   }
 
-  inject(cmd.chainSpecPath, cmd.validatorSpecPath, allowRaw)
+  if (cmd.palletSpecPath === undefined) {
+    inject(cmd.chainSpecPath, cmd.validatorSpecPath, allowRaw)
+  } else {
+    dynamicInject(cmd.chainSpecPath, cmd.validatorSpecPath, cmd.palletSpecPath, allowRaw)
+  }
 }

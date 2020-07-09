@@ -8,7 +8,7 @@ const { processor: tokenReplacer } = require('./replace-tokens')
 
 const RUNTIME_PROTECTED = ['system'];
 
-function inject(chainSpecPath, validatorSpecPath, palletRuntimePath, _allowRaw) {
+function dynamicInject(chainSpecPath, validatorSpecPath, palletRuntimePath, _allowRaw) {
   const allowRaw = opt.default(_allowRaw, false)
 
   if (!fs.existsSync(chainSpecPath)) {
@@ -56,11 +56,13 @@ function _realInject(chainSpec, validatorSpec, palletRuntime) {
 
 
 function _insertRuntime(baseRuntime, validatorSpec, palletRuntime) {
-  const tokenizedPalletSpec = tokenReplacer({ palletRuntime, tokens: validatorSpec.validators })
+  updatedRuntime = { ...baseRuntime, ...palletRuntime }
 
+  /*
   for (let i = 0; i < validatorSpec.validators.length; i++) {
     let validator_n = validatorSpec.validators[i]
   }
+  */
 
   return baseRuntime
 }
@@ -114,5 +116,5 @@ function checkChainspecValid(chainSpecObj, allowRaw) {
 }
 
 module.exports = {
-  inject
+  dynamicInject
 }

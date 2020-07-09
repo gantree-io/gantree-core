@@ -26,12 +26,12 @@
 - name: write pallet runtime
   delegate_to: localhost
   copy:
-    content: '{{ pallet_runtime }}'
+    content: '{{ sode.pallet_runtime }}'
     dest: '{{ gantree_control_working }}/spec/pallet_runtime.json'
 
 - name: do inject
   delegate_to: localhost
-  command: node {{ gantree_tools_root }}/gantree-inject.js --allow-raw -c {{ gantree_control_working }}/spec/chainSpec.json -v {{ gantree_control_working}}/spec/validators.json -p {{ gantree-control_working}}/spec/pallet_runtime.json
+  command: node {{ gantree_tools_root }}/gantree-inject.js --allow-raw -c {{ gantree_control_working }}/spec/chainSpec.json -v {{ gantree_control_working}}/spec/validators.json -p {{ gantree_control_working}}/spec/pallet_runtime.json
   args:
     chdir: '{{ gantree_root }}'
   register: inject_result

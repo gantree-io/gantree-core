@@ -14,43 +14,53 @@ const ALGO_MAP = {
   ed25519: "ed25519"
 }
 
-const createTokenCustomizer = tokens => value => {
-  if (typeof value !== 'string') {
-    return
+const createTokenCustomizer = (frame, tokens) => {
+  const logger = frame.logAt('binary-chain-pallet|tokenCustomizer')
+
+  return value => {
+    logger.debug(value)
+    if (typeof value !== 'string') {
+      return
+    }
+
+    logger.debug(value)
+
+    const match = value.match(nodeRegex)
+    if (!match) {
+      return
+    }
+
+    logger.debug(match)
+
+    const [_, raw_node_index, raw_algo] = match
+    const node_index = raw_node_index
+    const algo = ALGO_MAP[raw_algo]
+
+    logger.debug({
+      node_index, algo
+    })
+
+    const address = tokens[node_index][algo].address
+
+    return address
   }
-
-  const match = value.match(nodeRegex)
-  if (!match) {
-    return
-  }
-
-  const [_, raw_node_index, raw_algo] = match
-  const node_index = raw_node_index
-  const algo = ALGO_MAP[raw_algo]
-
-  const address = tokens[node_index][algo].address
-
-  return address
 }
 
-function processor({ rawPallet = {}, tokens = {} }) {
-  return cloneDeepWith(rawPallet, createTokenCustomizer(tokens))
+function processor({ frame, pallets, tokens }) {
+  return cloneDeepWith(pallets, createTokenCustomizer(frame, tokens))
 }
 
 const extract = createExtractor('binary-chain-pallet', props => {
-  const { gco, logger } = props
+  const { gco, logger, frame } = props
   const { chain: { pallets = {} } = {} } = gco
   const all_facts = CustomFacts.all(props)
   const all_session = all_facts.map(f => f && f.custom_facts && f.custom_facts.session)
 
   const pallet_runtime = processor({
-    rawPallets: pallets,
+    frame,
+    pallets,
     tokens: all_session
   })
-
-  logger.info(pallets)
-  logger.info(all_session)
-  logger.info(pallet_runtime)
 
   return {
     pallet_runtime

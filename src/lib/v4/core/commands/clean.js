@@ -25,9 +25,9 @@ const clean = async (frame, gco) => {
     return
   }
 
-  await Inventory.createInventory(frame, gco)
+  await Inventory.createInventory(frame, gco, 'full')
 
-  await Ansible.commands.runPlaybook(frame, 'clean_infra.yml')
+  await Ansible.runPlaybook(frame, 'clean_infra.yml')
 
   // delete gantree inventory
   Inventory.deleteGantreeInventory(frame)
