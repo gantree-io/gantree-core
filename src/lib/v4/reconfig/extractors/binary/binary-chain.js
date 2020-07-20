@@ -8,11 +8,11 @@ const { createExtractor } = require('../../creators/create-extractor')
 
 const { extract: SystemAccount } = require('../system-account')
 const { extract: SodeNames } = require('../sode/sode-names')
-const { extract: Pallet } = require('./binary-chain-pallet')
+const { extract: BinaryChainPallet } = require('./binary-chain-pallet')
 
 
 const extract = createExtractor('binary-chain', props => {
-  const { gco } = props
+  const { gco, logger } = props
   const { binary = {} } = gco
 
   const { system_home } = SystemAccount.node(props)
@@ -22,7 +22,7 @@ const extract = createExtractor('binary-chain', props => {
   const chain_dir = path.join(system_home, '.local/share', binary_name)
   const use_bin_spec = binary.use_bin_chain_spec || binary.useBinChainSpec || false
 
-  if (binary.chain) {
+  if (binary.chain && binary.chain != "") {
     return {
       chain_dir,
       chain: binary.chain,
@@ -30,7 +30,8 @@ const extract = createExtractor('binary-chain', props => {
     }
   }
 
-  if (use_bin_spec) {
+  // TODO(ryan): get rid of auto convert bool to string
+  if (use_bin_spec && use_bin_spec != "false") {
     return {
       chain_dir,
       chain: null,
@@ -38,7 +39,7 @@ const extract = createExtractor('binary-chain', props => {
     }
   }
 
-  const { pallet_runtime } = Pallet.node(props)
+  const { pallet_runtime } = BinaryChainPallet.node(props)
   return {
     pallet_runtime,
     chain_dir,

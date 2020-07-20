@@ -1,10 +1,10 @@
 
 const fs = require('fs')
-const JSONbig = require('json-bigint')
-const BigNumber = require('bignumber.js')
-const merge = require('lodash.merge')
+//const BigNumber = require('bignumber.js')
+//const merge = require('lodash.merge')
 const opt = require('../lib/utils/options')
-const { processor: tokenReplacer } = require('./replace-tokens')
+const StdJson = require('../lib/utils/std-json')
+//const { processor: tokenReplacer } = require('./replace-tokens')
 
 const RUNTIME_PROTECTED = ['system'];
 
@@ -20,27 +20,19 @@ function dynamicInject(chainSpecPath, validatorSpecPath, palletRuntimePath, _all
     throw new Error("couldn't find validatorSpec file for inject")
   }
   if (!fs.existsSync(palletRuntimePath)) {
-    console.error(`No validatorSpec file found at path: ${palletRuntimePath}`)
+    console.error(`No palletRuntimeSpec file found at path: ${palletRuntimePath}`)
     throw new Error("couldn't find validatorSpec file for inject")
   }
 
-  const chainSpec = JSONbig.parse(fs.readFileSync(chainSpecPath, 'utf-8'))
-  const validatorSpec = JSONbig.parse(
-    fs.readFileSync(validatorSpecPath, 'utf-8')
-  )
-  const palletRuntime = JSONbig.parse(
-    fs.readFileSync(validatorSpecPath, 'utf-8')
-  )
+  const chainSpec = StdJson.read(chainSpecPath, 'utf-8')
+  const validatorSpec = StdJson.read(validatorSpecPath, 'utf-8')
+  const palletRuntime = StdJson.read(palletRuntimePath, 'utf-8')
 
   const chainspec_injectable = checkChainspecValid(chainSpec, allowRaw)
 
   if (chainspec_injectable === true) {
     const injectedChainSpec = _realInject(chainSpec, validatorSpec, palletRuntime)
-    const injectedChainSpecStr = JSONbig.stringify(
-      injectedChainSpec,
-      null,
-      '    '
-    )
+    const injectedChainSpecStr = StdJson.stringify(injectedChainSpec)
     process.stdout.write(injectedChainSpecStr)
   }
 }
@@ -64,7 +56,7 @@ function _insertRuntime(baseRuntime, validatorSpec, palletRuntime) {
   }
   */
 
-  return baseRuntime
+  return updatedRuntime
 }
 
 function _insertBootnodes(bootnodes, validatorSpec) {
@@ -110,7 +102,7 @@ function checkChainspecValid(chainSpecObj, allowRaw) {
   //logger.warn('this is highly discouraged')
   //logger.warn('Function output will be raw instead of non-raw')
   //logger.warn('----------------')
-  const chainspec_str = JSONbig.stringify(chainSpecObj, null, '    ')
+  const chainspec_str = StdJson.stringify(chainSpecObj)
   process.stdout.write(chainspec_str)
   return false
 }

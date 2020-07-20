@@ -64,11 +64,17 @@ async function runPlaybookForJson(frame, playbook_filename, inventory_sources = 
 
   //logger.debug(exec_result)
 
-  const result = StdJson.parse(exec_result.out)
+  try {
+    const result = StdJson.parse(exec_result.out)
+    logger.info(`playbook finished: ${playbook_filepath}`)
+    return result
+  } catch (e) {
+    logger.info(`playbook finished with error: ${playbook_filepath}`)
+    logger.info(e)
+    return {}
+  }
 
-  logger.info(`playbook finished: ${playbook_filepath}`)
 
-  return result
 }
 
 

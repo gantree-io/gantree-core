@@ -12,12 +12,7 @@ const { ensurePath } = require('../../../utils/path-helpers')
 const { inventory: FullInventory } = require('../../reconfig/inventories/full')
 const { inventory: SetupInventory } = require('../../reconfig/inventories/setup')
 
-const rootLogger = Logger.create({
-  log_file: "/home/rozifus/Desktop/logggyyy.1",
-  console_log: false,
-  null_transport: true,
-  level: 'debug'
-})
+
 
 const INVENTORIES = {
   'full': FullInventory
@@ -37,7 +32,7 @@ const build_echo_inventory_dynamic_inventory = inventory => {
 }
 
 async function main(context_path) {
-  let gco, frame, logger, inventory_name
+  let gco, frame, inventory_name
 
   try {
     const context = StdJson.read(context_path)
@@ -46,14 +41,21 @@ async function main(context_path) {
 
     inventory_name = context.inventory_name
     if (!inventory_name) {
-      throw new Error(' no inventory name')
+      throw new Error('no inventory name')
     }
+
+    const rootLogger = Logger.create({
+      log_file: path.join(context.frame.project_path, "overtory_log.log"),
+      error_log_file: path.join(context.frame.project_path, "overtory_error_log.log"),
+      console_log: false,
+      level: 'debug'
+    })
 
     const selected_inventory = INVENTORIES[context.inventory_name]
 
     // TODO(ryan): why is strict not being serialized
     frame = Frame.createFrame({ ...context.frame, logger: rootLogger, gco, strict: false, enable_process_stdout: false })
-    logger = frame.logAt('overtory-entry')
+    const logger = frame.logAt('overtory-entry')
 
     const active = await Ansible.returnActiveInventory(frame)
 
@@ -80,7 +82,13 @@ async function main(context_path) {
     //logger.debug('sf_task')
     //logger.debug(sf_task)
 
-    const sode_facts = Object.entries(sf_hosts).reduce((acc, [host, data]) => Object.assign(acc, { [host]: data.ansible_facts.ansible_local }), {})
+    let sode_facts
+    try {
+      sode_facts = Object.entries(sf_hosts).reduce((acc, [host, data]) => Object.assign(acc, { [host]: data.ansible_facts.ansible_local }), {})
+    } catch (e) {
+      sode_facts = {}
+    }
+
 
     //logger.debug('sode_facts')
     //logger.debug(sode_facts)

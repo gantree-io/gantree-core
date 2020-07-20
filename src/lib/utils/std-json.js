@@ -11,9 +11,9 @@ const parse = s => {
   return JsonBigint.parse(s)
 }
 
-const read = file_path => {
+const read = (file_path, read_file_sync_options) => {
   const abs_file_path = path.resolve(process.cwd(), file_path)
-  const object_text = fs.readFileSync(abs_file_path)
+  const object_text = fs.readFileSync(abs_file_path, read_file_sync_options)
   return parse(object_text)
 }
 

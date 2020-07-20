@@ -23,10 +23,11 @@ const createTokenCustomizer = (frame, tokens) => {
       return
     }
 
-    logger.debug(value)
+    //logger.debug(value)
 
     const match = value.match(nodeRegex)
     if (!match) {
+      logger.debug(`nope ${match}`)
       return
     }
 
@@ -40,9 +41,12 @@ const createTokenCustomizer = (frame, tokens) => {
       node_index, algo
     })
 
-    const address = tokens[node_index][algo].address
-
-    return address
+    try {
+      const address = tokens[node_index][algo].address
+      return address
+    } catch (e) {
+      return
+    }
   }
 }
 
@@ -55,6 +59,8 @@ const extract = createExtractor('binary-chain-pallet', props => {
   const { chain: { pallets = {} } = {} } = gco
   const all_facts = CustomFacts.all(props)
   const all_session = all_facts.map(f => f && f.custom_facts && f.custom_facts.session)
+
+
 
   const pallet_runtime = processor({
     frame,

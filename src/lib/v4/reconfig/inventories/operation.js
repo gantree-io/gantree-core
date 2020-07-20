@@ -20,7 +20,9 @@ const inventory = invProps => {
 
   const special = {
     gantree_special: {
-      hostname_ip_pairs
+      vars: {
+        hostname_ip_pairs
+      }
     }
   }
 
