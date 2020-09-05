@@ -2,6 +2,8 @@ const { Gantree } = require('../../../lib')
 const { gantreeTitle } = require('../support/art')
 const { processCommandArgs } = require('./command-args')
 
+// File exposes syncWrapper and cleanWrapper which try-catch the respecitive library commands after processing cli arguments
+
 const wrapper = command => async args => {
   console.log(gantreeTitle)
 

@@ -1,5 +1,7 @@
 const { Utils, Logger } = require('../../../lib')
 
+// Processes cli arguments and environment variables for gantree-core commands into a single object
+
 const processCommandArgs = async args => {
   const strict =
     Boolean(args.strict || process.env.GANTREE_STRICT_OPERATIONS) || false
