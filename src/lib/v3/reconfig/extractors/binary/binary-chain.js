@@ -1,14 +1,9 @@
-
 const path = require('path')
-const {
-  GantreeError,
-  ErrorTypes: { BAD_CONFIG }
-} = require('../../../../error/gantree-error')
+const fs = require('fs')
 const { createExtractor } = require('../../creators/create-extractor')
 
 const { extract: SystemAccount } = require('../system-account')
 const { extract: SodeNames } = require('../sode/sode-names')
-
 
 const extract = createExtractor('binary-chain', props => {
   const { gco } = props
@@ -17,11 +12,15 @@ const extract = createExtractor('binary-chain', props => {
   const { system_home } = SystemAccount.node(props)
   const { binary_name } = SodeNames.node(props)
 
-  const chain_build_spec_path = path.join(system_home, `/tmp/gantree-validator/spec/chainSpecRaw.raw`)
+  const chain_build_spec_path = path.join(
+    system_home,
+    `/tmp/gantree-validator/spec/chainSpecRaw.raw`
+  )
   const chain_dir = path.join(system_home, '.local/share', binary_name)
-  const use_bin_spec = binary.use_bin_chain_spec || binary.useBinChainSpec || false
+  const use_bin_spec =
+    binary.use_bin_chain_spec || binary.useBinChainSpec || false
 
-  if (binary.chain) {
+  if (binary.chain && !fs.existsSync(binary.chain)) {
     return {
       chain_dir,
       chain: binary.chain,
@@ -37,13 +36,21 @@ const extract = createExtractor('binary-chain', props => {
     }
   }
 
+  if (fs.existsSync(binary.chain)) {
+    return {
+      chain_dir,
+      chain: chain_build_spec_path,
+      sb_build_spec: false,
+      sb_upload_spec: true
+    }
+  }
+
   return {
     chain_dir,
     chain: chain_build_spec_path,
-    sb_build_spec: true,
+    sb_build_spec: true
   }
 })
-
 
 module.exports = {
   extract

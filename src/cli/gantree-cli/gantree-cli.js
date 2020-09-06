@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// This file collects command arguments from the commandline and makes them available for processing
+// eg. gantree-core sync --some-arg ./somepath --some-arg-2 ./somepath2
+
 const program = require('commander')
 const packageMeta = require('../../package/package-meta')
 const { syncWrapper, cleanWrapper } = require('./commands/operations')
@@ -24,6 +27,7 @@ const standardCommand = (name, desc, func) => {
       '-i, --inventory [inventory]',
       'Force inventory path (advanced usage)'
     )
+    .option('-v, --verbosity [verbosity]', 'Logging verbosity level')
     .action(func)
 }
 

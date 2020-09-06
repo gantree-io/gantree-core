@@ -38,7 +38,7 @@ const get_gco = args => {
 const get_config_version = gco => {
   return (
     (gco.metadata && gco.metadata.version && gco.metadata.version.toString()) ||
-    '2'
+    '2' // NOTE(Denver): this default differs from run() switch case default
   )
 }
 
@@ -49,7 +49,7 @@ const run = async (args = {}) => {
   let gLib = null
   switch (config_version) {
     case '2.0':
-      args.logger.warn(
+      args.logger.notice(
         "Config point versions deprecated, use '2' rather than '2.0'"
       )
       args.logger.info('Matched config version: 2')
@@ -69,7 +69,7 @@ const run = async (args = {}) => {
       break
     default:
       args.logger.warn(
-        `Unsupported config version '${config_version}', using '3'`
+        `Unsupported config version '${config_version}', using '3'` // NOTE(Denver): this default differs from get_config_version default
       )
       gLib = libV3
       break
