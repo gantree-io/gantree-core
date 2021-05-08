@@ -61,7 +61,7 @@
     "dotenv": "^8.2.0",
     "fs-extra": "^8.1.0",
     "js-yaml": "^3.13.1",
-    "json-bigint": "^0.3.0",
+    "json-bigint": "^1.0.0",
     "json-diff": "^0.5.4",
     "lodash.clonedeepwith": "^4.5.0",
     "lodash.pick": "^4.4.0",
