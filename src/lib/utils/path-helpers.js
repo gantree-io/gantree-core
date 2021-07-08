@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs')
+const os = require('os')
 
 // NOTE: If you move this file, ensure this path in gantreeLibRoot remains correct
 const gantreeLibRoot = () => path.join(__dirname, '../', '../', '../')
@@ -19,9 +20,19 @@ const ensurePath = (basePath, ...extra) => {
   return result
 }
 
+const getHomePath = (...extra) => {
+  return path.join(os.homedir(), ...extra)
+}
+
+const getOperationsPath = (...extra) => {
+  return path.join(getHomePath(), '.gantree', ...extra)
+}
+
 module.exports = {
   getGantreePath,
   getPlaybookFilePath,
   getToolsPath,
-  ensurePath
+  ensurePath,
+  getHomePath,
+  getOperationsPath
 }

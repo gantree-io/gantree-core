@@ -1,4 +1,4 @@
-const fs = require('fs')
+// const fs = require('fs')
 const path = require('path')
 const cloneDeepWith = require('lodash.clonedeepwith')
 
@@ -11,18 +11,23 @@ const { processor: full_preprocess } = require('../preprocessors/full')
 
 const SAMPLE_SUBPATHS = require('./sample-subpaths')
 
-const replaceExtension = (filename, new_ext) => [...filename.split('.').slice(0, -1), new_ext].join('.')
+const replaceExtension = (filename, new_ext) =>
+  [...filename.split('.').slice(0, -1), new_ext].join('.')
 
 const getTestFrame = gco => {
-  const DRIFT_TEST_PRIVATE_KEY_PATH = path.join(__dirname, 'test-assets', 'drift_test_private_key')
+  const DRIFT_TEST_PRIVATE_KEY_PATH = path.join(
+    __dirname,
+    'test-assets',
+    'drift_test_private_key'
+  )
 
   return createFrame({
     logger: Logger.create({
       service_name: 'Reconfig Tests',
       null_transport: true
     }),
-    project_path: '/tmp/gantree-test-project/',
-    control_root: '/tmp/gantree-test-control/',
+    project_path: `${PathHelpers.getOperationsPath()}/gantree-test-project/`,
+    control_root: `${PathHelpers.getOperationsPath()}/gantree-test-control/`,
     strict: false,
     gco,
     env: {
@@ -33,15 +38,15 @@ const getTestFrame = gco => {
   })
 }
 
-const getFilesWithExtension = (files_path, ext) => {
-  if (typeof ext !== 'string' || ext.trim() === "") {
-    throw Error('extension must be type string')
-  }
+// const getFilesWithExtension = (files_path, ext) => {
+//   if (typeof ext !== 'string' || ext.trim() === "") {
+//     throw Error('extension must be type string')
+//   }
 
-  return fs.readdirSync(files_path)
-    .filter(filename => path.extname(filename) === '.' + ext)
-    .map(filename => path.join(files_path, filename))
-}
+//   return fs.readdirSync(files_path)
+//     .filter(filename => path.extname(filename) === '.' + ext)
+//     .map(filename => path.join(files_path, filename))
+// }
 
 const sanitizeLocalPaths = (frame, inventory) => {
   const homedir = require('os').homedir()
@@ -68,8 +73,7 @@ const sanitizeLocalPaths = (frame, inventory) => {
 const readJsonOrNull = file_path => {
   try {
     return StdJson.read(file_path)
-  }
-  catch (e) {
+  } catch (e) {
     return null
   }
 }
@@ -77,7 +81,10 @@ const readJsonOrNull = file_path => {
 const getFileSets = (config_root, inventory_root) => {
   return SAMPLE_SUBPATHS.map(sample => {
     const config_path = path.join(config_root, sample)
-    const inventory_path = replaceExtension(path.join(inventory_root, sample), 'inventory')
+    const inventory_path = replaceExtension(
+      path.join(inventory_root, sample),
+      'inventory'
+    )
 
     return {
       config_path,
@@ -102,5 +109,5 @@ const createTestInventory = raw_gco => {
 
 module.exports = {
   getFileSets,
-  createTestInventory,
+  createTestInventory
 }

@@ -60,14 +60,14 @@ provisioner:
         substrate_rpc_port: 9933
         substrate_options: []
         substrate_bootnode_argument: []
-        gantree_control_working: /tmp/gantree-control
+        gantree_control_working: {system_home}/gantree-control
         gantree_root: ../../../../../
       builder_bin:
-        gantree_working: /tmp/gantree-build-bin
+        gantree_working: {system_home}/gantree-build-bin
       builder_telemetry:
-        gantree_working: tmp/gantree_working
+        gantree_working: {system_home}/gantree_working
       builder_spec:
-        gantree_working: /tmp/gantree-build-spec
+        gantree_working: {system_home}/gantree-build-spec
       validator:
         gantree_working: /home/subuser/tmp/gantree-validator
   lint:

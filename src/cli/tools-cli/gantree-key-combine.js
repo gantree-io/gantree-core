@@ -2,6 +2,7 @@
 
 const program = require('commander')
 const { keyCombine } = require('../../tools/key-combine')
+const { Utils } = require('../../lib')
 
 program
   .description(
@@ -10,7 +11,7 @@ program
   .option(
     '-d, --directory [path]',
     'Path to session directory.',
-    '/tmp/gantree_host/session'
+    `${Utils.getOperationsPath()}/gantree_host/session`
   )
   .action(keyCombine_CLI)
 
