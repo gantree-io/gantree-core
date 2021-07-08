@@ -8,6 +8,18 @@ const {
 } = require('../../error/gantree-error')
 const { getValidLevels } = require('../../logging/logger')
 
+const getConfigVersion = args => {
+  const { gco } = args
+  const config_version = gco.metadata && gco.metadata.version
+  if (!config_version) {
+    throw new GantreeError(
+      BAD_CONFIG,
+      'config requires |.metadata.version field'
+    )
+  }
+  return config_version
+}
+
 const getProjectName = args => {
   const { gco } = args
   const project_name = gco.metadata && gco.metadata.project
@@ -37,7 +49,7 @@ const getProjectPath = (args, project_name) => {
 
 const getControlPath = (args, project_name) => {
   if (!args.control_root) {
-    throw new Error(MISSING_ARGUMENTS, `Must supply 'control_root`)
+    throw new GantreeError(MISSING_ARGUMENTS, `Must supply 'control_root'`)
   }
 
   return path.join(args.control_root, project_name)
@@ -47,11 +59,13 @@ const createFrame = args => {
   const project_name = getProjectName(args)
   const project_path = ensurePath(getProjectPath(args, project_name))
   const control_path = ensurePath(getControlPath(args, project_name))
+  const config_version = getConfigVersion(args)
 
   const frame = {
     project_name,
     project_path,
     control_path,
+    config_version,
     ...oPick(
       args,
       'enable_process_stdout',

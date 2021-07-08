@@ -42,7 +42,7 @@ function validateProviderSpecificKeys(frame, gco) {
       logger.error(message)
       missing_messages.push(message)
     } else {
-      logger.info(`All required ${provider} specific keys satisfied`)
+      logger.info(`all required ${provider} specific keys satisfied`)
     }
   }
 
@@ -70,7 +70,7 @@ function validateConfig(frame, gco) {
   const is_valid = validate(gco)
 
   if (!is_valid) {
-    console.error('Invalid Gantree config detected')
+    logger.error('invalid Gantree config detected')
     validate.errors.forEach(e => {
       logger.error(
         `--ISSUE: ${e.dataPath} ${e.message} (SCHEMA:${e.schemaPath})`
@@ -79,10 +79,12 @@ function validateConfig(frame, gco) {
     throw new GantreeError(BAD_CONFIG, 'invalid gantree config')
   }
 
-  logger.info('Gantree configuration validated successfully')
+  logger.info('schema validation successful')
 
-  validateProviderSpecificKeys(frame, gco)
-  checks.config.nodeNameCharLimit(frame, gco)
+  validateProviderSpecificKeys(frame, gco) // TODO(Denver): process these like Ryan does with reconfig
+  checks.config.nodeNameCharLimit(frame, gco) // TODO(Denver): process these like Ryan does with reconfig
+
+  logger.info('Gantree configuration validated successfully')
 
   return gco
 }

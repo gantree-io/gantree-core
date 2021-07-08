@@ -1,6 +1,7 @@
 const { Gantree } = require('../../../lib')
 const { gantreeTitle } = require('../support/art')
 const { processCommandArgs } = require('./command-args')
+const { handleErr } = require('../../../lib/error/gantree-error')
 
 // File exposes syncWrapper and cleanWrapper which try-catch the respecitive library commands after processing cli arguments
 
@@ -16,12 +17,7 @@ const wrapper = command => async args => {
       command
     })
   } catch (e) {
-    let err = e
-    while (err) {
-      console.log(err.message)
-      err = err.cause
-    }
-    process.exit(1)
+    handleErr(undefined, e)
   }
 }
 
